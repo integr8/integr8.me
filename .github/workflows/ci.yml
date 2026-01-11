@@ -51,7 +51,7 @@ jobs:
             # For push: check the last commit on main
             npx commitlint -x conventional --from HEAD~1 --to HEAD || exit 1
           fi
-[setup, commits]
+
   # ===========================================================================
   # Setup - Instala dependências (reutilizado por outros jobs via cache)
   # ===========================================================================
