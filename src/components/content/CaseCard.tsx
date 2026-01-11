@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiArrowRight, FiTrendingUp, FiTrendingDown, FiClock, FiZap } from 'react-icons/fi';
+import { FiArrowRight, FiTrendingUp, FiTrendingDown, FiZap } from 'react-icons/fi';
 
 interface CaseMetric {
   value: string;

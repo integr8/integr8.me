@@ -8,7 +8,7 @@ import {
   FiMessageCircle, FiSend, FiBell, FiImage, FiVideo, FiMusic,
   FiFile, FiFolder, FiUser, FiUsers, FiUserPlus, FiSettings,
   FiTool, FiSliders, FiBarChart2, FiPieChart, FiTrendingUp,
-  FiTrendingDown, FiActivity, FiCode, FiTerminal, FiGitBranch,
+  FiTrendingDown, FiActivity, FiCode, FiTerminal,
   FiDatabase, FiServer, FiCpu, FiCloud, FiGlobe, FiWifi,
   FiLock, FiUnlock, FiShield, FiKey, FiLayout, FiGrid, FiList,
   FiLayers, FiBox, FiPackage, FiClock, FiCalendar, FiAlertCircle,
@@ -19,7 +19,7 @@ import {
 } from 'react-icons/fi';
 
 import {
-  HiCloud, HiServer, HiCode, HiShieldCheck, HiChartBar,
+  HiServer, HiCode, HiShieldCheck, HiChartBar,
   HiCog, HiUsers, HiDocumentText, HiGlobe, HiSparkles,
   HiBeaker, HiCubeTransparent, HiDesktopComputer, HiFire,
   HiPuzzle, HiSupport, HiAdjustments
