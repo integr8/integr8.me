@@ -1,7 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
-import { getTranslations } from '@i18n/utils';
 import { Badge } from '@components/common/Badge';
 
 export async function getStaticPaths() {
@@ -31,9 +30,8 @@ interface Props {
   post: CollectionEntry<'blog'>;
 }
 
-const { lang, slug } = Astro.params;
+const { lang } = Astro.params;
 const { post } = Astro.props;
-const t = getTranslations(lang as 'ptbr' | 'en');
 
 const { Content } = await post.render();
 ---

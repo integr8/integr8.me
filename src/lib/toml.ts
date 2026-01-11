@@ -9,21 +9,21 @@ export function loadToml<T>(filePath: string): T {
 }
 
 export const loadSiteConfig = () => loadToml('site.config.toml');
-export const loadNavigation = () => loadToml<{ main: any[] }>('src/content/data/navigation.toml');
+export const loadNavigation = () => loadToml<{ main: unknown[] }>('src/content/data/navigation.toml');
 export const loadCertifications = () => {
-  const data = loadToml<{ certifications: any[] }>('src/content/data/certifications.toml');
+  const data = loadToml<{ certifications: unknown[] }>('src/content/data/certifications.toml');
   return data.certifications || [];
 };
 export const loadTechnologies = () => {
-  const data = loadToml<{ technologies: any[] }>('src/content/data/technologies.toml');
+  const data = loadToml<{ technologies: unknown[] }>('src/content/data/technologies.toml');
   return data.technologies || [];
 };
 export const loadStats = () => {
-  const data = loadToml<{ stats: any[] }>('src/content/data/stats.toml');
+  const data = loadToml<{ stats: unknown[] }>('src/content/data/stats.toml');
   return data.stats || [];
 };
 export const loadCapabilities = () => {
-  const data = loadToml<{ capabilities: any[] }>('src/content/data/capabilities.toml');
+  const data = loadToml<{ capabilities: unknown[] }>('src/content/data/capabilities.toml');
   return data.capabilities || [];
 };
 export const loadTranslations = (lang: string) => 

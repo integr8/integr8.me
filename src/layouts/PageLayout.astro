@@ -6,12 +6,10 @@ export interface Props {
   title?: string;
   description?: string;
   breadcrumbs?: Array<{ label: string; href?: string }>;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const { title, description, breadcrumbs, ...rest } = Astro.props;
-const pathSegments = Astro.url.pathname.split('/').filter(Boolean);
-const lang = ['ptbr', 'en'].includes(pathSegments[0]) ? pathSegments[0] : 'ptbr';
 ---
 
 <BaseLayout title={title} description={description} {...rest}>

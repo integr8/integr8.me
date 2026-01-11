@@ -1,7 +1,6 @@
 ---
 import PageLayout from '@layouts/PageLayout.astro';
 import { Icon } from '@components/common/Icon';
-import { Button } from '@components/common/Button';
 
 export function getStaticPaths() {
   return [
@@ -9,8 +8,6 @@ export function getStaticPaths() {
     { params: { lang: 'en' } }
   ];
 }
-
-const { lang } = Astro.params;
 
 const sections = [
   {

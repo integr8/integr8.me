@@ -23,13 +23,13 @@ export function Icon({
 
   switch (variant) {
     case 'solid':
-      iconSet = solid as any;
+      iconSet = solid as Record<string, React.ComponentType>;
       break;
     case 'mini':
-      iconSet = mini as any;
+      iconSet = mini as Record<string, React.ComponentType>;
       break;
     default:
-      iconSet = outline as any;
+      iconSet = outline as Record<string, React.ComponentType>;
   }
 
   const IconComponent = iconSet[name as IconName] as React.ComponentType<

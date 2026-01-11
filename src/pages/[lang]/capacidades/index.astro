@@ -1,6 +1,5 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
-import { useTranslations } from '@i18n/utils';
 import { loadCapabilities } from '@lib/toml';
 
 export function getStaticPaths() {
@@ -11,7 +10,6 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.params;
-const { t } = useTranslations(lang);
 
 // Carregar capabilities do TOML
 const capabilities = loadCapabilities();
@@ -150,7 +148,7 @@ const certifications = [
           : "Explore our detailed capabilities across key technology areas. Each badge represents hands-on experience in production environments."}
       </p>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {capabilities.map((cap: any) => (
+        {capabilities.map((cap: { icon: string; name: string; technologies: string[] }) => (
           <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow">
             <div class="card-body">
               <div class="flex items-center gap-3 mb-3">

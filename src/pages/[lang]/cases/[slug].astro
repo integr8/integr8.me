@@ -1,7 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
-import { getTranslations } from '@i18n/utils';
 import { Badge } from '@components/common/Badge';
 import { Icon } from '@components/common/Icon';
 
@@ -32,9 +31,8 @@ interface Props {
   caseItem: CollectionEntry<'cases'>;
 }
 
-const { lang, slug } = Astro.params;
+const { lang } = Astro.params;
 const { caseItem } = Astro.props;
-const t = getTranslations(lang as 'ptbr' | 'en');
 
 const { Content } = await caseItem.render();
 ---
@@ -115,7 +113,7 @@ const { Content } = await caseItem.render();
           {lang === 'ptbr' ? 'Resultados' : 'Results'}
         </h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {caseItem.data.results.map((result: any) => (
+          {caseItem.data.results.map((result: { value: string; label: string }) => (
             <div class="stat bg-base-200 rounded-lg">
               <div class="stat-value text-primary">{result.value}</div>
               <div class="stat-desc">{result.label}</div>

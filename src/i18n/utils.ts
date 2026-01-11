@@ -1,6 +1,6 @@
 import { loadTranslations } from '../lib/toml';
 
-const cache: Record<string, any> = {};
+const cache: Record<string, Record<string, string>> = {};
 
 export function getTranslations(lang: string) {
   if (!cache[lang]) {

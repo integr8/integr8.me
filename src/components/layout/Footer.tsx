@@ -1,6 +1,5 @@
 import React from 'react';
 import { Icon } from '@components/common/Icon';
-import { loadSiteConfig } from '@lib/toml';
 import { SOCIAL_LINKS } from '@lib/constants';
 
 interface Solution {
@@ -14,8 +13,6 @@ interface FooterProps {
 }
 
 export function Footer({ lang, solutions = [] }: FooterProps) {
-  const config = loadSiteConfig();
-
   const t = {
     solutions: lang === 'ptbr' ? 'Soluções' : 'Solutions',
     company: lang === 'ptbr' ? 'Empresa' : 'Company',

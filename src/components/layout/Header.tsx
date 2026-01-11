@@ -19,7 +19,7 @@ interface NavItem {
 
 interface HeaderProps {
   lang: string;
-  translations: Record<string, any>;
+  translations: Record<string, string>;
 }
 
 export function Header({ lang, translations }: HeaderProps) {

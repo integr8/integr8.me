@@ -32,7 +32,7 @@ interface Props {
   solution: CollectionEntry<'solutions'>;
 }
 
-const { lang, slug } = Astro.params;
+const { lang } = Astro.params;
 const { solution } = Astro.props;
 const t = getTranslations(lang as 'ptbr' | 'en');
 

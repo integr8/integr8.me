@@ -9,7 +9,7 @@ export interface Frontmatter {
   tags?: string[];
   related?: string[];
   technologies?: string[];
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export interface BlogPost extends Frontmatter {
