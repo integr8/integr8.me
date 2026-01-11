@@ -4,13 +4,13 @@
 # Princípios: DRY (jobs reutilizáveis), KISS (steps simples), YAGNI (só o necessário)
 # =============================================================================
 
-name: CI - Lint, Test & Security
+name: CI
 
 on:
   push:
-    branches: [main, development]
+    branches: [main]
   pull_request:
-    branches: [main, development]
+    types: [opened, synchronize, reopened]
   workflow_call:
 
 concurrency:
