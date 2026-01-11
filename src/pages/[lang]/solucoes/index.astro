@@ -1,9 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import PageLayout from '@layouts/PageLayout.astro';
-import { Badge } from '@components/common/Badge';
-import { Button } from '@components/common/Button';
-import { Icon } from '@components/common/Icon';
+import { SolutionCard } from '@components/content/SolutionCard';
 
 export function getStaticPaths() {
   return [{ params: { lang: 'ptbr' } }, { params: { lang: 'en' } }];
@@ -13,6 +11,9 @@ const { lang } = Astro.params;
 const allSolutions = await getCollection('solutions');
 const solutions = allSolutions.filter((s) => s.id.startsWith(`${lang}/`));
 
+// Highlight some solutions as featured
+const featuredSlugs = ['kubernetes', 'platform-engineering', 'devops-cicd'];
+
 const breadcrumbs = [
   { label: lang === 'ptbr' ? 'Início' : 'Home', href: `/${lang}` },
   { label: lang === 'ptbr' ? 'Soluções' : 'Solutions' },
@@ -20,41 +21,27 @@ const breadcrumbs = [
 ---
 
 <PageLayout
-  title="Nossas Soluções"
-  description="Expertise técnica para acelerar sua jornada cloud-native"
+  title={lang === 'ptbr' ? 'Nossas Soluções' : 'Our Solutions'}
+  description={lang === 'ptbr' ? 'Expertise técnica para acelerar sua jornada cloud-native' : 'Technical expertise to accelerate your cloud-native journey'}
   breadcrumbs={breadcrumbs}
 >
-  <div class="grid grid-cols-1 gap-6 py-12 md:grid-cols-2 lg:grid-cols-3">
+  <div class="grid grid-cols-1 gap-8 py-12 md:grid-cols-2 lg:grid-cols-3 stagger-children">
     {
-      solutions.map((solution) => (
-        <a
-          href={`/${lang}/solucoes/${solution.slug.split('/').pop()}`}
-          class="card border border-base-300 bg-base-200/50 shadow-lg transition-all hover:border-primary/30 hover:shadow-xl"
-        >
-          <div class="card-body items-center text-center">
-            <Icon name={solution.data.icon} className="h-12 w-12 text-primary" client:load />
-            <h3 class="card-title mt-4 text-lg text-base-content">{solution.data.title}</h3>
-            <p class="text-sm text-base-content/80">{solution.data.description}</p>
-
-            {solution.data.technologies && (
-              <div class="mt-4 flex flex-wrap justify-center gap-2">
-                {solution.data.technologies.slice(0, 3).map((tech: string) => (
-                  <Badge key={tech} variant="primary" size="sm">
-                    {tech}
-                  </Badge>
-                ))}
-              </div>
-            )}
-
-            <div class="card-actions mt-4">
-              <Button variant="primary" size="sm">
-                {lang === 'ptbr' ? 'Saiba mais' : 'Learn more'}
-                <Icon name="ArrowRightIcon" className="h-4 w-4" client:load />
-              </Button>
-            </div>
-          </div>
-        </a>
-      ))
+      solutions.map((solution) => {
+        const slug = solution.slug.split('/').pop() || '';
+        return (
+          <SolutionCard
+            client:load
+            title={solution.data.title}
+            description={solution.data.description}
+            icon={solution.data.icon}
+            technologies={solution.data.technologies || []}
+            href={`/${lang}/solucoes/${slug}`}
+            lang={lang as string}
+            featured={featuredSlugs.includes(slug)}
+          />
+        );
+      })
     }
   </div>
 </PageLayout>

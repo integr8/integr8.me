@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Icon } from './Icon';
+import { FiSun, FiMoon } from 'react-icons/fi';
 
 export function ThemeSwitcher() {
   const [theme, setTheme] = useState('integr8');
@@ -28,13 +28,13 @@ export function ThemeSwitcher() {
   return (
     <button
       onClick={toggleTheme}
-      className="btn btn-circle btn-ghost"
+      className="btn btn-circle btn-ghost btn-sm transition-transform hover:scale-110"
       aria-label={isDark ? 'Light mode' : 'Dark mode'}
     >
       {isDark ? (
-        <Icon name="SunIcon" className="h-5 w-5" />
+        <FiSun className="h-5 w-5 text-yellow-400" />
       ) : (
-        <Icon name="MoonIcon" className="h-5 w-5" />
+        <FiMoon className="h-5 w-5" />
       )}
     </button>
   );

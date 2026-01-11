@@ -1,8 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
-import BaseLayout from '@layouts/BaseLayout.astro';
+import SolutionLayout from '@layouts/SolutionLayout.astro';
 import { getTranslations } from '@i18n/utils';
-import { Icon } from '@components/common/Icon';
 
 export async function getStaticPaths() {
   const solutions = await getCollection('solutions');
@@ -42,79 +41,13 @@ const t = getTranslations(lang as 'ptbr' | 'en');
 const { Content } = await solution.render();
 ---
 
-<BaseLayout
-  title={`${solution.data.title} - Integr8`}
+<SolutionLayout
+  title={solution.data.title}
   description={solution.data.description}
-  lang={lang as 'ptbr' | 'en'}
+  category={solution.data.category}
+  technologies={solution.data.technologies}
+  icon={solution.data.icon}
+  lang={lang}
 >
-  <div class="container mx-auto max-w-4xl px-4 py-12">
-    <!-- Breadcrumbs -->
-    <div class="breadcrumbs mb-8 text-sm">
-      <ul>
-        <li><a href={`/${lang}`}>{t.nav.home}</a></li>
-        <li><a href={`/${lang}/solucoes`}>{t.nav.solutions}</a></li>
-        <li class="text-base-content/60">{solution.data.title}</li>
-      </ul>
-    </div>
-
-    <!-- Header -->
-    <header class="mb-12">
-      <div class="mb-4 flex items-center gap-4">
-        <Icon name={solution.data.icon} className="h-16 w-16 text-primary" client:load />
-        <div>
-          <span class="badge badge-primary badge-outline">{solution.data.category}</span>
-          <h1 class="mt-2 text-4xl font-bold">{solution.data.title}</h1>
-        </div>
-      </div>
-      <p class="text-xl leading-relaxed text-base-content/70">
-        {solution.data.description}
-      </p>
-    </header>
-
-    <!-- Technologies -->
-    {
-      solution.data.technologies && solution.data.technologies.length > 0 && (
-        <div class="mb-8">
-          <h2 class="mb-3 text-lg font-semibold">
-            {lang === 'ptbr' ? 'Tecnologias' : 'Technologies'}
-          </h2>
-          <div class="flex flex-wrap gap-2">
-            {solution.data.technologies.map((tech: string) => (
-              <span class="badge badge-neutral">{tech}</span>
-            ))}
-          </div>
-        </div>
-      )
-    }
-
-    <!-- Content -->
-    <article class="prose prose-lg max-w-none">
-      <Content />
-    </article>
-
-    <!-- Related Solutions -->
-    {
-      solution.data.related && solution.data.related.length > 0 && (
-        <div class="mt-12 border-t border-base-300 pt-8">
-          <h2 class="mb-4 text-2xl font-bold">
-            {lang === 'ptbr' ? 'Soluções Relacionadas' : 'Related Solutions'}
-          </h2>
-          <div class="flex flex-wrap gap-2">
-            {solution.data.related.map((related: string) => (
-              <a href={`/${lang}/solucoes/${related}`} class="btn btn-outline btn-sm">
-                {related}
-              </a>
-            ))}
-          </div>
-        </div>
-      )
-    }
-
-    <!-- CTA -->
-    <div class="mt-12 text-center">
-      <a href={`/${lang}/contato`} class="btn btn-primary btn-lg">
-        {lang === 'ptbr' ? 'Fale Conosco' : 'Contact Us'}
-      </a>
-    </div>
-  </div>
-</BaseLayout>
+  <Content />
+</SolutionLayout>

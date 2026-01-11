@@ -1,5 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
+import { ReadingProgress } from '@components/content/ReadingProgress';
+import { TableOfContents } from '@components/content/TableOfContents';
 
 export interface Props {
   title?: string;
@@ -7,25 +9,132 @@ export interface Props {
   author?: string;
   date?: Date;
   category?: string;
+  read_time?: number;
+  image?: string;
+  lang?: string;
   [key: string]: unknown;
 }
 
-const { title, description, author, date, category, ...rest } = Astro.props;
+const { title, description, author, date, category, read_time, image, lang = 'ptbr', ...rest } = Astro.props;
+
+const formattedDate = date
+  ? new Intl.DateTimeFormat(lang === 'ptbr' ? 'pt-BR' : 'en-US', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }).format(date)
+  : null;
 ---
 
 <BaseLayout title={title} description={description} {...rest}>
-  <article class="prose prose-lg mx-auto max-w-4xl py-12">
-    <header class="mb-12">
-      {title && <h1>{title}</h1>}
-      {description && <p class="text-xl text-base-content/70">{description}</p>}
+  <ReadingProgress client:load />
 
-      <div class="mt-6 flex flex-wrap items-center gap-4 text-sm text-base-content/60">
-        {author && <span>Por {author}</span>}
-        {date && <span>{date.toLocaleDateString('pt-BR')}</span>}
-        {category && <span class="badge badge-primary">{category}</span>}
+  {/* Hero header */}
+  <header class="bg-gradient-to-b from-base-200 to-base-100 pb-12 pt-8">
+    <div class="container mx-auto px-4">
+      <div class="mx-auto max-w-4xl">
+        {/* Breadcrumb */}
+        <nav class="mb-6 text-sm">
+          <a href={`/${lang}`} class="text-base-content/60 hover:text-primary">
+            {lang === 'ptbr' ? 'Início' : 'Home'}
+          </a>
+          <span class="mx-2 text-base-content/40">/</span>
+          <a href={`/${lang}/blog`} class="text-base-content/60 hover:text-primary">
+            Blog
+          </a>
+          <span class="mx-2 text-base-content/40">/</span>
+          <span class="text-base-content">{title}</span>
+        </nav>
+
+        {/* Category badge */}
+        {category && (
+          <div class="mb-4">
+            <span class="badge badge-primary badge-lg">{category}</span>
+          </div>
+        )}
+
+        {/* Title */}
+        <h1 class="mb-6 text-4xl font-bold leading-tight md:text-5xl">
+          {title}
+        </h1>
+
+        {/* Description */}
+        {description && (
+          <p class="mb-8 text-xl text-base-content/70">
+            {description}
+          </p>
+        )}
+
+        {/* Meta info */}
+        <div class="flex flex-wrap items-center gap-6 text-sm text-base-content/60">
+          {author && (
+            <div class="flex items-center gap-2">
+              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                {author.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <div class="font-medium text-base-content">{author}</div>
+                <div class="text-xs">{lang === 'ptbr' ? 'Autor' : 'Author'}</div>
+              </div>
+            </div>
+          )}
+
+          {formattedDate && (
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>{formattedDate}</span>
+            </div>
+          )}
+
+          {read_time && (
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{read_time} min {lang === 'ptbr' ? 'de leitura' : 'read'}</span>
+            </div>
+          )}
+        </div>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <slot />
-  </article>
+  {/* Featured image */}
+  {image && (
+    <div class="container mx-auto -mt-4 mb-8 px-4">
+      <div class="mx-auto max-w-4xl overflow-hidden rounded-2xl shadow-xl">
+        <img src={image} alt={title} class="h-auto w-full object-cover" />
+      </div>
+    </div>
+  )}
+
+  {/* Content with TOC */}
+  <div class="container mx-auto px-4 py-12">
+    <div class="mx-auto flex max-w-6xl gap-12">
+      {/* Main content */}
+      <article class="prose prose-lg min-w-0 max-w-4xl flex-1">
+        <slot />
+      </article>
+
+      {/* Sidebar TOC */}
+      <TableOfContents client:load lang={lang} />
+    </div>
+  </div>
+
+  {/* Share and navigation */}
+  <div class="border-t border-base-200 bg-base-100 py-8">
+    <div class="container mx-auto px-4">
+      <div class="mx-auto flex max-w-4xl items-center justify-between">
+        <a href={`/${lang}/blog`} class="btn btn-ghost">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          {lang === 'ptbr' ? 'Voltar ao Blog' : 'Back to Blog'}
+        </a>
+      </div>
+    </div>
+  </div>
 </BaseLayout>
+

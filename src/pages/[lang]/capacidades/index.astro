@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { loadCapabilities } from '@lib/toml';
+import { CapabilitiesAccordion } from '@components/content/CapabilitiesAccordion';
 
 export function getStaticPaths() {
   return [{ params: { lang: 'ptbr' } }, { params: { lang: 'en' } }];
@@ -10,23 +11,6 @@ const { lang } = Astro.params;
 
 // Carregar capabilities do TOML
 const capabilities = loadCapabilities();
-
-// Mapeamento de ícones para emojis
-const iconMap: Record<string, string> = {
-  cloud: '☁️',
-  kubernetes: '🐳',
-  code: '📝',
-  cicd: '🚀',
-  observability: '📊',
-  security: '🔐',
-  data: '📈',
-  database: '💾',
-  network: '🌐',
-  programming: '💻',
-  frontend: '🖥️',
-  devex: '👥',
-  certification: '🏆',
-};
 
 const certifications = [
   {
@@ -154,25 +138,11 @@ const certifications = [
             : 'Explore our detailed capabilities across key technology areas. Each badge represents hands-on experience in production environments.'
         }
       </p>
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {
-          capabilities.map((cap: { icon: string; name: string; technologies: string[] }) => (
-            <div class="card bg-base-100 shadow-lg transition-shadow hover:shadow-xl">
-              <div class="card-body">
-                <div class="mb-3 flex items-center gap-3">
-                  <div class="text-2xl">{iconMap[cap.icon] || '⚡'}</div>
-                  <h3 class="card-title text-lg">{cap.name}</h3>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                  {cap.technologies.map((tech: string) => (
-                    <span class="badge badge-outline badge-sm">{tech}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))
-        }
-      </div>
+      <CapabilitiesAccordion 
+        client:load
+        capabilities={capabilities} 
+        lang={lang as string} 
+      />
     </div>
   </section>
 

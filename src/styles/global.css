@@ -132,6 +132,209 @@
 }
 
 @layer utilities {
+  /* Animations */
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-20px) rotate(2deg);
+    }
+  }
+
+  @keyframes float-delayed {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-30px) rotate(-2deg);
+    }
+  }
+
+  @keyframes pulse-slow {
+    0%,
+    100% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(1.1);
+    }
+  }
+
+  @keyframes fade-in-down {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-float-delayed {
+    animation: float-delayed 8s ease-in-out infinite;
+    animation-delay: 1s;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 4s ease-in-out infinite;
+  }
+
+  .animate-fade-in-down {
+    animation: fade-in-down 0.6s ease-out forwards;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.5s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.4s ease-out forwards;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+
+  .animation-delay-800 {
+    animation-delay: 800ms;
+  }
+
+  /* Hover effects */
+  .hover-card {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .hover-card:hover {
+    @apply -translate-y-1 shadow-xl;
+  }
+
+  .hover-glow:hover {
+    box-shadow: 0 0 30px rgba(var(--primary), 0.2);
+  }
+
+  /* Glass effect */
+  .glass-effect {
+    @apply bg-base-100/80 backdrop-blur-sm;
+  }
+
+  /* Gradient text */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+  }
+
+  /* Card variants */
+  .card-hover-border {
+    @apply border border-transparent transition-colors duration-300;
+  }
+
+  .card-hover-border:hover {
+    @apply border-primary/30;
+  }
+
+  /* Progress bar animation */
+  @keyframes progress {
+    from {
+      width: 0%;
+    }
+  }
+
+  .animate-progress {
+    animation: progress 1s ease-out forwards;
+  }
+
+  /* Stagger children animations */
+  .stagger-children > * {
+    opacity: 0;
+    animation: fade-in-up 0.5s ease-out forwards;
+  }
+
+  .stagger-children > *:nth-child(1) {
+    animation-delay: 0ms;
+  }
+  .stagger-children > *:nth-child(2) {
+    animation-delay: 100ms;
+  }
+  .stagger-children > *:nth-child(3) {
+    animation-delay: 200ms;
+  }
+  .stagger-children > *:nth-child(4) {
+    animation-delay: 300ms;
+  }
+  .stagger-children > *:nth-child(5) {
+    animation-delay: 400ms;
+  }
+  .stagger-children > *:nth-child(6) {
+    animation-delay: 500ms;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

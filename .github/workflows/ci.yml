@@ -11,6 +11,7 @@ on:
     branches: [main, development]
   pull_request:
     branches: [main, development]
+  workflow_call:
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -21,6 +22,36 @@ env:
   PNPM_VERSION: '9'
 
 jobs:
+  # ===========================================================================
+  # Conventional Commits - Valida commit messages
+  # ===========================================================================
+  commits:
+    name: 📝 Conventional Commits
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+        with:
+          experimental: true
+
+      - name: Validate conventional commits
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            # For PR: check commits in the PR
+            while IFS= read -r commit; do
+              echo "Validating: $commit"
+              git log -1 --pretty=%B "$commit" | npx commitlint -x conventional || exit 1
+            done < <(git rev-list ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
+          else
+            # For push: check the last commit on main
+            npx commitlint -x conventional --from HEAD~1 --to HEAD || exit 1
+          fi
+[setup, commits]
   # ===========================================================================
   # Setup - Instala dependências (reutilizado por outros jobs via cache)
   # ===========================================================================
