@@ -1,0 +1,19 @@
+[site]
+name = "Integr8"
+url = "https://integr8.me"
+description = "Consultoria técnica especializada em DevOps, Cloud, Kubernetes e Platform Engineering"
+author = "Integr8"
+
+[i18n]
+default_lang = "ptbr"
+languages = ["ptbr", "en"]
+
+[social]
+email = "contato@integr8.me"
+linkedin = "https://linkedin.com/company/integr8"
+github = "https://github.com/integr8"
+
+[seo]
+title_template = "%s | Integr8"
+og_image = "/images/og-default.png"
+twitter_handle = "@integr8"

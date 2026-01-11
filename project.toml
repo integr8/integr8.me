@@ -1,0 +1,68 @@
+# Paketo Buildpacks Configuration
+# https://paketo.io/docs/
+
+[_]
+schema-version = "0.2"
+
+[io.buildpacks]
+builder = "paketobuildpacks/builder-jammy-base"
+
+[[io.buildpacks.build.env]]
+name = "BP_NODE_VERSION"
+value = "18.*"
+
+[[io.buildpacks.build.env]]
+name = "BP_NODE_PROJECT_PATH"
+value = "."
+
+[[io.buildpacks.build.env]]
+name = "BP_NODE_RUN_SCRIPTS"
+value = "build"
+
+[[io.buildpacks.build.env]]
+name = "BP_WEB_SERVER"
+value = "nginx"
+
+[[io.buildpacks.build.env]]
+name = "BP_WEB_SERVER_ROOT"
+value = "dist"
+
+[[io.buildpacks.build.env]]
+name = "BP_WEB_SERVER_ENABLE_PUSH_STATE"
+value = "true"
+
+# Build settings
+[io.buildpacks.build]
+include = [
+    "src/",
+    "public/",
+    "package.json",
+    "pnpm-lock.yaml",
+    "astro.config.mjs",
+    "tailwind.config.mjs",
+    "tsconfig.json",
+    "site.config.toml"
+]
+exclude = [
+    ".git",
+    ".github",
+    "node_modules",
+    "dist",
+    ".astro",
+    "*.md",
+    "docs/",
+    "Dockerfile*",
+    "docker-compose.yml"
+]
+
+# Project metadata
+[project]
+id = "integr8-website"
+name = "Integr8 Website"
+version = "1.0.0"
+authors = ["Integr8 Team"]
+documentation-url = "https://integr8.me"
+source-url = "https://github.com/integr8/integr8.me"
+
+[[project.licenses]]
+type = "Proprietary"
