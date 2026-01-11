@@ -19,10 +19,12 @@ const breadcrumbs = [
 
 <PageLayout
   title={lang === 'ptbr' ? 'Cases de Sucesso' : 'Success Stories'}
-  description={lang === 'ptbr' ? 'Resultados reais que entregamos para nossos clientes' : 'Real results we deliver for our clients'}
+  description={lang === 'ptbr'
+    ? 'Resultados reais que entregamos para nossos clientes'
+    : 'Real results we deliver for our clients'}
   breadcrumbs={breadcrumbs}
 >
-  <div class="grid grid-cols-1 gap-8 py-12 md:grid-cols-2 stagger-children">
+  <div class="stagger-children grid grid-cols-1 gap-8 py-12 md:grid-cols-2">
     {
       cases.map((caseItem, idx) => (
         <CaseCard
@@ -41,11 +43,13 @@ const breadcrumbs = [
     }
   </div>
 
-  {cases.length === 0 && (
-    <div class="py-24 text-center">
-      <p class="text-xl text-base-content/60">
-        {lang === 'ptbr' ? 'Nenhum case publicado ainda.' : 'No case studies published yet.'}
-      </p>
-    </div>
-  )}
+  {
+    cases.length === 0 && (
+      <div class="py-24 text-center">
+        <p class="text-xl text-base-content/60">
+          {lang === 'ptbr' ? 'Nenhum case publicado ainda.' : 'No case studies published yet.'}
+        </p>
+      </div>
+    )
+  }
 </PageLayout>

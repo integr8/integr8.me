@@ -40,9 +40,7 @@ export function DORAMetrics({ metrics, lang }: DORAMetricsProps) {
             className="card border border-base-300 bg-base-100 transition-all duration-300 hover:border-primary/30 hover:shadow-lg"
           >
             <div className="card-body p-5">
-              <div
-                className={`flex h-12 w-12 items-center justify-center rounded-xl ${colors}`}
-              >
+              <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${colors}`}>
                 <IconComponent className="h-6 w-6" />
               </div>
               <h4 className="mt-3 font-bold">{metric.name}</h4>

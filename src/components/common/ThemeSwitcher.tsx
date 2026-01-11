@@ -31,11 +31,7 @@ export function ThemeSwitcher() {
       className="btn btn-circle btn-ghost btn-sm transition-transform hover:scale-110"
       aria-label={isDark ? 'Light mode' : 'Dark mode'}
     >
-      {isDark ? (
-        <FiSun className="h-5 w-5 text-yellow-400" />
-      ) : (
-        <FiMoon className="h-5 w-5" />
-      )}
+      {isDark ? <FiSun className="h-5 w-5 text-yellow-400" /> : <FiMoon className="h-5 w-5" />}
     </button>
   );
 }

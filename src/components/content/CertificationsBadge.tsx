@@ -1,12 +1,17 @@
 import React from 'react';
-import { 
-  SiAmazonwebservices, SiGooglecloud, 
-  SiKubernetes, SiTerraform, SiDocker, SiGrafana,
-  SiPrometheus, SiHelm, SiJenkins, SiGithubactions
+import {
+  SiAmazonwebservices,
+  SiGooglecloud,
+  SiKubernetes,
+  SiTerraform,
+  SiDocker,
+  SiGrafana,
+  SiPrometheus,
+  SiHelm,
+  SiJenkins,
+  SiGithubactions,
 } from 'react-icons/si';
-import { 
-  FiAward, FiShield, FiCheckCircle, FiCloud, FiRefreshCw 
-} from 'react-icons/fi';
+import { FiAward, FiShield, FiCheckCircle, FiCloud, FiRefreshCw } from 'react-icons/fi';
 import { HiAcademicCap, HiSparkles } from 'react-icons/hi2';
 
 interface Certification {
@@ -21,32 +26,32 @@ interface CertificationsBadgeProps {
 
 // Icon mapping for certifications
 const certIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  'aws': SiAmazonwebservices,
-  'azure': FiCloud,
-  'gcp': SiGooglecloud,
-  'google': SiGooglecloud,
-  'kubernetes': SiKubernetes,
-  'cka': SiKubernetes,
-  'ckad': SiKubernetes,
-  'cks': SiKubernetes,
-  'terraform': SiTerraform,
-  'docker': SiDocker,
-  'grafana': SiGrafana,
-  'prometheus': SiPrometheus,
-  'helm': SiHelm,
-  'argo': FiRefreshCw,
-  'gitops': FiRefreshCw,
-  'jenkins': SiJenkins,
-  'github': SiGithubactions,
+  aws: SiAmazonwebservices,
+  azure: FiCloud,
+  gcp: SiGooglecloud,
+  google: SiGooglecloud,
+  kubernetes: SiKubernetes,
+  cka: SiKubernetes,
+  ckad: SiKubernetes,
+  cks: SiKubernetes,
+  terraform: SiTerraform,
+  docker: SiDocker,
+  grafana: SiGrafana,
+  prometheus: SiPrometheus,
+  helm: SiHelm,
+  argo: FiRefreshCw,
+  gitops: FiRefreshCw,
+  jenkins: SiJenkins,
+  github: SiGithubactions,
 };
 
 const categoryIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  'cloud': SiAmazonwebservices,
-  'security': FiShield,
-  'devops': SiGithubactions,
-  'platform': SiKubernetes,
-  'framework': HiSparkles,
-  'compliance': FiCheckCircle,
+  cloud: SiAmazonwebservices,
+  security: FiShield,
+  devops: SiGithubactions,
+  platform: SiKubernetes,
+  framework: HiSparkles,
+  compliance: FiCheckCircle,
 };
 
 function getCertIcon(name: string): React.ComponentType<{ className?: string }> {
@@ -69,13 +74,16 @@ function getCategoryIcon(category: string): React.ComponentType<{ className?: st
   return HiAcademicCap;
 }
 
-export function CertificationsBadge({ title = 'Certificações', certifications }: CertificationsBadgeProps) {
+export function CertificationsBadge({
+  title = 'Certificações',
+  certifications,
+}: CertificationsBadgeProps) {
   // Handle both array and object formats
   const isGrouped = !Array.isArray(certifications);
 
   if (isGrouped) {
     const groups = certifications as Record<string, string[]>;
-    
+
     return (
       <div className="my-8">
         {title && (
@@ -86,13 +94,13 @@ export function CertificationsBadge({ title = 'Certificações', certifications 
             <h3 className="text-2xl font-bold text-base-content">{title}</h3>
           </div>
         )}
-        
+
         <div className="grid gap-6 md:grid-cols-2">
           {Object.entries(groups).map(([category, certs], groupIndex) => {
             const CategoryIcon = getCategoryIcon(category);
-            
+
             return (
-              <div 
+              <div
                 key={groupIndex}
                 className="rounded-2xl border border-base-200 bg-base-100 p-6 transition-all hover:border-primary/30 hover:shadow-lg"
               >
@@ -100,12 +108,12 @@ export function CertificationsBadge({ title = 'Certificações', certifications 
                   <CategoryIcon className="h-5 w-5 text-primary" />
                   <h4 className="font-bold text-base-content">{category}</h4>
                 </div>
-                
+
                 <div className="space-y-3">
                   {certs.map((cert, certIndex) => {
                     const CertIcon = getCertIcon(cert);
                     return (
-                      <div 
+                      <div
                         key={certIndex}
                         className="flex items-center gap-3 rounded-xl bg-base-200/30 p-3 transition-colors hover:bg-base-200/50"
                       >
@@ -127,7 +135,7 @@ export function CertificationsBadge({ title = 'Certificações', certifications 
 
   // Simple array format
   const certList = certifications as Certification[];
-  
+
   return (
     <div className="my-8">
       {title && (
@@ -138,12 +146,12 @@ export function CertificationsBadge({ title = 'Certificações', certifications 
           <h3 className="text-2xl font-bold text-base-content">{title}</h3>
         </div>
       )}
-      
+
       <div className="flex flex-wrap gap-3">
         {certList.map((cert, index) => {
           const certName = typeof cert === 'string' ? cert : cert.name;
           const CertIcon = getCertIcon(certName);
-          
+
           return (
             <div
               key={index}

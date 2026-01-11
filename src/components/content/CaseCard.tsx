@@ -88,9 +88,7 @@ export function CaseCard({
         </h3>
 
         {/* Description */}
-        {description && (
-          <p className="line-clamp-2 text-sm text-base-content/70">{description}</p>
-        )}
+        {description && <p className="line-clamp-2 text-sm text-base-content/70">{description}</p>}
 
         {/* Metrics showcase */}
         {displayMetrics.length > 0 && (

@@ -124,9 +124,7 @@ export function BlogCard({
         </h3>
 
         {/* Description */}
-        {description && (
-          <p className="line-clamp-2 text-sm text-base-content/70">{description}</p>
-        )}
+        {description && <p className="line-clamp-2 text-sm text-base-content/70">{description}</p>}
 
         {/* Metadata */}
         <div className="mt-4 flex items-center justify-between border-t border-base-200 pt-4 text-xs text-base-content/60">

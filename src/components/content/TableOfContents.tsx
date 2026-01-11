@@ -99,10 +99,7 @@ export function TableOfContents({ lang }: TableOfContentsProps) {
         <div className="absolute right-0 top-0 h-full w-80 max-w-full bg-base-100 p-6 shadow-2xl">
           <div className="mb-4 flex items-center justify-between">
             <h3 className="font-bold">{lang === 'ptbr' ? 'Índice' : 'Table of Contents'}</h3>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="btn btn-circle btn-ghost btn-sm"
-            >
+            <button onClick={() => setIsOpen(false)} className="btn btn-circle btn-ghost btn-sm">
               <FiX className="h-5 w-5" />
             </button>
           </div>
