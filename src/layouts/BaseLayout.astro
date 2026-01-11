@@ -54,34 +54,35 @@ const solutions = allSolutions
       <slot />
     </main>
     <Footer lang={lang} solutions={solutions} />
-  </body><style is:global>
-    :root {
-      font-family: 'Inter', system-ui, sans-serif;
-      color-scheme: light dark;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    main {
-      flex: 1;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
+    <style is:global>
+      :root {
+        font-family: 'Inter', system-ui, sans-serif;
+        color-scheme: light dark;
       }
-    }
-  </style>
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      main {
+        flex: 1;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </body>
 </html>
