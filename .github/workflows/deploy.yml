@@ -11,14 +11,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Descomente as permissões abaixo quando o GitHub Pages estiver habilitado
-# permissions:
-#   contents: read
-#   pages: write
-#   id-token: write
-
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 concurrency:
   group: pages
@@ -36,8 +32,6 @@ jobs:
   build:
     name: 🏗️ Build
     runs-on: ubuntu-latest
-    # Remova o 'if' abaixo quando o GitHub Pages estiver habilitado
-    if: false  # Desabilitado até configurar Pages
     steps:
       - name: Checkout
         uses: actions/checkout@v4

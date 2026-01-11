@@ -114,10 +114,9 @@ jobs:
         with:
           sarif_file: 'trivy-results.sarif'
 
-      - name: Check for secrets with Gitleaks
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Gitleaks removido - requer licença para organizações
+      # Para adicionar: configure GITLEAKS_LICENSE no GitHub Secrets
+      # Ref: https://github.com/gitleaks/gitleaks-action
 
   # ===========================================================================
   # Accessibility - Validação a11y
