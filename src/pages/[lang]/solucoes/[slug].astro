@@ -1,7 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import SolutionLayout from '@layouts/SolutionLayout.astro';
-import { getTranslations } from '@i18n/utils';
 
 export async function getStaticPaths() {
   const solutions = await getCollection('solutions');
@@ -36,7 +35,6 @@ interface Props {
 
 const { lang } = Astro.params;
 const { solution } = Astro.props;
-const t = getTranslations(lang as 'ptbr' | 'en');
 
 const { Content } = await solution.render();
 ---

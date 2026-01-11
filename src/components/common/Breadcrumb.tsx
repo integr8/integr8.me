@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiHome, FiChevronRight } from 'react-icons/fi';
+import { FiHome } from 'react-icons/fi';
 
 export interface BreadcrumbItem {
   label: string;

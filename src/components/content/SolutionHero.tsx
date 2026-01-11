@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  FiCloud, FiCode, FiShield, FiActivity, FiServer, 
+  FiCloud, FiCode, FiShield, FiActivity, 
   FiDatabase, FiLayers, FiGitBranch, FiZap 
 } from 'react-icons/fi';
 import { 

@@ -34,22 +34,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup mise
-        uses: jdx/mise-action@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          experimental: true
+          node-version: '20'
+
+      - name: Install commitlint
+        run: npm install -g @commitlint/cli @commitlint/config-conventional
 
       - name: Validate conventional commits
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            # For PR: check commits in the PR
-            while IFS= read -r commit; do
-              echo "Validating: $commit"
-              git log -1 --pretty=%B "$commit" | npx commitlint -x conventional || exit 1
-            done < <(git rev-list ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
+            npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
           else
-            # For push: check the last commit on main
-            npx commitlint -x conventional --from HEAD~1 --to HEAD || exit 1
+            npx commitlint --from HEAD~1 --to HEAD --verbose
           fi
 
   # ===========================================================================
