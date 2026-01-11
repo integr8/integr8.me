@@ -1,0 +1,4 @@
+Contact: security@integr8.me
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: pt-br, en
+Canonical: https://integr8.me/.well-known/security.txt

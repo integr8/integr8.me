@@ -1,0 +1,18 @@
+# Integr8 - robots.txt
+# https://integr8.me/
+
+# Allow all bots
+User-agent: *
+Allow: /
+
+# Disallow private areas (if any)
+Disallow: /admin/
+Disallow: /private/
+Disallow: /.env
+Disallow: /node_modules/
+
+# Set sitemap location
+Sitemap: https://integr8.me/sitemap-index.xml
+
+# Crawl delay (optional - helps with server load)
+# Crawl-delay: 1
