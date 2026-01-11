@@ -12,13 +12,13 @@ export interface LanguageSwitcherProps {
 export function LanguageSwitcher({ currentLang }: LanguageSwitcherProps) {
   const handleLanguageChange = (lang: string) => {
     const currentPath = window.location.pathname;
-    
+
     // Se estamos na raiz (/), redireciona para /{lang}/
     if (currentPath === '/') {
       window.location.href = `/${lang}/`;
       return;
     }
-    
+
     // Caso contrário, substitui o idioma atual pelo novo
     const newPath = currentPath.replace(`/${currentLang}/`, `/${lang}/`);
     window.location.href = newPath;
@@ -26,7 +26,11 @@ export function LanguageSwitcher({ currentLang }: LanguageSwitcherProps) {
 
   return (
     <div className="dropdown dropdown-end">
-      <button tabIndex={0} className="btn btn-circle btn-ghost btn-sm transition-transform hover:scale-110" aria-label="Change language">
+      <button
+        tabIndex={0}
+        className="btn btn-circle btn-ghost btn-sm transition-transform hover:scale-110"
+        aria-label="Change language"
+      >
         <FiGlobe className="h-5 w-5" />
       </button>
       <ul

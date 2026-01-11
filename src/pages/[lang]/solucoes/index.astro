@@ -22,10 +22,12 @@ const breadcrumbs = [
 
 <PageLayout
   title={lang === 'ptbr' ? 'Nossas Soluções' : 'Our Solutions'}
-  description={lang === 'ptbr' ? 'Expertise técnica para acelerar sua jornada cloud-native' : 'Technical expertise to accelerate your cloud-native journey'}
+  description={lang === 'ptbr'
+    ? 'Expertise técnica para acelerar sua jornada cloud-native'
+    : 'Technical expertise to accelerate your cloud-native journey'}
   breadcrumbs={breadcrumbs}
 >
-  <div class="grid grid-cols-1 gap-8 py-12 md:grid-cols-2 lg:grid-cols-3 stagger-children">
+  <div class="stagger-children grid grid-cols-1 gap-8 py-12 md:grid-cols-2 lg:grid-cols-3">
     {
       solutions.map((solution) => {
         const slug = solution.slug.split('/').pop() || '';

@@ -9,13 +9,13 @@ interface SolutionSectionProps {
   children: React.ReactNode;
 }
 
-export function SolutionSection({ 
-  id, 
-  title, 
-  subtitle, 
-  icon, 
+export function SolutionSection({
+  id,
+  title,
+  subtitle,
+  icon,
   variant = 'default',
-  children 
+  children,
 }: SolutionSectionProps) {
   const bgClasses = {
     default: 'bg-base-100',
@@ -24,10 +24,7 @@ export function SolutionSection({
   };
 
   return (
-    <section 
-      id={id}
-      className={`relative py-16 lg:py-24 ${bgClasses[variant]}`}
-    >
+    <section id={id} className={`relative py-16 lg:py-24 ${bgClasses[variant]}`}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <div className="mb-12 max-w-3xl">
@@ -38,14 +35,8 @@ export function SolutionSection({
               </div>
             )}
             <div>
-              <h2 className="text-3xl font-bold text-base-content lg:text-4xl">
-                {title}
-              </h2>
-              {subtitle && (
-                <p className="mt-2 text-lg text-base-content/60">
-                  {subtitle}
-                </p>
-              )}
+              <h2 className="text-3xl font-bold text-base-content lg:text-4xl">{title}</h2>
+              {subtitle && <p className="mt-2 text-lg text-base-content/60">{subtitle}</p>}
             </div>
           </div>
           {/* Decorative line */}
@@ -53,27 +44,23 @@ export function SolutionSection({
         </div>
 
         {/* Section content */}
-        <div className="solution-section-content">
-          {children}
-        </div>
+        <div className="solution-section-content">{children}</div>
       </div>
     </section>
   );
 }
 
 // Compact section for smaller content blocks
-export function SolutionSubSection({ 
-  title, 
-  children 
-}: { 
-  title: string; 
+export function SolutionSubSection({
+  title,
+  children,
+}: {
+  title: string;
   children: React.ReactNode;
 }) {
   return (
     <div className="mb-12 last:mb-0">
-      <h3 className="mb-6 text-2xl font-bold text-base-content">
-        {title}
-      </h3>
+      <h3 className="mb-6 text-2xl font-bold text-base-content">{title}</h3>
       {children}
     </div>
   );

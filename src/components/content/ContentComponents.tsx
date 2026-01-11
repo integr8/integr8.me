@@ -49,8 +49,8 @@ export function FeatureGrid({ features, columns = 3, variant = 'default' }: Feat
     return (
       <div className={`grid grid-cols-1 ${gridCols[columns]} my-8 gap-4`}>
         {features.map((feature, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className="group flex items-start gap-4 rounded-xl border border-base-200 bg-base-100 p-4 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
           >
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 text-2xl transition-transform group-hover:scale-110">
@@ -58,7 +58,9 @@ export function FeatureGrid({ features, columns = 3, variant = 'default' }: Feat
             </div>
             <div className="min-w-0 flex-1">
               <h4 className="font-bold text-base-content">{feature.title}</h4>
-              <p className="mt-1 text-sm leading-relaxed text-base-content/60">{feature.description}</p>
+              <p className="mt-1 text-sm leading-relaxed text-base-content/60">
+                {feature.description}
+              </p>
             </div>
           </div>
         ))}
@@ -70,21 +72,21 @@ export function FeatureGrid({ features, columns = 3, variant = 'default' }: Feat
     return (
       <div className={`grid grid-cols-1 ${gridCols[columns]} my-8 gap-6`}>
         {features.map((feature, index) => (
-          <div 
-            key={index} 
+          <div
+            key={index}
             className="group relative overflow-hidden rounded-2xl border border-base-200 bg-base-100 p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5"
           >
             {/* Gradient overlay on hover */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 transition-opacity group-hover:opacity-100" />
-            
+
             <div className="relative">
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-secondary/10 text-4xl transition-transform group-hover:scale-110">
                 {feature.icon}
               </div>
               <h4 className="mb-2 text-xl font-bold text-base-content">{feature.title}</h4>
-              <p className="text-base-content/70 leading-relaxed">{feature.description}</p>
+              <p className="leading-relaxed text-base-content/70">{feature.description}</p>
             </div>
-            
+
             {/* Decorative corner */}
             <div className="absolute -bottom-4 -right-4 h-24 w-24 rounded-full bg-gradient-to-br from-primary/5 to-transparent blur-2xl" />
           </div>
@@ -97,8 +99,8 @@ export function FeatureGrid({ features, columns = 3, variant = 'default' }: Feat
   return (
     <div className={`grid grid-cols-1 ${gridCols[columns]} my-8 gap-6`}>
       {features.map((feature, index) => (
-        <div 
-          key={index} 
+        <div
+          key={index}
           className="group rounded-2xl border border-base-200 bg-base-100 p-6 text-center transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
           style={{ animationDelay: `${index * 0.1}s` }}
         >
@@ -144,9 +146,13 @@ export function ComparisonTable({ headers, rows }: ComparisonTableProps) {
                   <td key={valIndex} className="text-center">
                     {typeof value === 'boolean' ? (
                       value ? (
-                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-success/10 text-sm text-success">✓</span>
+                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-success/10 text-sm text-success">
+                          ✓
+                        </span>
                       ) : (
-                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-error/10 text-sm text-error">✗</span>
+                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-error/10 text-sm text-error">
+                          ✗
+                        </span>
                       )
                     ) : (
                       <span className="text-base-content/80">{value}</span>
@@ -181,8 +187,8 @@ export function Timeline({ title, items, variant = 'horizontal' }: TimelineProps
         {title && <h3 className="mb-8 text-2xl font-bold text-base-content">{title}</h3>}
         <div className="relative">
           {/* Vertical line */}
-          <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-primary via-primary/50 to-primary/20" />
-          
+          <div className="absolute bottom-0 left-6 top-0 w-px bg-gradient-to-b from-primary via-primary/50 to-primary/20" />
+
           <div className="space-y-8">
             {items.map((item, index) => (
               <div key={index} className="relative pl-16">
@@ -193,7 +199,7 @@ export function Timeline({ title, items, variant = 'horizontal' }: TimelineProps
                     {index + 1}
                   </div>
                 </div>
-                
+
                 {/* Content card */}
                 <div className="rounded-2xl border border-base-200 bg-base-100 p-6 transition-all hover:border-primary/30 hover:shadow-lg">
                   <div className="mb-2 flex flex-wrap items-center gap-3">
@@ -247,8 +253,8 @@ export function Timeline({ title, items, variant = 'horizontal' }: TimelineProps
         {/* Content grid */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {items.map((item, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="group h-full rounded-2xl border border-base-200 bg-base-100 p-6 transition-all hover:border-primary/30 hover:shadow-xl hover:shadow-primary/5"
             >
               {/* Mobile phase badge */}
@@ -257,8 +263,8 @@ export function Timeline({ title, items, variant = 'horizontal' }: TimelineProps
                   {item.phase}
                 </span>
               </div>
-              
-              <h4 className="mb-3 text-lg font-bold leading-tight text-base-content group-hover:text-primary transition-colors">
+
+              <h4 className="mb-3 text-lg font-bold leading-tight text-base-content transition-colors group-hover:text-primary">
                 {item.title}
               </h4>
               <p className="mb-4 text-sm leading-relaxed text-base-content/60">

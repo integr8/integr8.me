@@ -37,10 +37,7 @@ interface SolutionCardProps {
 }
 
 // Solution-specific colors and gradients
-const solutionStyles: Record<
-  string,
-  { gradient: string; iconColor: string; bgColor: string }
-> = {
+const solutionStyles: Record<string, { gradient: string; iconColor: string; bgColor: string }> = {
   kubernetes: {
     gradient: 'from-blue-500 to-indigo-600',
     iconColor: 'text-blue-500',
@@ -144,9 +141,7 @@ export function SolutionCard({
     <a
       href={href}
       className={`group card relative overflow-hidden border bg-base-100 transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl ${
-        featured
-          ? 'border-primary/50 shadow-xl shadow-primary/10'
-          : 'border-base-300 shadow-lg'
+        featured ? 'border-primary/50 shadow-xl shadow-primary/10' : 'border-base-300 shadow-lg'
       }`}
     >
       {/* Gradient header strip */}

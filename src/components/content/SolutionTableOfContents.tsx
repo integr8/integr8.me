@@ -21,18 +21,24 @@ export function SolutionTableOfContents({ items }: SolutionTableOfContentsProps)
     if (!items) {
       const headings = document.querySelectorAll('article h2, article h3');
       const generatedItems: TOCItem[] = [];
-      
+
       headings.forEach((heading) => {
-        const id = heading.id || heading.textContent?.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '') || '';
+        const id =
+          heading.id ||
+          heading.textContent
+            ?.toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w-]/g, '') ||
+          '';
         if (!heading.id) heading.id = id;
-        
+
         generatedItems.push({
           id,
           title: heading.textContent || '',
           level: heading.tagName === 'H2' ? 2 : 3,
         });
       });
-      
+
       setTocItems(generatedItems);
     }
   }, [items]);
@@ -78,10 +84,7 @@ export function SolutionTableOfContents({ items }: SolutionTableOfContentsProps)
           <div className="absolute bottom-0 left-0 right-0 max-h-[70vh] overflow-y-auto rounded-t-3xl bg-base-100 p-6">
             <div className="mb-4 flex items-center justify-between">
               <h3 className="text-lg font-bold text-base-content">Índice</h3>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="btn btn-circle btn-ghost btn-sm"
-              >
+              <button onClick={() => setIsOpen(false)} className="btn btn-circle btn-ghost btn-sm">
                 <FiX className="h-5 w-5" />
               </button>
             </div>
@@ -96,11 +99,13 @@ export function SolutionTableOfContents({ items }: SolutionTableOfContentsProps)
                         item.level === 3 ? 'ml-4' : ''
                       } ${
                         activeId === item.id
-                          ? 'bg-primary/10 text-primary font-medium'
+                          ? 'bg-primary/10 font-medium text-primary'
                           : 'text-base-content/70 hover:bg-base-200/50'
                       }`}
                     >
-                      <FiChevronRight className={`h-4 w-4 shrink-0 transition-transform ${activeId === item.id ? 'text-primary' : 'text-base-content/40'}`} />
+                      <FiChevronRight
+                        className={`h-4 w-4 shrink-0 transition-transform ${activeId === item.id ? 'text-primary' : 'text-base-content/40'}`}
+                      />
                       {item.title}
                     </a>
                   </li>
@@ -131,8 +136,8 @@ export function SolutionTableOfContents({ items }: SolutionTableOfContentsProps)
                     item.level === 3 ? 'ml-3 text-xs' : ''
                   } ${
                     activeId === item.id
-                      ? 'bg-primary/10 text-primary font-medium'
-                      : 'text-base-content/60 hover:text-base-content hover:bg-base-200/50'
+                      ? 'bg-primary/10 font-medium text-primary'
+                      : 'text-base-content/60 hover:bg-base-200/50 hover:text-base-content'
                   }`}
                 >
                   {activeId === item.id && (

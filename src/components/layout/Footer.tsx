@@ -49,10 +49,7 @@ export function Footer({ lang, solutions = [], showCTA = false }: FooterProps) {
                   ? 'Vamos transformar sua infraestrutura juntos.'
                   : "Let's transform your infrastructure together."}
               </p>
-              <a
-                href={`/${lang}/contato`}
-                className="btn btn-primary btn-sm gap-2"
-              >
+              <a href={`/${lang}/contato`} className="btn btn-primary btn-sm gap-2">
                 {t.ctaButton}
                 <FiArrowRight className="h-4 w-4" />
               </a>

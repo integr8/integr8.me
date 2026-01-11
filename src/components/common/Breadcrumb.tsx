@@ -22,9 +22,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
                 {item.label}
               </a>
             ) : (
-              <span className="inline-flex items-center gap-1">
-                {item.label}
-              </span>
+              <span className="inline-flex items-center gap-1">{item.label}</span>
             )}
           </li>
         ))}

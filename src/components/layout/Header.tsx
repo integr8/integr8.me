@@ -1,5 +1,20 @@
 import React from 'react';
-import { FiMenu, FiHome, FiLayers, FiTool, FiBriefcase, FiFileText, FiMail, FiCloud, FiShield, FiActivity, FiCode, FiServer, FiDatabase, FiUsers } from 'react-icons/fi';
+import {
+  FiMenu,
+  FiHome,
+  FiLayers,
+  FiTool,
+  FiBriefcase,
+  FiFileText,
+  FiMail,
+  FiCloud,
+  FiShield,
+  FiActivity,
+  FiCode,
+  FiServer,
+  FiDatabase,
+  FiUsers,
+} from 'react-icons/fi';
 import { Button } from '@components/common/Button';
 import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { ThemeSwitcher } from '@components/common/ThemeSwitcher';

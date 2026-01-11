@@ -1,7 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { FiMenu, FiX, FiHome, FiLayers, FiTool, FiBriefcase, FiFileText, FiMail } from 'react-icons/fi';
+import {
+  FiMenu,
+  FiX,
+  FiHome,
+  FiLayers,
+  FiTool,
+  FiBriefcase,
+  FiFileText,
+  FiMail,
+} from 'react-icons/fi';
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   HomeIcon: FiHome,
@@ -46,10 +55,7 @@ export function MobileDrawer({ lang, items }: MobileDrawerProps) {
         <div className="menu w-80 space-y-2 bg-base-100 p-4 text-base-content">
           <div className="mb-4 flex items-center justify-between">
             <span className="text-lg font-bold">Menu</span>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="btn btn-circle btn-ghost btn-sm"
-            >
+            <button onClick={() => setIsOpen(false)} className="btn btn-circle btn-ghost btn-sm">
               <FiX className="h-5 w-5" />
             </button>
           </div>
