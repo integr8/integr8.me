@@ -1,7 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Icon } from '@components/common/Icon';
+import { FiMenu, FiX, FiHome, FiLayers, FiTool, FiBriefcase, FiFileText, FiMail } from 'react-icons/fi';
+
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  HomeIcon: FiHome,
+  LayersIcon: FiLayers,
+  CogIcon: FiTool,
+  BriefcaseIcon: FiBriefcase,
+  DocumentTextIcon: FiFileText,
+  EnvelopeIcon: FiMail,
+  ChatBubbleLeftRightIcon: FiMail,
+  Bars3Icon: FiMenu,
+  XMarkIcon: FiX,
+};
 
 interface MobileDrawerProps {
   lang: string;
@@ -26,21 +38,39 @@ export function MobileDrawer({ lang, items }: MobileDrawerProps) {
       />
       <div className="drawer-content">
         <label htmlFor="mobile-drawer" className="btn btn-circle btn-ghost lg:hidden">
-          <Icon name="Bars3Icon" className="h-6 w-6" />
+          <FiMenu className="h-6 w-6" />
         </label>
       </div>
-      <div className="drawer-side">
+      <div className="drawer-side z-50">
         <label htmlFor="mobile-drawer" className="drawer-overlay"></label>
-        <ul className="menu w-80 space-y-2 bg-base-100 p-4 text-base-content">
-          {items.map((item) => (
-            <li key={item.key}>
-              <a href={`/${lang}${item.href}`} onClick={() => setIsOpen(false)}>
-                <Icon name={item.icon} className="h-5 w-5" />
-                {item.key}
-              </a>
-            </li>
-          ))}
-        </ul>
+        <div className="menu w-80 space-y-2 bg-base-100 p-4 text-base-content">
+          <div className="mb-4 flex items-center justify-between">
+            <span className="text-lg font-bold">Menu</span>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="btn btn-circle btn-ghost btn-sm"
+            >
+              <FiX className="h-5 w-5" />
+            </button>
+          </div>
+          <ul className="space-y-1">
+            {items.map((item) => {
+              const IconComponent = iconMap[item.icon] || FiLayers;
+              return (
+                <li key={item.key}>
+                  <a
+                    href={`/${lang}${item.href}`}
+                    onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-3 rounded-lg p-3 transition-colors hover:bg-base-200"
+                  >
+                    <IconComponent className="h-5 w-5 text-primary" />
+                    {item.key}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </div>
   );

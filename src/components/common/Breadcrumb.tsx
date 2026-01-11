@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from './Icon';
+import { FiHome, FiChevronRight } from 'react-icons/fi';
 
 export interface BreadcrumbItem {
   label: string;
@@ -17,15 +17,14 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
         {items.map((item, index) => (
           <li key={index}>
             {item.href ? (
-              <a href={item.href} className="link-hover link">
-                {index === 0 && <Icon name="HomeIcon" className="h-4 w-4" />}
+              <a href={item.href} className="link-hover link inline-flex items-center gap-1">
+                {index === 0 && <FiHome className="h-4 w-4" />}
                 {item.label}
               </a>
             ) : (
-              <>
-                {index > 0 && <Icon name="ChevronRightIcon" className="h-4 w-4" />}
+              <span className="inline-flex items-center gap-1">
                 {item.label}
-              </>
+              </span>
             )}
           </li>
         ))}

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { LANGUAGES } from '@i18n/config';
-import { Icon } from './Icon';
+import { FiGlobe } from 'react-icons/fi';
 
 export interface LanguageSwitcherProps {
   currentLang: string;
@@ -26,8 +26,8 @@ export function LanguageSwitcher({ currentLang }: LanguageSwitcherProps) {
 
   return (
     <div className="dropdown dropdown-end">
-      <button tabIndex={0} className="btn btn-circle btn-ghost" aria-label="Change language">
-        <Icon name="GlobeAltIcon" className="h-5 w-5" />
+      <button tabIndex={0} className="btn btn-circle btn-ghost btn-sm transition-transform hover:scale-110" aria-label="Change language">
+        <FiGlobe className="h-5 w-5" />
       </button>
       <ul
         tabIndex={0}

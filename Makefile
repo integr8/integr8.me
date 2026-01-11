@@ -12,29 +12,32 @@ help:
 	@echo "🚀 Integr8 Website - Available Commands"
 	@echo ""
 	@echo "Setup:"
-	@echo "  make setup         Setup mise and install dependencies"
-	@echo "  make install       Install dependencies"
-	@echo "  make clean         Clean build artifacts"
+	@echo "  make setup              Setup mise and install dependencies"
+	@echo "  make install            Install dependencies"
+	@echo "  make precommit-install  Install pre-commit hooks"
+	@echo "  make precommit-run      Run pre-commit on all files"
+	@echo "  make precommit-update   Update pre-commit hooks"
+	@echo "  make clean              Clean build artifacts"
 	@echo ""
 	@echo "Development:"
-	@echo "  make dev           Start development server (localhost:3000)"
-	@echo "  make build         Build for production"
-	@echo "  make preview       Preview production build"
+	@echo "  make dev                Start development server (localhost:3000)"
+	@echo "  make build              Build for production"
+	@echo "  make preview            Preview production build"
 	@echo ""
 	@echo "Quality:"
-	@echo "  make lint          Run ESLint"
-	@echo "  make lint-fix      Fix linting issues"
-	@echo "  make format        Run Prettier"
-	@echo "  make format-check  Check formatting"
-	@echo "  make typecheck     TypeScript type checking"
+	@echo "  make lint               Run ESLint"
+	@echo "  make lint-fix           Fix linting issues"
+	@echo "  make format             Run Prettier"
+	@echo "  make format-check       Check formatting"
+	@echo "  make typecheck          TypeScript type checking"
 	@echo ""
 	@echo "Content:"
-	@echo "  make add-solution  Add new solution template"
-	@echo "  make add-case      Add new case study template"
-	@echo "  make add-post      Add new blog post template"
+	@echo "  make add-solution       Add new solution template"
+	@echo "  make add-case           Add new case study template"
+	@echo "  make add-post           Add new blog post template"
 	@echo ""
 	@echo "Deployment:"
-	@echo "  make deploy        Build and prepare for deployment"
+	@echo "  make deploy             Build and prepare for deployment"
 	@echo ""
 
 setup:
@@ -44,10 +47,25 @@ setup:
 	@mise install
 	@echo "✅ mise setup complete!"
 	@$(MAKE) install
+	@$(MAKE) precommit-install
 
 install:
 	@echo "📦 Installing dependencies..."
 	$(MISE) pnpm install
+
+precommit-install:
+	@echo "🪝 Installing pre-commit hooks..."
+	$(MISE) pre-commit install
+	$(MISE) pre-commit install --hook-type commit-msg
+	@echo "✅ pre-commit hooks installed!"
+
+precommit-run:
+	@echo "🪝 Running pre-commit on all files..."
+	$(MISE) pre-commit run --all-files
+
+precommit-update:
+	@echo "🪝 Updating pre-commit hooks..."
+	$(MISE) pre-commit autoupdate
 
 dev:
 	@echo "🚀 Starting development server..."

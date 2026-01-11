@@ -4,7 +4,16 @@
 [tools]
 node = "20"
 pnpm = "9"
+pre-commit = "3.0.4"
 
 [env]
 # Use pnpm for package management
 NODE_ENV = "development"
+
+[tasks.precommit-install]
+description = "Install pre-commit hooks"
+run = "pre-commit install"
+
+[tasks.precommit-run]
+description = "Run pre-commit on all files"
+run = "pre-commit run --all-files"

@@ -1,39 +1,210 @@
 import React from 'react';
-import * as outline from '@heroicons/react/24/outline';
-import * as solid from '@heroicons/react/24/solid';
-import * as mini from '@heroicons/react/20/solid';
+import {
+  FiArrowRight, FiArrowLeft, FiArrowUp, FiArrowDown,
+  FiChevronRight, FiChevronLeft, FiChevronUp, FiChevronDown,
+  FiExternalLink, FiMenu, FiX, FiCheck, FiCheckCircle,
+  FiPlus, FiMinus, FiEdit, FiTrash2, FiCopy, FiDownload,
+  FiUpload, FiRefreshCw, FiSearch, FiFilter, FiMail, FiPhone,
+  FiMessageCircle, FiSend, FiBell, FiImage, FiVideo, FiMusic,
+  FiFile, FiFolder, FiUser, FiUsers, FiUserPlus, FiSettings,
+  FiTool, FiSliders, FiBarChart2, FiPieChart, FiTrendingUp,
+  FiTrendingDown, FiActivity, FiCode, FiTerminal, FiGitBranch,
+  FiDatabase, FiServer, FiCpu, FiCloud, FiGlobe, FiWifi,
+  FiLock, FiUnlock, FiShield, FiKey, FiLayout, FiGrid, FiList,
+  FiLayers, FiBox, FiPackage, FiClock, FiCalendar, FiAlertCircle,
+  FiAlertTriangle, FiInfo, FiHelpCircle, FiGithub, FiLinkedin,
+  FiTwitter, FiStar, FiHeart, FiBookmark, FiAward, FiZap,
+  FiSun, FiMoon, FiMapPin, FiHome, FiBookOpen, FiFileText,
+  FiClipboard, FiLink, FiEye, FiEyeOff, FiMaximize
+} from 'react-icons/fi';
 
-export interface IconProps {
+import {
+  HiCloud, HiServer, HiCode, HiShieldCheck, HiChartBar,
+  HiCog, HiUsers, HiDocumentText, HiGlobe, HiSparkles,
+  HiBeaker, HiCubeTransparent, HiDesktopComputer, HiFire,
+  HiPuzzle, HiSupport, HiAdjustments
+} from 'react-icons/hi';
+
+import {
+  SiKubernetes, SiDocker, SiTerraform, SiAnsible, SiPrometheus,
+  SiGrafana, SiHelm, SiArgo, SiJenkins, SiGitlab, SiGithubactions,
+  SiAmazonwebservices, SiGooglecloud, SiPython, SiGo,
+  SiTypescript, SiReact, SiPostgresql, SiMongodb, SiRedis,
+  SiApachekafka, SiVault, SiDatadog, SiGit
+} from 'react-icons/si';
+
+import { BiBuildingHouse, BiRocket } from 'react-icons/bi';
+import { TbBuildingSkyscraper } from 'react-icons/tb';
+
+type IconComponent = React.ComponentType<{ className?: string }>;
+
+const iconMap: Record<string, IconComponent> = {
+  ArrowRightIcon: FiArrowRight,
+  ArrowLeftIcon: FiArrowLeft,
+  ArrowUpIcon: FiArrowUp,
+  ArrowDownIcon: FiArrowDown,
+  ChevronRightIcon: FiChevronRight,
+  ChevronLeftIcon: FiChevronLeft,
+  ChevronUpIcon: FiChevronUp,
+  ChevronDownIcon: FiChevronDown,
+  ArrowTopRightOnSquareIcon: FiExternalLink,
+  Bars3Icon: FiMenu,
+  XMarkIcon: FiX,
+  CheckIcon: FiCheck,
+  CheckCircleIcon: FiCheckCircle,
+  PlusIcon: FiPlus,
+  MinusIcon: FiMinus,
+  PencilIcon: FiEdit,
+  TrashIcon: FiTrash2,
+  ClipboardIcon: FiClipboard,
+  ClipboardDocumentIcon: FiCopy,
+  ArrowDownTrayIcon: FiDownload,
+  ArrowUpTrayIcon: FiUpload,
+  ArrowPathIcon: FiRefreshCw,
+  MagnifyingGlassIcon: FiSearch,
+  FunnelIcon: FiFilter,
+  EnvelopeIcon: FiMail,
+  PhoneIcon: FiPhone,
+  ChatBubbleLeftIcon: FiMessageCircle,
+  ChatBubbleLeftRightIcon: FiMessageCircle,
+  PaperAirplaneIcon: FiSend,
+  BellIcon: FiBell,
+  PhotoIcon: FiImage,
+  VideoCameraIcon: FiVideo,
+  MusicalNoteIcon: FiMusic,
+  DocumentIcon: FiFile,
+  FolderIcon: FiFolder,
+  UserIcon: FiUser,
+  UsersIcon: FiUsers,
+  UserPlusIcon: FiUserPlus,
+  UserGroupIcon: HiUsers,
+  CogIcon: FiSettings,
+  Cog6ToothIcon: FiSettings,
+  Cog8ToothIcon: HiCog,
+  WrenchIcon: FiTool,
+  WrenchScrewdriverIcon: FiTool,
+  AdjustmentsHorizontalIcon: FiSliders,
+  AdjustmentsVerticalIcon: HiAdjustments,
+  ChartBarIcon: FiBarChart2,
+  ChartPieIcon: FiPieChart,
+  PresentationChartBarIcon: HiChartBar,
+  PresentationChartLineIcon: FiTrendingUp,
+  ArrowTrendingUpIcon: FiTrendingUp,
+  ArrowTrendingDownIcon: FiTrendingDown,
+  CodeBracketIcon: FiCode,
+  CodeBracketSquareIcon: HiCode,
+  CommandLineIcon: FiTerminal,
+  CircleStackIcon: FiDatabase,
+  ServerIcon: FiServer,
+  ServerStackIcon: HiServer,
+  CpuChipIcon: FiCpu,
+  CloudIcon: FiCloud,
+  GlobeAltIcon: FiGlobe,
+  GlobeAmericasIcon: HiGlobe,
+  WifiIcon: FiWifi,
+  LockClosedIcon: FiLock,
+  LockOpenIcon: FiUnlock,
+  ShieldCheckIcon: FiShield,
+  ShieldExclamationIcon: HiShieldCheck,
+  KeyIcon: FiKey,
+  FingerPrintIcon: FiKey,
+  Squares2X2Icon: FiGrid,
+  ViewColumnsIcon: FiLayout,
+  ListBulletIcon: FiList,
+  QueueListIcon: FiList,
+  RectangleStackIcon: FiLayers,
+  CubeIcon: FiBox,
+  CubeTransparentIcon: HiCubeTransparent,
+  ArchiveBoxIcon: FiPackage,
+  ClockIcon: FiClock,
+  CalendarIcon: FiCalendar,
+  CalendarDaysIcon: FiCalendar,
+  ExclamationCircleIcon: FiAlertCircle,
+  ExclamationTriangleIcon: FiAlertTriangle,
+  InformationCircleIcon: FiInfo,
+  QuestionMarkCircleIcon: FiHelpCircle,
+  StarIcon: FiStar,
+  HeartIcon: FiHeart,
+  BookmarkIcon: FiBookmark,
+  TrophyIcon: FiAward,
+  SparklesIcon: HiSparkles,
+  BoltIcon: FiZap,
+  FireIcon: HiFire,
+  LightBulbIcon: FiZap,
+  SunIcon: FiSun,
+  MoonIcon: FiMoon,
+  MapPinIcon: FiMapPin,
+  HomeIcon: FiHome,
+  BuildingOfficeIcon: BiBuildingHouse,
+  BuildingOffice2Icon: TbBuildingSkyscraper,
+  AcademicCapIcon: FiAward,
+  BeakerIcon: HiBeaker,
+  BookOpenIcon: FiBookOpen,
+  DocumentTextIcon: FiFileText,
+  NewspaperIcon: HiDocumentText,
+  LinkIcon: FiLink,
+  EyeIcon: FiEye,
+  EyeSlashIcon: FiEyeOff,
+  WindowIcon: FiMaximize,
+  ComputerDesktopIcon: HiDesktopComputer,
+  DevicePhoneMobileIcon: FiMaximize,
+  SignalIcon: FiActivity,
+  RocketLaunchIcon: BiRocket,
+  PuzzlePieceIcon: HiPuzzle,
+  LifebuoyIcon: HiSupport,
+  KubernetesIcon: SiKubernetes,
+  DockerIcon: SiDocker,
+  TerraformIcon: SiTerraform,
+  AnsibleIcon: SiAnsible,
+  PrometheusIcon: SiPrometheus,
+  GrafanaIcon: SiGrafana,
+  HelmIcon: SiHelm,
+  ArgoCDIcon: SiArgo,
+  JenkinsIcon: SiJenkins,
+  GitLabIcon: SiGitlab,
+  GitHubActionsIcon: SiGithubactions,
+  AWSIcon: SiAmazonwebservices,
+  GCPIcon: SiGooglecloud,
+  AzureIcon: FiCloud,
+  PythonIcon: SiPython,
+  GoIcon: SiGo,
+  TypeScriptIcon: SiTypescript,
+  ReactIcon: SiReact,
+  PostgreSQLIcon: SiPostgresql,
+  MongoDBIcon: SiMongodb,
+  RedisIcon: SiRedis,
+  KafkaIcon: SiApachekafka,
+  VaultIcon: SiVault,
+  DatadogIcon: SiDatadog,
+  GitIcon: SiGit,
+  GitHubIcon: FiGithub,
+  LinkedInIcon: FiLinkedin,
+  TwitterIcon: FiTwitter,
+  AwsIcon: SiAmazonwebservices,
+  GcpIcon: SiGooglecloud,
+  ClipboardDocumentListIcon: FiClipboard,
+  ChartBarSquareIcon: FiBarChart2,
+  DefaultIcon: FiBox,
+};
+
+interface IconProps {
   name: string;
-  variant?: 'outline' | 'solid' | 'mini';
   className?: string;
-  'aria-hidden'?: boolean;
-  role?: string;
+  size?: number;
 }
 
-type IconName = keyof typeof outline;
-
-export function Icon({ name, variant = 'outline', className = 'h-6 w-6', ...props }: IconProps) {
-  let iconSet: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>>;
-
-  switch (variant) {
-    case 'solid':
-      iconSet = solid as Record<string, React.ComponentType>;
-      break;
-    case 'mini':
-      iconSet = mini as Record<string, React.ComponentType>;
-      break;
-    default:
-      iconSet = outline as Record<string, React.ComponentType>;
-  }
-
-  const IconComponent = iconSet[name as IconName] as React.ComponentType<
-    React.SVGProps<SVGSVGElement>
-  >;
+export function Icon({ name, className = 'h-5 w-5', size }: IconProps) {
+  const IconComponent = iconMap[name];
 
   if (!IconComponent) {
-    return null;
+    console.warn(`Icon "${name}" not found, using default`);
+    const DefaultIcon = iconMap.DefaultIcon;
+    return <DefaultIcon className={className} />;
   }
 
-  return <IconComponent className={className} {...props} />;
+  const style = size ? { width: size, height: size } : undefined;
+
+  return <IconComponent className={className} style={style} />;
 }
+
+export { iconMap };

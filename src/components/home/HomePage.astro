@@ -16,8 +16,10 @@ const { t } = useTranslations(lang);
 
 const allSolutions = await getCollection('solutions');
 const solutions = allSolutions.filter((s) => s.id.startsWith(`${lang}/`));
-const cases = await getCollection('cases');
-const posts = await getCollection('blog');
+const allCases = await getCollection('cases');
+const cases = allCases.filter((c) => c.id.startsWith(`${lang}/`));
+const allPosts = await getCollection('blog');
+const posts = allPosts.filter((p) => p.slug.startsWith(`${lang}/`));
 ---
 
 <BaseLayout title="Integr8 - Consultoria Cloud-Native">
