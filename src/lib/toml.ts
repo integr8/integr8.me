@@ -9,7 +9,8 @@ export function loadToml<T>(filePath: string): T {
 }
 
 export const loadSiteConfig = () => loadToml('site.config.toml');
-export const loadNavigation = () => loadToml<{ main: unknown[] }>('src/content/data/navigation.toml');
+export const loadNavigation = () =>
+  loadToml<{ main: unknown[] }>('src/content/data/navigation.toml');
 export const loadCertifications = () => {
   const data = loadToml<{ certifications: unknown[] }>('src/content/data/certifications.toml');
   return data.certifications || [];
@@ -26,5 +27,4 @@ export const loadCapabilities = () => {
   const data = loadToml<{ capabilities: unknown[] }>('src/content/data/capabilities.toml');
   return data.capabilities || [];
 };
-export const loadTranslations = (lang: string) => 
-  loadToml(`src/i18n/locales/${lang}.toml`);
+export const loadTranslations = (lang: string) => loadToml(`src/i18n/locales/${lang}.toml`);

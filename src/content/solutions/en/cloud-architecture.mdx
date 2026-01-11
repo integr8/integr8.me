@@ -1,10 +1,19 @@
 ---
-title: "Cloud Architecture & FinOps"
-category: "cloud-platform"
-description: "We design resilient and optimized infrastructures on AWS, Azure and GCP with focus on cost reduction, security and operational excellence."
-icon: "CloudIcon"
+title: 'Cloud Architecture & FinOps'
+category: 'cloud-platform'
+description: 'We design resilient and optimized infrastructures on AWS, Azure and GCP with focus on cost reduction, security and operational excellence.'
+icon: 'CloudIcon'
 weight: 1
-technologies: ["AWS (EKS, Lambda, RDS, S3, CloudFront)", "Azure (AKS, ARM, Azure Functions)", "GCP (GKE, Cloud Run, BigQuery)", "Terraform / OpenTofu", "Crossplane", "Karpenter", "Pulumi"]
+technologies:
+  [
+    'AWS (EKS, Lambda, RDS, S3, CloudFront)',
+    'Azure (AKS, ARM, Azure Functions)',
+    'GCP (GKE, Cloud Run, BigQuery)',
+    'Terraform / OpenTofu',
+    'Crossplane',
+    'Karpenter',
+    'Pulumi',
+  ]
 ---
 
 import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
@@ -13,14 +22,34 @@ import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/con
 
 Cloud computing promises infinite scalability, but without proper architecture it becomes an unmanageable cost center:
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "💸", title: "Uncontrolled Spending", description: "Bills growing exponentially without corresponding value" },
-    { icon: "🔓", title: "Vulnerabilities", description: "Misconfigured services and permissive IAM policies" },
-    { icon: "🔀", title: "Operational Complexity", description: "Scattered infrastructure without standardization" },
-    { icon: "🚫", title: "Failed Migrations", description: "Stuck between legacy and incomplete cloud" },
-    { icon: "📋", title: "Compliance Gaps", description: "Regulatory risks and audit failures" },
-    { icon: "🏚️", title: "Lift & Shift", description: "Problems moved from on-premise to cloud at higher cost" }
+    {
+      icon: '💸',
+      title: 'Uncontrolled Spending',
+      description: 'Bills growing exponentially without corresponding value',
+    },
+    {
+      icon: '🔓',
+      title: 'Vulnerabilities',
+      description: 'Misconfigured services and permissive IAM policies',
+    },
+    {
+      icon: '🔀',
+      title: 'Operational Complexity',
+      description: 'Scattered infrastructure without standardization',
+    },
+    {
+      icon: '🚫',
+      title: 'Failed Migrations',
+      description: 'Stuck between legacy and incomplete cloud',
+    },
+    { icon: '📋', title: 'Compliance Gaps', description: 'Regulatory risks and audit failures' },
+    {
+      icon: '🏚️',
+      title: 'Lift & Shift',
+      description: 'Problems moved from on-premise to cloud at higher cost',
+    },
   ]}
   columns={3}
 />
@@ -32,34 +61,44 @@ Cloud computing promises infinite scalability, but without proper architecture i
   levels={[
     {
       level: 1,
-      title: "Exploratory",
-      description: "First cloud experiments",
-      items: ["Basic VMs", "Manual console", "No automation", "Unknown costs"]
+      title: 'Exploratory',
+      description: 'First cloud experiments',
+      items: ['Basic VMs', 'Manual console', 'No automation', 'Unknown costs'],
     },
     {
       level: 2,
-      title: "Foundational",
-      description: "First production workloads",
-      items: ["Basic IaC (Terraform)", "Initial landing zone", "Basic monitoring", "Some cost tags"]
+      title: 'Foundational',
+      description: 'First production workloads',
+      items: [
+        'Basic IaC (Terraform)',
+        'Initial landing zone',
+        'Basic monitoring',
+        'Some cost tags',
+      ],
     },
     {
       level: 3,
-      title: "Standardized",
-      description: "Well-Architected practices",
-      items: ["Multi-account/subscription", "Modular IaC", "GitOps for infra", "Basic FinOps"]
+      title: 'Standardized',
+      description: 'Well-Architected practices',
+      items: ['Multi-account/subscription', 'Modular IaC', 'GitOps for infra', 'Basic FinOps'],
     },
     {
       level: 4,
-      title: "Advanced",
-      description: "Cloud-native optimized ops",
-      items: ["Multi-cloud/hybrid", "Crossplane/Pulumi", "Mature FinOps", "Chaos engineering"]
+      title: 'Advanced',
+      description: 'Cloud-native optimized ops',
+      items: ['Multi-cloud/hybrid', 'Crossplane/Pulumi', 'Mature FinOps', 'Chaos engineering'],
     },
     {
       level: 5,
-      title: "Optimized",
-      description: "Continuous operational excellence",
-      items: ["Self-service platform", "Automated FinOps", "Continuous compliance", "Sustainability metrics"]
-    }
+      title: 'Optimized',
+      description: 'Continuous operational excellence',
+      items: [
+        'Self-service platform',
+        'Automated FinOps',
+        'Continuous compliance',
+        'Sustainability metrics',
+      ],
+    },
   ]}
 />
 
@@ -67,14 +106,30 @@ Cloud computing promises infinite scalability, but without proper architecture i
 
 ### Well-Architected Framework
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "⚙️", title: "Operational Excellence", description: "Automated runbooks, IaC, continuous monitoring" },
-    { icon: "🛡️", title: "Security", description: "Zero-trust, least privilege, end-to-end encryption" },
-    { icon: "🔄", title: "Reliability", description: "Multi-region, automated DR, chaos engineering" },
-    { icon: "⚡", title: "Performance", description: "Right-sizing, caching, database tuning" },
-    { icon: "💰", title: "Cost Optimization", description: "Reserved instances, Spot, lifecycle management" },
-    { icon: "🌱", title: "Sustainability", description: "Resource efficiency, carbon footprint" }
+    {
+      icon: '⚙️',
+      title: 'Operational Excellence',
+      description: 'Automated runbooks, IaC, continuous monitoring',
+    },
+    {
+      icon: '🛡️',
+      title: 'Security',
+      description: 'Zero-trust, least privilege, end-to-end encryption',
+    },
+    {
+      icon: '🔄',
+      title: 'Reliability',
+      description: 'Multi-region, automated DR, chaos engineering',
+    },
+    { icon: '⚡', title: 'Performance', description: 'Right-sizing, caching, database tuning' },
+    {
+      icon: '💰',
+      title: 'Cost Optimization',
+      description: 'Reserved instances, Spot, lifecycle management',
+    },
+    { icon: '🌱', title: 'Sustainability', description: 'Resource efficiency, carbon footprint' },
   ]}
   columns={3}
 />
@@ -84,25 +139,42 @@ Cloud computing promises infinite scalability, but without proper architecture i
 <Timeline
   title="FinOps Journey"
   items={[
-    { phase: "Visibility", title: "Unified Dashboards", description: "Consolidated costs from all accounts and providers" },
-    { phase: "Allocation", title: "Tagging & Chargeback", description: "Cost attribution to teams and projects" },
-    { phase: "Optimization", title: "Right-sizing & Spot", description: "Up to 90% savings with Spot Instances" },
-    { phase: "Governance", title: "Alerts & Guardrails", description: "Anomaly detection and budget alerts" }
+    {
+      phase: 'Visibility',
+      title: 'Unified Dashboards',
+      description: 'Consolidated costs from all accounts and providers',
+    },
+    {
+      phase: 'Allocation',
+      title: 'Tagging & Chargeback',
+      description: 'Cost attribution to teams and projects',
+    },
+    {
+      phase: 'Optimization',
+      title: 'Right-sizing & Spot',
+      description: 'Up to 90% savings with Spot Instances',
+    },
+    {
+      phase: 'Governance',
+      title: 'Alerts & Guardrails',
+      description: 'Anomaly detection and budget alerts',
+    },
   ]}
 />
 
 <Callout type="success" title="Typical Results">
-**30-50% reduction in cloud bills** through right-sizing, reserved instances and Spot optimization.
+  **30-50% reduction in cloud bills** through right-sizing, reserved instances and Spot
+  optimization.
 </Callout>
 
 ### Infrastructure as Code
 
-| Tool | Use | Benefit |
-|------|-----|---------|
-| **Terraform/OpenTofu** | Multi-cloud IaC | Reusable modules, state management |
-| **Crossplane** | K8s-native IaC | Self-service, resource composition |
-| **Pulumi** | IaC in real languages | TypeScript/Python/Go for infra |
-| **GitOps** | Infra delivery | PRs, approvals, audit trail |
+| Tool                   | Use                   | Benefit                            |
+| ---------------------- | --------------------- | ---------------------------------- |
+| **Terraform/OpenTofu** | Multi-cloud IaC       | Reusable modules, state management |
+| **Crossplane**         | K8s-native IaC        | Self-service, resource composition |
+| **Pulumi**             | IaC in real languages | TypeScript/Python/Go for infra     |
+| **GitOps**             | Infra delivery        | PRs, approvals, audit trail        |
 
 ## Certifications
 
@@ -113,12 +185,12 @@ Cloud computing promises infinite scalability, but without proper architecture i
 
 ## Results
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "💰", title: "-30-50% Costs", description: "Significant cloud bill reduction" },
-    { icon: "⚡", title: "Zero Downtime", description: "Migrations without service interruption" },
-    { icon: "✅", title: "99.99% Uptime", description: "Multi-region high availability" },
-    { icon: "🚀", title: "4x Faster", description: "New environment provisioning" }
+    { icon: '💰', title: '-30-50% Costs', description: 'Significant cloud bill reduction' },
+    { icon: '⚡', title: 'Zero Downtime', description: 'Migrations without service interruption' },
+    { icon: '✅', title: '99.99% Uptime', description: 'Multi-region high availability' },
+    { icon: '🚀', title: '4x Faster', description: 'New environment provisioning' },
   ]}
   columns={4}
 />

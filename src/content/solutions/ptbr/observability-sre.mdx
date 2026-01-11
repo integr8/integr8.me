@@ -1,10 +1,20 @@
 ---
-title: "Observabilidade & SRE"
-category: "engineering"
-description: "Implementamos observabilidade moderna com OpenTelemetry, Prometheus e práticas SRE para garantir confiabilidade e performance dos seus sistemas."
-icon: "ChartBarSquareIcon"
+title: 'Observabilidade & SRE'
+category: 'engineering'
+description: 'Implementamos observabilidade moderna com OpenTelemetry, Prometheus e práticas SRE para garantir confiabilidade e performance dos seus sistemas.'
+icon: 'ChartBarSquareIcon'
 weight: 7
-technologies: ["OpenTelemetry", "Prometheus / Mimir / Thanos", "Grafana / Loki", "Jaeger / Tempo", "Datadog / New Relic", "PagerDuty / OpsGenie", "Chaos Engineering", "SLOs & Error Budgets"]
+technologies:
+  [
+    'OpenTelemetry',
+    'Prometheus / Mimir / Thanos',
+    'Grafana / Loki',
+    'Jaeger / Tempo',
+    'Datadog / New Relic',
+    'PagerDuty / OpsGenie',
+    'Chaos Engineering',
+    'SLOs & Error Budgets',
+  ]
 ---
 
 import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
@@ -13,14 +23,26 @@ import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/con
 
 Sistemas distribuídos modernos apresentam desafios únicos de observabilidade:
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🔀", title: "Monitoramento fragmentado", description: "Ferramentas diferentes para métricas, logs e traces" },
-    { icon: "🔔", title: "Alert fatigue", description: "Bombardeio de alertas não acionáveis" },
-    { icon: "🐌", title: "Troubleshooting lento", description: "Correlação manual entre serviços" },
-    { icon: "📊", title: "Métricas de vaidade", description: "Não refletem experiência do usuário" },
-    { icon: "💸", title: "Custos crescentes", description: "Volume de dados descontrolado" },
-    { icon: "🔥", title: "Firefighting constante", description: "Sem tempo para trabalho proativo" }
+    {
+      icon: '🔀',
+      title: 'Monitoramento fragmentado',
+      description: 'Ferramentas diferentes para métricas, logs e traces',
+    },
+    { icon: '🔔', title: 'Alert fatigue', description: 'Bombardeio de alertas não acionáveis' },
+    { icon: '🐌', title: 'Troubleshooting lento', description: 'Correlação manual entre serviços' },
+    {
+      icon: '📊',
+      title: 'Métricas de vaidade',
+      description: 'Não refletem experiência do usuário',
+    },
+    { icon: '💸', title: 'Custos crescentes', description: 'Volume de dados descontrolado' },
+    {
+      icon: '🔥',
+      title: 'Firefighting constante',
+      description: 'Sem tempo para trabalho proativo',
+    },
   ]}
   columns={3}
 />
@@ -32,34 +54,46 @@ Sistemas distribuídos modernos apresentam desafios únicos de observabilidade:
   levels={[
     {
       level: 1,
-      title: "Reativo",
-      description: "Básico e fragmentado",
-      items: ["Logs básicos", "Métricas de infra", "Alertas ad-hoc", "Sem traces"]
+      title: 'Reativo',
+      description: 'Básico e fragmentado',
+      items: ['Logs básicos', 'Métricas de infra', 'Alertas ad-hoc', 'Sem traces'],
     },
     {
       level: 2,
-      title: "Básico",
-      description: "Ferramentas implementadas",
-      items: ["Prometheus", "Dashboards básicos", "Log aggregation", "Alertas por threshold"]
+      title: 'Básico',
+      description: 'Ferramentas implementadas',
+      items: ['Prometheus', 'Dashboards básicos', 'Log aggregation', 'Alertas por threshold'],
     },
     {
       level: 3,
-      title: "Integrado",
-      description: "Three pillars correlacionados",
-      items: ["OpenTelemetry", "Distributed tracing", "SLIs definidos", "Logs estruturados", "Correlation"]
+      title: 'Integrado',
+      description: 'Three pillars correlacionados',
+      items: [
+        'OpenTelemetry',
+        'Distributed tracing',
+        'SLIs definidos',
+        'Logs estruturados',
+        'Correlation',
+      ],
     },
     {
       level: 4,
-      title: "Proativo",
-      description: "SRE practices maduras",
-      items: ["SLOs & Error Budgets", "Burn rate alerts", "Chaos Engineering", "RUM/Synthetic", "Incident management"]
+      title: 'Proativo',
+      description: 'SRE practices maduras',
+      items: [
+        'SLOs & Error Budgets',
+        'Burn rate alerts',
+        'Chaos Engineering',
+        'RUM/Synthetic',
+        'Incident management',
+      ],
     },
     {
       level: 5,
-      title: "Otimizado",
-      description: "Excelência operacional",
-      items: ["AIOps", "Auto-remediation", "Predictive alerts", "Business metrics", "Toil < 10%"]
-    }
+      title: 'Otimizado',
+      description: 'Excelência operacional',
+      items: ['AIOps', 'Auto-remediation', 'Predictive alerts', 'Business metrics', 'Toil < 10%'],
+    },
   ]}
 />
 
@@ -67,18 +101,18 @@ Sistemas distribuídos modernos apresentam desafios únicos de observabilidade:
 
 ### OpenTelemetry como Base
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "📈", title: "Metrics", description: "Histogramas com exemplars linkados a traces" },
-    { icon: "📝", title: "Logs", description: "Estruturados com trace_id e span_id" },
-    { icon: "🔗", title: "Traces", description: "Propagação de contexto end-to-end" },
-    { icon: "🔄", title: "Collector", description: "Processamento, enrichment, routing" }
+    { icon: '📈', title: 'Metrics', description: 'Histogramas com exemplars linkados a traces' },
+    { icon: '📝', title: 'Logs', description: 'Estruturados com trace_id e span_id' },
+    { icon: '🔗', title: 'Traces', description: 'Propagação de contexto end-to-end' },
+    { icon: '🔄', title: 'Collector', description: 'Processamento, enrichment, routing' },
   ]}
   columns={4}
 />
 
 <Callout type="success" title="Vendor Neutrality">
-OpenTelemetry garante que você não fica preso a nenhum vendor de observabilidade.
+  OpenTelemetry garante que você não fica preso a nenhum vendor de observabilidade.
 </Callout>
 
 ### Metrics Stack
@@ -86,30 +120,30 @@ OpenTelemetry garante que você não fica preso a nenhum vendor de observabilida
 <Timeline
   title="Stack de Métricas"
   items={[
-    { phase: "Coleta", title: "Prometheus", description: "Pull-based metrics collection" },
-    { phase: "Scale", title: "Thanos/Mimir", description: "Long-term storage e multi-cluster" },
-    { phase: "Visualização", title: "Grafana", description: "Dashboards padronizados e mixins" },
-    { phase: "Alerting", title: "Alertmanager", description: "Routing e deduplication" }
+    { phase: 'Coleta', title: 'Prometheus', description: 'Pull-based metrics collection' },
+    { phase: 'Scale', title: 'Thanos/Mimir', description: 'Long-term storage e multi-cluster' },
+    { phase: 'Visualização', title: 'Grafana', description: 'Dashboards padronizados e mixins' },
+    { phase: 'Alerting', title: 'Alertmanager', description: 'Routing e deduplication' },
   ]}
 />
 
 ### Logging Strategy
 
-| Ferramenta | Uso | Benefício |
-|------------|-----|-----------|
-| **Loki** | Log aggregation | Cost-effective, labels inteligentes |
-| **LogQL** | Queries | Correlação com métricas |
-| **Structured** | Format | JSON para parsing automático |
-| **Sampling** | Alto volume | Controle de custos |
+| Ferramenta     | Uso             | Benefício                           |
+| -------------- | --------------- | ----------------------------------- |
+| **Loki**       | Log aggregation | Cost-effective, labels inteligentes |
+| **LogQL**      | Queries         | Correlação com métricas             |
+| **Structured** | Format          | JSON para parsing automático        |
+| **Sampling**   | Alto volume     | Controle de custos                  |
 
 ### Distributed Tracing
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🔍", title: "Jaeger", description: "Self-hosted, full-featured" },
-    { icon: "⏱️", title: "Tempo", description: "Integration com Grafana stack" },
-    { icon: "📊", title: "Service Maps", description: "Dependency visualization" },
-    { icon: "🎯", title: "Sampling", description: "Head/tail/error-based" }
+    { icon: '🔍', title: 'Jaeger', description: 'Self-hosted, full-featured' },
+    { icon: '⏱️', title: 'Tempo', description: 'Integration com Grafana stack' },
+    { icon: '📊', title: 'Service Maps', description: 'Dependency visualization' },
+    { icon: '🎯', title: 'Sampling', description: 'Head/tail/error-based' },
   ]}
   columns={4}
 />
@@ -119,17 +153,21 @@ OpenTelemetry garante que você não fica preso a nenhum vendor de observabilida
 <Timeline
   title="Jornada SRE"
   items={[
-    { phase: "SLIs", title: "Definição", description: "Métricas baseadas na jornada do usuário" },
-    { phase: "SLOs", title: "Objetivos", description: "Targets acordados com stakeholders" },
-    { phase: "Error Budgets", title: "Gerenciamento", description: "Burn rate tracking e policies" },
-    { phase: "Incidents", title: "Gestão", description: "Playbooks, postmortems, action items" }
+    { phase: 'SLIs', title: 'Definição', description: 'Métricas baseadas na jornada do usuário' },
+    { phase: 'SLOs', title: 'Objetivos', description: 'Targets acordados com stakeholders' },
+    {
+      phase: 'Error Budgets',
+      title: 'Gerenciamento',
+      description: 'Burn rate tracking e policies',
+    },
+    { phase: 'Incidents', title: 'Gestão', description: 'Playbooks, postmortems, action items' },
   ]}
 />
 
 ### Alerting Philosophy
 
 <Callout type="info" title="Alertas Efetivos">
-Alertas baseados em **sintomas** (impacto no usuário), não causas (CPU alta).
+  Alertas baseados em **sintomas** (impacto no usuário), não causas (CPU alta).
 </Callout>
 
 - Multi-window, multi-burn-rate alerting
@@ -139,17 +177,18 @@ Alertas baseados em **sintomas** (impacto no usuário), não causas (CPU alta).
 
 ### Chaos Engineering
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🐒", title: "Chaos Monkey", description: "Falhas de instância" },
-    { icon: "☸️", title: "Litmus Chaos", description: "Kubernetes-native" },
-    { icon: "🎮", title: "Game Days", description: "Exercícios planejados" },
-    { icon: "🛡️", title: "Steady State", description: "Validação automatizada" }
+    { icon: '🐒', title: 'Chaos Monkey', description: 'Falhas de instância' },
+    { icon: '☸️', title: 'Litmus Chaos', description: 'Kubernetes-native' },
+    { icon: '🎮', title: 'Game Days', description: 'Exercícios planejados' },
+    { icon: '🛡️', title: 'Steady State', description: 'Validação automatizada' },
   ]}
   columns={4}
 />
 
 **Failure Scenarios:**
+
 - Pod/Container/Node failures
 - Network latency e partition
 - DNS failures
@@ -158,23 +197,25 @@ Alertas baseados em **sintomas** (impacto no usuário), não causas (CPU alta).
 ## Certificações
 
 **Observability:**
+
 - Grafana Certified Professional
 - AWS DevOps Engineer – Professional
 - Experiência Prometheus, Loki, Tempo, Jaeger
 
 **SRE:**
+
 - Google SRE Certification
 - Participação em SREcon
 - Contribuições open source
 
 ## Resultados
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "⚡", title: "MTTD -70%", description: "Detecção mais rápida de problemas" },
-    { icon: "🔧", title: "MTTR -60%", description: "Resolução mais rápida" },
-    { icon: "📉", title: "-80% Alertas", description: "Eliminação de ruído" },
-    { icon: "💰", title: "-50% Custos", description: "Otimização de volume de dados" }
+    { icon: '⚡', title: 'MTTD -70%', description: 'Detecção mais rápida de problemas' },
+    { icon: '🔧', title: 'MTTR -60%', description: 'Resolução mais rápida' },
+    { icon: '📉', title: '-80% Alertas', description: 'Eliminação de ruído' },
+    { icon: '💰', title: '-50% Custos', description: 'Otimização de volume de dados' },
   ]}
   columns={4}
 />

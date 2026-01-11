@@ -17,7 +17,7 @@ export function Breadcrumb({ items }: BreadcrumbProps) {
         {items.map((item, index) => (
           <li key={index}>
             {item.href ? (
-              <a href={item.href} className="link link-hover">
+              <a href={item.href} className="link-hover link">
                 {index === 0 && <Icon name="HomeIcon" className="h-4 w-4" />}
                 {item.label}
               </a>

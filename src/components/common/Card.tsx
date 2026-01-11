@@ -12,7 +12,7 @@ export function Card({ children, className, hoverable = true }: CardProps) {
     <div
       className={classNames(
         'card bg-base-100 shadow-lg',
-        hoverable && 'hover:shadow-xl transition-shadow duration-300',
+        hoverable && 'transition-shadow duration-300 hover:shadow-xl',
         className
       )}
     >
@@ -39,7 +39,7 @@ export interface CardImageProps {
 export function CardImage({ src, alt, className }: CardImageProps) {
   return (
     <figure className={classNames('px-10 pt-10', className)}>
-      <img src={src} alt={alt} className="rounded-lg h-32 w-32 object-cover" />
+      <img src={src} alt={alt} className="h-32 w-32 rounded-lg object-cover" />
     </figure>
   );
 }

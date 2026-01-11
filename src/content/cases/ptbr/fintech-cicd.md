@@ -1,10 +1,10 @@
 ---
-title: "Transformação CI/CD em Fintech"
-client: "Fintech líder no Brasil"
-industry: "fintech"
-challenge: "Pipeline de deploy manual levava 2 semanas e causava 40% de falhas em produção. O time de 3 DevOps engenheiros era gargalo para toda organização."
-description: "Caso de sucesso: Implementação de GitOps com ArgoCD, GitHub Actions e Kubernetes reduzindo deployment frequency de 1x/mês para 50x/dia"
-technologies: ["Kubernetes", "ArgoCD", "GitHub Actions", "Terraform", "Prometheus"]
+title: 'Transformação CI/CD em Fintech'
+client: 'Fintech líder no Brasil'
+industry: 'fintech'
+challenge: 'Pipeline de deploy manual levava 2 semanas e causava 40% de falhas em produção. O time de 3 DevOps engenheiros era gargalo para toda organização.'
+description: 'Caso de sucesso: Implementação de GitOps com ArgoCD, GitHub Actions e Kubernetes reduzindo deployment frequency de 1x/mês para 50x/dia'
+technologies: ['Kubernetes', 'ArgoCD', 'GitHub Actions', 'Terraform', 'Prometheus']
 featured: true
 weight: 1
 ---
@@ -18,6 +18,7 @@ Uma das maiores fintechs do Brasil enfrentava desafios críticos em sua pipeline
 ### Fase 1: Assessment (2 semanas)
 
 Realizamos um assessment completo analisando:
+
 - Arquitetura atual (monolito em Java + microsserviços iniciais)
 - Pipeline atual (Jenkins com scripts bash manuais)
 - Infraestrutura (VMs em datacenter + AWS)
@@ -56,12 +57,12 @@ Recomendação: Containerizar aplicações, migrar para Kubernetes e implementar
 
 ### Métricas DORA
 
-| Métrica | Antes | Depois | Melhoria |
-|---------|-------|--------|----------|
-| **Deployment Frequency** | 1x/mês | 50x/dia | **50,000%** |
-| **Lead Time for Changes** | 2 semanas | 30 min | **99.6%** |
-| **Change Failure Rate** | 40% | 2% | **95%** ↓ |
-| **Time to Restore Service** | 6 horas | 15 min | **96%** ↓ |
+| Métrica                     | Antes     | Depois  | Melhoria    |
+| --------------------------- | --------- | ------- | ----------- |
+| **Deployment Frequency**    | 1x/mês    | 50x/dia | **50,000%** |
+| **Lead Time for Changes**   | 2 semanas | 30 min  | **99.6%**   |
+| **Change Failure Rate**     | 40%       | 2%      | **95%** ↓   |
+| **Time to Restore Service** | 6 horas   | 15 min  | **96%** ↓   |
 
 ### Impacto Financeiro
 

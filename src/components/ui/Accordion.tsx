@@ -34,14 +34,14 @@ export function Accordion({ items, allowMultiple = false }: AccordionProps) {
   return (
     <div className="join join-vertical w-full">
       {items.map((item, index) => (
-        <div key={index} className="collapse collapse-arrow join-item border border-base-300">
+        <div key={index} className="collapse join-item collapse-arrow border border-base-300">
           <input
             type="radio"
             name="accordion"
             checked={openIndexes.has(index)}
             onChange={() => toggleItem(index)}
           />
-          <div className="collapse-title text-lg font-medium flex items-center gap-2">
+          <div className="collapse-title flex items-center gap-2 text-lg font-medium">
             {item.icon && <Icon name={item.icon} className="h-5 w-5 text-primary" />}
             {item.title}
           </div>

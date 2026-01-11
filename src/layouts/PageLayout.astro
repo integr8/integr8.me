@@ -13,17 +13,19 @@ const { title, description, breadcrumbs, ...rest } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description} {...rest}>
-  <div class="min-h-screen bg-base-50">
-    {breadcrumbs && (
-      <div class="bg-base-100 border-b border-base-200">
-        <div class="container mx-auto px-4 py-4">
-          <Breadcrumb items={breadcrumbs} client:load />
+  <div class="bg-base-50 min-h-screen">
+    {
+      breadcrumbs && (
+        <div class="border-b border-base-200 bg-base-100">
+          <div class="container mx-auto px-4 py-4">
+            <Breadcrumb items={breadcrumbs} client:load />
+          </div>
         </div>
-      </div>
-    )}
+      )
+    }
     <div class="container mx-auto px-4 py-12">
-      {title && <h1 class="text-4xl font-bold mb-6">{title}</h1>}
-      {description && <p class="text-lg text-base-content/70 mb-8">{description}</p>}
+      {title && <h1 class="mb-6 text-4xl font-bold">{title}</h1>}
+      {description && <p class="mb-8 text-lg text-base-content/70">{description}</p>}
       <slot />
     </div>
   </div>

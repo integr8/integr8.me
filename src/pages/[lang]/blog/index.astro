@@ -6,10 +6,7 @@ import { Button } from '@components/common/Button';
 import { Icon } from '@components/common/Icon';
 
 export function getStaticPaths() {
-  return [
-    { params: { lang: 'ptbr' } },
-    { params: { lang: 'en' } }
-  ];
+  return [{ params: { lang: 'ptbr' } }, { params: { lang: 'en' } }];
 }
 
 const { lang } = Astro.params;
@@ -26,45 +23,51 @@ const breadcrumbs = [
   description="Insights técnicos, boas práticas e novidades"
   breadcrumbs={breadcrumbs}
 >
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-12">
-    {posts.map((post) => (
-      <a href={`/${lang}/blog/${post.slug.split('/').pop()}`} class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow">
-        {post.data.image && (
-          <figure class="h-48 overflow-hidden">
-            <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover" onerror="this.parentElement.style.display='none'" />
-          </figure>
-        )}
-        
-        <div class="card-body">
-          <div class="flex items-center gap-2 mb-2">
-            {post.data.category && (
-              <Badge variant="primary">{post.data.category}</Badge>
-            )}
-            {post.data.read_time && (
-              <span class="text-xs text-base-content/60">{post.data.read_time} min read</span>
-            )}
+  <div class="grid grid-cols-1 gap-8 py-12 md:grid-cols-2 lg:grid-cols-3">
+    {
+      posts.map((post) => (
+        <a
+          href={`/${lang}/blog/${post.slug.split('/').pop()}`}
+          class="card bg-base-100 shadow-lg transition-shadow hover:shadow-xl"
+        >
+          {post.data.image && (
+            <figure class="h-48 overflow-hidden">
+              <img
+                src={post.data.image}
+                alt={post.data.title}
+                class="h-full w-full object-cover"
+                onerror="this.parentElement.style.display='none'"
+              />
+            </figure>
+          )}
+
+          <div class="card-body">
+            <div class="mb-2 flex items-center gap-2">
+              {post.data.category && <Badge variant="primary">{post.data.category}</Badge>}
+              {post.data.read_time && (
+                <span class="text-xs text-base-content/60">{post.data.read_time} min read</span>
+              )}
+            </div>
+
+            <h3 class="card-title text-lg">{post.data.title}</h3>
+            <p class="text-sm text-base-content/70">{post.data.description}</p>
+
+            <div class="divider my-2" />
+
+            <div class="flex items-center justify-between text-xs text-base-content/60">
+              {post.data.author && <span>{post.data.author}</span>}
+              {post.data.date && <span>{post.data.date.toLocaleDateString('pt-BR')}</span>}
+            </div>
+
+            <div class="card-actions mt-4 justify-end">
+              <Button variant="primary" size="sm">
+                Ler Artigo
+                <Icon name="ArrowRightIcon" className="h-4 w-4" client:load />
+              </Button>
+            </div>
           </div>
-          
-          <h3 class="card-title text-lg">{post.data.title}</h3>
-          <p class="text-sm text-base-content/70">{post.data.description}</p>
-          
-          <div class="divider my-2"></div>
-          
-          <div class="flex justify-between items-center text-xs text-base-content/60">
-            {post.data.author && <span>{post.data.author}</span>}
-            {post.data.date && (
-              <span>{post.data.date.toLocaleDateString('pt-BR')}</span>
-            )}
-          </div>
-          
-          <div class="card-actions justify-end mt-4">
-            <Button variant="primary" size="sm">
-              Ler Artigo
-              <Icon name="ArrowRightIcon" className="h-4 w-4" client:load />
-            </Button>
-          </div>
-        </div>
-      </a>
-    ))}
+        </a>
+      ))
+    }
   </div>
 </PageLayout>

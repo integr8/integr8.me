@@ -27,7 +27,7 @@ const mainItems = nav.filter((item) => !item.is_cta);
 
 // Buscar soluções para o dropdown
 const allSolutions = await getCollection('solutions');
-const solutions = allSolutions.filter(s => s.id.startsWith(`${lang}/`));
+const solutions = allSolutions.filter((s) => s.id.startsWith(`${lang}/`));
 
 const getNavLabel = (key: string): string => {
   return translations?.nav?.[key] || key;
@@ -45,27 +45,26 @@ const isActive = (itemHref: string | undefined): boolean => {
 };
 ---
 
-<div class="navbar bg-base-100 shadow-lg sticky top-0 z-40">
+<div class="navbar sticky top-0 z-40 bg-base-100 shadow-lg">
   <div class="navbar-start">
     <div class="dropdown">
       <label tabindex="0" class="btn btn-ghost lg:hidden">
         <Icon name="Bars3Icon" className="h-6 w-6" client:load />
       </label>
-      <ul
-        tabindex="0"
-        class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-      >
-        {mainItems.map((item) => (
-          <li>
-            <a 
-              href={`/${lang}${item.href}`}
-              class:list={[isActive(item.href) && 'bg-primary text-primary-content']}
-            >
-              <Icon name={item.icon} className="h-4 w-4" client:load />
-              {getNavLabel(item.key)}
-            </a>
-          </li>
-        ))}
+      <ul tabindex="0" class="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow">
+        {
+          mainItems.map((item) => (
+            <li>
+              <a
+                href={`/${lang}${item.href}`}
+                class:list={[isActive(item.href) && 'bg-primary text-primary-content']}
+              >
+                <Icon name={item.icon} className="h-4 w-4" client:load />
+                {getNavLabel(item.key)}
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </div>
     <a href={`/${lang}/`} class="btn btn-ghost text-xl">
@@ -74,68 +73,84 @@ const isActive = (itemHref: string | undefined): boolean => {
   </div>
 
   <div class="navbar-center hidden lg:flex">
-    <ul class="menu menu-horizontal px-1 gap-2">
-      {mainItems.map((item) => (
-        item.key === 'solutions' ? (
-          <li class="dropdown dropdown-hover">
-            <a 
-              href={`/${lang}${item.href}`}
-              tabindex="0"
-              role="button"
-              class:list={[
-                'rounded-btn px-4',
-                isActive(item.href) && 'bg-primary text-primary-content hover:bg-primary hover:text-primary-content'
-              ]}
-            >
-              <Icon name={item.icon} className="h-4 w-4" client:load />
-              {getNavLabel(item.key)}
-              <Icon name="ChevronDownIcon" className="h-3 w-3" client:load />
-            </a>
-            <ul tabindex="0" class="dropdown-content z-[1] menu p-4 shadow-lg bg-base-200 rounded-box w-[500px] border border-base-300 grid grid-cols-2 gap-1">
-              {solutions.map((solution) => (
-                <li>
-                  <a href={`/${lang}/solucoes/${solution.slug.split('/').pop()}`} class="flex items-center gap-2 hover:bg-base-300">
-                    <Icon name={solution.data.icon} className="h-4 w-4 text-primary" client:load />
-                    <span class="text-sm">{solution.data.title}</span>
+    <ul class="menu menu-horizontal gap-2 px-1">
+      {
+        mainItems.map((item) =>
+          item.key === 'solutions' ? (
+            <li class="dropdown dropdown-hover">
+              <a
+                href={`/${lang}${item.href}`}
+                tabindex="0"
+                role="button"
+                class:list={[
+                  'rounded-btn px-4',
+                  isActive(item.href) &&
+                    'bg-primary text-primary-content hover:bg-primary hover:text-primary-content',
+                ]}
+              >
+                <Icon name={item.icon} className="h-4 w-4" client:load />
+                {getNavLabel(item.key)}
+                <Icon name="ChevronDownIcon" className="h-3 w-3" client:load />
+              </a>
+              <ul
+                tabindex="0"
+                class="menu dropdown-content z-[1] grid w-[500px] grid-cols-2 gap-1 rounded-box border border-base-300 bg-base-200 p-4 shadow-lg"
+              >
+                {solutions.map((solution) => (
+                  <li>
+                    <a
+                      href={`/${lang}/solucoes/${solution.slug.split('/').pop()}`}
+                      class="flex items-center gap-2 hover:bg-base-300"
+                    >
+                      <Icon
+                        name={solution.data.icon}
+                        className="h-4 w-4 text-primary"
+                        client:load
+                      />
+                      <span class="text-sm">{solution.data.title}</span>
+                    </a>
+                  </li>
+                ))}
+                <li class="col-span-2 mt-2 border-t border-base-300 pt-2">
+                  <a href={`/${lang}/solucoes`} class="font-medium text-primary hover:bg-base-300">
+                    {lang === 'ptbr' ? 'Ver todas as soluções' : 'View all solutions'}
+                    <Icon name="ArrowRightIcon" className="h-4 w-4" client:load />
                   </a>
                 </li>
-              ))}
-              <li class="col-span-2 border-t border-base-300 mt-2 pt-2">
-                <a href={`/${lang}/solucoes`} class="text-primary font-medium hover:bg-base-300">
-                  {lang === 'ptbr' ? 'Ver todas as soluções' : 'View all solutions'}
-                  <Icon name="ArrowRightIcon" className="h-4 w-4" client:load />
-                </a>
-              </li>
-            </ul>
-          </li>
-        ) : (
-          <li>
-            <a 
-              href={`/${lang}${item.href}`}
-              class:list={[
-                'rounded-btn px-4',
-                isActive(item.href) && 'bg-primary text-primary-content hover:bg-primary hover:text-primary-content'
-              ]}
-            >
-              <Icon name={item.icon} className="h-4 w-4" client:load />
-              {getNavLabel(item.key)}
-            </a>
-          </li>
+              </ul>
+            </li>
+          ) : (
+            <li>
+              <a
+                href={`/${lang}${item.href}`}
+                class:list={[
+                  'rounded-btn px-4',
+                  isActive(item.href) &&
+                    'bg-primary text-primary-content hover:bg-primary hover:text-primary-content',
+                ]}
+              >
+                <Icon name={item.icon} className="h-4 w-4" client:load />
+                {getNavLabel(item.key)}
+              </a>
+            </li>
+          )
         )
-      ))}
+      }
     </ul>
   </div>
 
   <div class="navbar-end gap-2">
     <ThemeSwitcherIsland />
     <LanguageSwitcherIsland currentLang={lang} />
-    {ctaItem && (
-      <a href={`/${lang}${ctaItem.href}`} class="hidden sm:inline-block">
-        <Button variant="primary" size="sm" className="gap-2">
-          <Icon name={ctaItem.icon} className="h-4 w-4" client:load />
-          {getNavLabel(ctaItem.key)}
-        </Button>
-      </a>
-    )}
+    {
+      ctaItem && (
+        <a href={`/${lang}${ctaItem.href}`} class="hidden sm:inline-block">
+          <Button variant="primary" size="sm" className="gap-2">
+            <Icon name={ctaItem.icon} className="h-4 w-4" client:load />
+            {getNavLabel(ctaItem.key)}
+          </Button>
+        </a>
+      )
+    }
   </div>
 </div>

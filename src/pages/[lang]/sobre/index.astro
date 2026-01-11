@@ -3,10 +3,7 @@ import PageLayout from '@layouts/PageLayout.astro';
 import { Icon } from '@components/common/Icon';
 
 export function getStaticPaths() {
-  return [
-    { params: { lang: 'ptbr' } },
-    { params: { lang: 'en' } }
-  ];
+  return [{ params: { lang: 'ptbr' } }, { params: { lang: 'en' } }];
 }
 
 const sections = [
@@ -38,23 +35,25 @@ const sections = [
   description="Conheça a Integr8, especialistas em DevOps, Cloud, Kubernetes e Platform Engineering"
 >
   <!-- Sticky Navigation -->
-  <div class="sticky top-20 z-30 bg-base-100 border-b border-base-200">
+  <div class="sticky top-20 z-30 border-b border-base-200 bg-base-100">
     <div class="container mx-auto px-4">
       <div class="tabs tabs-bordered overflow-x-auto">
-        {sections.map((section) => (
-          <a href={`#${section.id}`} class="tab gap-2 whitespace-nowrap">
-            <Icon name={section.icon} className="h-4 w-4" client:load />
-            {section.label}
-          </a>
-        ))}
+        {
+          sections.map((section) => (
+            <a href={`#${section.id}`} class="tab gap-2 whitespace-nowrap">
+              <Icon name={section.icon} className="h-4 w-4" client:load />
+              {section.label}
+            </a>
+          ))
+        }
       </div>
     </div>
   </div>
 
   <!-- Quem Somos Section -->
   <section id="quem-somos" class="py-16">
-    <h2 class="text-3xl font-bold mb-8">Quem Somos</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <h2 class="mb-8 text-3xl font-bold">Quem Somos</h2>
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
       <div class="card bg-base-100 shadow-lg">
         <div class="card-body items-center text-center">
           <Icon name="AcademicCapIcon" className="h-12 w-12 text-primary" client:load />
@@ -79,9 +78,7 @@ const sections = [
         <div class="card-body items-center text-center">
           <Icon name="ChartBarIcon" className="h-12 w-12 text-primary" client:load />
           <h3 class="card-title mt-4">Resultados Mensuráveis</h3>
-          <p class="text-base-content/70">
-            Métricas DORA e impacto de negócio comprovados.
-          </p>
+          <p class="text-base-content/70">Métricas DORA e impacto de negócio comprovados.</p>
         </div>
       </div>
     </div>
@@ -89,8 +86,8 @@ const sections = [
 
   <!-- Metodologia Section -->
   <section id="metodologia" class="py-16">
-    <h2 class="text-3xl font-bold mb-8">Nossa Metodologia</h2>
-    <ul class="steps steps-vertical lg:steps-horizontal w-full">
+    <h2 class="mb-8 text-3xl font-bold">Nossa Metodologia</h2>
+    <ul class="steps steps-vertical w-full lg:steps-horizontal">
       <li class="step step-primary" data-content="1">
         <div class="flex flex-col items-center gap-2">
           <Icon name="MagnifyingGlassIcon" className="h-8 w-8 text-primary" client:load />
@@ -124,12 +121,12 @@ const sections = [
 
   <!-- Certificações Section -->
   <section id="certificacoes" class="py-16">
-    <h2 class="text-3xl font-bold mb-8">Certificações</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <h2 class="mb-8 text-3xl font-bold">Certificações</h2>
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       <div class="card bg-base-100 shadow-lg">
         <div class="card-body">
           <h3 class="card-title text-lg">CNCF Kubestronaut</h3>
-          <p class="text-sm text-base-content/70 mb-4">
+          <p class="mb-4 text-sm text-base-content/70">
             Kubernetes certification set: CKA, CKAD, CKS, KCNA, KCSA
           </p>
           <div class="flex flex-wrap gap-2">
@@ -143,9 +140,7 @@ const sections = [
       <div class="card bg-base-100 shadow-lg">
         <div class="card-body">
           <h3 class="card-title text-lg">AWS Certified</h3>
-          <p class="text-sm text-base-content/70 mb-4">
-            Professional level certifications
-          </p>
+          <p class="mb-4 text-sm text-base-content/70">Professional level certifications</p>
           <div class="flex flex-wrap gap-2">
             <span class="badge badge-secondary">Solutions Architect</span>
             <span class="badge badge-secondary">DevOps Engineer</span>
@@ -156,9 +151,7 @@ const sections = [
       <div class="card bg-base-100 shadow-lg">
         <div class="card-body">
           <h3 class="card-title text-lg">Microsoft Azure</h3>
-          <p class="text-sm text-base-content/70 mb-4">
-            Expert level certifications
-          </p>
+          <p class="mb-4 text-sm text-base-content/70">Expert level certifications</p>
           <div class="flex flex-wrap gap-2">
             <span class="badge badge-accent">Solutions Architect Expert</span>
             <span class="badge badge-accent">DevOps Engineer Expert</span>
@@ -170,10 +163,10 @@ const sections = [
 
   <!-- Tecnologias Section -->
   <section id="tecnologias" class="py-16">
-    <h2 class="text-3xl font-bold mb-8">Tecnologias</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <h2 class="mb-8 text-3xl font-bold">Tecnologias</h2>
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
       <div>
-        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+        <h3 class="mb-4 flex items-center gap-2 text-xl font-bold">
           <Icon name="CloudIcon" className="h-6 w-6 text-primary" client:load />
           Cloud Providers
         </h3>
@@ -185,7 +178,7 @@ const sections = [
       </div>
 
       <div>
-        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+        <h3 class="mb-4 flex items-center gap-2 text-xl font-bold">
           <Icon name="CubeIcon" className="h-6 w-6 text-primary" client:load />
           Containers & Orquestração
         </h3>
@@ -197,7 +190,7 @@ const sections = [
       </div>
 
       <div>
-        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+        <h3 class="mb-4 flex items-center gap-2 text-xl font-bold">
           <Icon name="ArrowPathIcon" className="h-6 w-6 text-primary" client:load />
           CI/CD & GitOps
         </h3>
@@ -209,7 +202,7 @@ const sections = [
       </div>
 
       <div>
-        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+        <h3 class="mb-4 flex items-center gap-2 text-xl font-bold">
           <Icon name="ChartBarIcon" className="h-6 w-6 text-primary" client:load />
           Observabilidade
         </h3>

@@ -25,13 +25,13 @@ export function MobileDrawer({ lang, items }: MobileDrawerProps) {
         onChange={(e) => setIsOpen(e.target.checked)}
       />
       <div className="drawer-content">
-        <label htmlFor="mobile-drawer" className="btn btn-ghost btn-circle lg:hidden">
+        <label htmlFor="mobile-drawer" className="btn btn-circle btn-ghost lg:hidden">
           <Icon name="Bars3Icon" className="h-6 w-6" />
         </label>
       </div>
       <div className="drawer-side">
         <label htmlFor="mobile-drawer" className="drawer-overlay"></label>
-        <ul className="menu p-4 w-80 bg-base-100 text-base-content space-y-2">
+        <ul className="menu w-80 space-y-2 bg-base-100 p-4 text-base-content">
           {items.map((item) => (
             <li key={item.key}>
               <a href={`/${lang}${item.href}`} onClick={() => setIsOpen(false)}>

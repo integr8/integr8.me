@@ -8,12 +8,7 @@ export interface BadgeProps {
   className?: string;
 }
 
-export function Badge({
-  children,
-  variant = 'default',
-  size = 'md',
-  className,
-}: BadgeProps) {
+export function Badge({ children, variant = 'default', size = 'md', className }: BadgeProps) {
   const variantClasses = {
     default: 'badge-outline',
     primary: 'badge-primary',
@@ -31,14 +26,7 @@ export function Badge({
   };
 
   return (
-    <span
-      className={classNames(
-        'badge',
-        variantClasses[variant],
-        sizeClasses[size],
-        className
-      )}
-    >
+    <span className={classNames('badge', variantClasses[variant], sizeClasses[size], className)}>
       {children}
     </span>
   );

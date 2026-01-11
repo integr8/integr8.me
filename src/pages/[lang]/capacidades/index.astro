@@ -3,10 +3,7 @@ import BaseLayout from '@layouts/BaseLayout.astro';
 import { loadCapabilities } from '@lib/toml';
 
 export function getStaticPaths() {
-  return [
-    { params: { lang: 'ptbr' } },
-    { params: { lang: 'en' } }
-  ];
+  return [{ params: { lang: 'ptbr' } }, { params: { lang: 'en' } }];
 }
 
 const { lang } = Astro.params;
@@ -28,62 +25,64 @@ const iconMap: Record<string, string> = {
   programming: '💻',
   frontend: '🖥️',
   devex: '👥',
-  certification: '🏆'
+  certification: '🏆',
 };
 
 const certifications = [
   {
-    category: "Kubernetes & CNCF",
+    category: 'Kubernetes & CNCF',
     certs: [
-      "Kubestronaut (CKA + CKAD + CKS + KCNA + KCSA)",
-      "Certified Kubernetes Administrator (CKA)",
-      "Certified Kubernetes Application Developer (CKAD)",
-      "Certified Kubernetes Security Specialist (CKS)"
-    ]
+      'Kubestronaut (CKA + CKAD + CKS + KCNA + KCSA)',
+      'Certified Kubernetes Administrator (CKA)',
+      'Certified Kubernetes Application Developer (CKAD)',
+      'Certified Kubernetes Security Specialist (CKS)',
+    ],
   },
   {
-    category: "Cloud Providers",
+    category: 'Cloud Providers',
     certs: [
-      "AWS Solutions Architect Professional",
-      "AWS DevOps Engineer Professional",
-      "AWS Security Specialty",
-      "Azure Solutions Architect Expert",
-      "Azure DevOps Engineer Expert",
-      "Google Cloud Professional Architect"
-    ]
+      'AWS Solutions Architect Professional',
+      'AWS DevOps Engineer Professional',
+      'AWS Security Specialty',
+      'Azure Solutions Architect Expert',
+      'Azure DevOps Engineer Expert',
+      'Google Cloud Professional Architect',
+    ],
   },
   {
-    category: "Enterprise & Security",
+    category: 'Enterprise & Security',
     certs: [
-      "Oracle Certified Professional (OCP)",
-      "IBM Certified Solution Developer",
-      "Certified Ethical Hacker (CEH)",
-      "ITIL v4 Foundation & Managing Professional"
-    ]
-  }
+      'Oracle Certified Professional (OCP)',
+      'IBM Certified Solution Developer',
+      'Certified Ethical Hacker (CEH)',
+      'ITIL v4 Foundation & Managing Professional',
+    ],
+  },
 ];
 ---
 
-<BaseLayout 
-  title={lang === 'ptbr' ? "Capacidades Técnicas" : "Technical Capabilities"}
+<BaseLayout
+  title={lang === 'ptbr' ? 'Capacidades Técnicas' : 'Technical Capabilities'}
   description={lang === 'ptbr'
-    ? "Expertise profunda em toda a stack de tecnologias cloud-native modernas, de infraestrutura a aplicações."
-    : "Deep expertise in the entire modern cloud-native technology stack, from infrastructure to applications."}
+    ? 'Expertise profunda em toda a stack de tecnologias cloud-native modernas, de infraestrutura a aplicações.'
+    : 'Deep expertise in the entire modern cloud-native technology stack, from infrastructure to applications.'}
 >
   <!-- Hero Section -->
-  <section class="py-20 bg-gradient-to-b from-base-200 to-base-100">
+  <section class="bg-gradient-to-b from-base-200 to-base-100 py-20">
     <div class="container mx-auto px-4">
-      <div class="max-w-4xl mx-auto text-center">
-        <span class="text-primary font-semibold text-sm uppercase tracking-wide">
-          {lang === 'ptbr' ? "Expertise" : "Expertise"}
+      <div class="mx-auto max-w-4xl text-center">
+        <span class="text-sm font-semibold uppercase tracking-wide text-primary">
+          {lang === 'ptbr' ? 'Expertise' : 'Expertise'}
         </span>
-        <h1 class="text-4xl md:text-5xl font-bold mb-6 mt-2">
-          {lang === 'ptbr' ? "Capacidades Técnicas" : "Technical Capabilities"}
+        <h1 class="mb-6 mt-2 text-4xl font-bold md:text-5xl">
+          {lang === 'ptbr' ? 'Capacidades Técnicas' : 'Technical Capabilities'}
         </h1>
-        <p class="text-xl text-base-content/70 mb-8">
-          {lang === 'ptbr'
-            ? "Nossa expertise abrange as tecnologias mais relevantes do ecossistema cloud-native. Não apenas conhecemos essas ferramentas—já implantamos, operamos e debugamos em produção em escala."
-            : "Our expertise covers the most relevant technologies in the cloud-native ecosystem. We don't just know these tools—we've deployed, operated, and debugged them in production at scale."}
+        <p class="mb-8 text-xl text-base-content/70">
+          {
+            lang === 'ptbr'
+              ? 'Nossa expertise abrange as tecnologias mais relevantes do ecossistema cloud-native. Não apenas conhecemos essas ferramentas—já implantamos, operamos e debugamos em produção em escala.'
+              : "Our expertise covers the most relevant technologies in the cloud-native ecosystem. We don't just know these tools—we've deployed, operated, and debugged them in production at scale."
+          }
         </p>
       </div>
     </div>
@@ -92,43 +91,49 @@ const certifications = [
   <!-- Why Our Expertise Matters -->
   <section class="py-12">
     <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      <div class="mx-auto grid max-w-5xl grid-cols-1 gap-6 md:grid-cols-3">
         <div class="card bg-base-200">
           <div class="card-body items-center text-center">
-            <div class="text-4xl mb-2">🏭</div>
+            <div class="mb-2 text-4xl">🏭</div>
             <h3 class="card-title text-lg">
-              {lang === 'ptbr' ? "Experiência em Produção" : "Production Experience"}
+              {lang === 'ptbr' ? 'Experiência em Produção' : 'Production Experience'}
             </h3>
             <p class="text-sm text-base-content/70">
-              {lang === 'ptbr'
-                ? "Toda tecnologia listada foi utilizada em ambientes de produção reais processando milhões de transações."
-                : "Every technology listed has been used in real production environments processing millions of transactions."}
+              {
+                lang === 'ptbr'
+                  ? 'Toda tecnologia listada foi utilizada em ambientes de produção reais processando milhões de transações.'
+                  : 'Every technology listed has been used in real production environments processing millions of transactions.'
+              }
             </p>
           </div>
         </div>
         <div class="card bg-base-200">
           <div class="card-body items-center text-center">
-            <div class="text-4xl mb-2">🏆</div>
+            <div class="mb-2 text-4xl">🏆</div>
             <h3 class="card-title text-lg">
-              {lang === 'ptbr' ? "Profissionais Certificados" : "Certified Professionals"}
+              {lang === 'ptbr' ? 'Profissionais Certificados' : 'Certified Professionals'}
             </h3>
             <p class="text-sm text-base-content/70">
-              {lang === 'ptbr'
-                ? "Kubestronaut, AWS Professional, Azure Expert, Oracle OCP e mais certificações de elite."
-                : "Kubestronaut, AWS Professional, Azure Expert, Oracle OCP, and more elite certifications."}
+              {
+                lang === 'ptbr'
+                  ? 'Kubestronaut, AWS Professional, Azure Expert, Oracle OCP e mais certificações de elite.'
+                  : 'Kubestronaut, AWS Professional, Azure Expert, Oracle OCP, and more elite certifications.'
+              }
             </p>
           </div>
         </div>
         <div class="card bg-base-200">
           <div class="card-body items-center text-center">
-            <div class="text-4xl mb-2">🔗</div>
+            <div class="mb-2 text-4xl">🔗</div>
             <h3 class="card-title text-lg">
-              {lang === 'ptbr' ? "Cobertura End-to-End" : "End-to-End Coverage"}
+              {lang === 'ptbr' ? 'Cobertura End-to-End' : 'End-to-End Coverage'}
             </h3>
             <p class="text-sm text-base-content/70">
-              {lang === 'ptbr'
-                ? "Da infraestrutura cloud ao código de aplicação, cobrimos toda a stack de entrega de software moderna."
-                : "From cloud infrastructure to application code, we cover the entire modern software delivery stack."}
+              {
+                lang === 'ptbr'
+                  ? 'Da infraestrutura cloud ao código de aplicação, cobrimos toda a stack de entrega de software moderna.'
+                  : 'From cloud infrastructure to application code, we cover the entire modern software delivery stack.'
+              }
             </p>
           </div>
         </div>
@@ -137,32 +142,36 @@ const certifications = [
   </section>
 
   <!-- All Capabilities Grid -->
-  <section class="py-16 bg-base-200">
+  <section class="bg-base-200 py-16">
     <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold text-center mb-4">
-        {lang === 'ptbr' ? "Nossos Pilares Tecnológicos" : "Our Technology Pillars"}
+      <h2 class="mb-4 text-center text-3xl font-bold">
+        {lang === 'ptbr' ? 'Nossos Pilares Tecnológicos' : 'Our Technology Pillars'}
       </h2>
-      <p class="text-center text-base-content/70 mb-12 max-w-2xl mx-auto">
-        {lang === 'ptbr'
-          ? "Explore nossas capacidades detalhadas nas principais áreas tecnológicas. Cada badge representa experiência hands-on em ambientes de produção."
-          : "Explore our detailed capabilities across key technology areas. Each badge represents hands-on experience in production environments."}
+      <p class="mx-auto mb-12 max-w-2xl text-center text-base-content/70">
+        {
+          lang === 'ptbr'
+            ? 'Explore nossas capacidades detalhadas nas principais áreas tecnológicas. Cada badge representa experiência hands-on em ambientes de produção.'
+            : 'Explore our detailed capabilities across key technology areas. Each badge represents hands-on experience in production environments.'
+        }
       </p>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {capabilities.map((cap: { icon: string; name: string; technologies: string[] }) => (
-          <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow">
-            <div class="card-body">
-              <div class="flex items-center gap-3 mb-3">
-                <div class="text-2xl">{iconMap[cap.icon] || '⚡'}</div>
-                <h3 class="card-title text-lg">{cap.name}</h3>
-              </div>
-              <div class="flex flex-wrap gap-2">
-                {cap.technologies.map((tech: string) => (
-                  <span class="badge badge-outline badge-sm">{tech}</span>
-                ))}
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {
+          capabilities.map((cap: { icon: string; name: string; technologies: string[] }) => (
+            <div class="card bg-base-100 shadow-lg transition-shadow hover:shadow-xl">
+              <div class="card-body">
+                <div class="mb-3 flex items-center gap-3">
+                  <div class="text-2xl">{iconMap[cap.icon] || '⚡'}</div>
+                  <h3 class="card-title text-lg">{cap.name}</h3>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                  {cap.technologies.map((tech: string) => (
+                    <span class="badge badge-outline badge-sm">{tech}</span>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        }
       </div>
     </div>
   </section>
@@ -170,62 +179,75 @@ const certifications = [
   <!-- Certifications -->
   <section class="py-16">
     <div class="container mx-auto px-4">
-      <h2 class="text-3xl font-bold text-center mb-4">
-        {lang === 'ptbr' ? "Certificações da Equipe" : "Team Certifications"}
+      <h2 class="mb-4 text-center text-3xl font-bold">
+        {lang === 'ptbr' ? 'Certificações da Equipe' : 'Team Certifications'}
       </h2>
-      <p class="text-center text-base-content/70 mb-12 max-w-2xl mx-auto">
-        {lang === 'ptbr'
-          ? "Nossa equipe possui as certificações mais exigentes da indústria, comprovando expertise técnica profunda."
-          : "Our team holds the most demanding certifications in the industry, proving deep technical expertise."}
+      <p class="mx-auto mb-12 max-w-2xl text-center text-base-content/70">
+        {
+          lang === 'ptbr'
+            ? 'Nossa equipe possui as certificações mais exigentes da indústria, comprovando expertise técnica profunda.'
+            : 'Our team holds the most demanding certifications in the industry, proving deep technical expertise.'
+        }
       </p>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-        {certifications.map((group) => (
-          <div class="card bg-base-200">
-            <div class="card-body">
-              <h3 class="card-title text-primary">{group.category}</h3>
-              <ul class="space-y-2 mt-2">
-                {group.certs.map((cert) => (
-                  <li class="flex items-start gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-success flex-shrink-0 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                    </svg>
-                    <span class="text-sm">{cert}</span>
-                  </li>
-                ))}
-              </ul>
+      <div class="mx-auto grid max-w-5xl grid-cols-1 gap-8 md:grid-cols-3">
+        {
+          certifications.map((group) => (
+            <div class="card bg-base-200">
+              <div class="card-body">
+                <h3 class="card-title text-primary">{group.category}</h3>
+                <ul class="mt-2 space-y-2">
+                  {group.certs.map((cert) => (
+                    <li class="flex items-start gap-2">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="mt-0.5 h-5 w-5 flex-shrink-0 text-success"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                      <span class="text-sm">{cert}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        }
       </div>
     </div>
   </section>
 
   <!-- Numbers -->
-  <section class="py-16 bg-primary text-primary-content">
+  <section class="bg-primary py-16 text-primary-content">
     <div class="container mx-auto px-4">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div class="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
         <div>
-          <div class="text-4xl md:text-5xl font-bold">500+</div>
-          <div class="text-primary-content/80 mt-2">
-            {lang === 'ptbr' ? "Nodes K8s gerenciados" : "K8s nodes managed"}
+          <div class="text-4xl font-bold md:text-5xl">500+</div>
+          <div class="mt-2 text-primary-content/80">
+            {lang === 'ptbr' ? 'Nodes K8s gerenciados' : 'K8s nodes managed'}
           </div>
         </div>
         <div>
-          <div class="text-4xl md:text-5xl font-bold">99.99%</div>
-          <div class="text-primary-content/80 mt-2">
-            {lang === 'ptbr' ? "Uptime alcançado" : "Uptime achieved"}
+          <div class="text-4xl font-bold md:text-5xl">99.99%</div>
+          <div class="mt-2 text-primary-content/80">
+            {lang === 'ptbr' ? 'Uptime alcançado' : 'Uptime achieved'}
           </div>
         </div>
         <div>
-          <div class="text-4xl md:text-5xl font-bold">10x</div>
-          <div class="text-primary-content/80 mt-2">
-            {lang === 'ptbr' ? "Aceleração de deploy" : "Deploy acceleration"}
+          <div class="text-4xl font-bold md:text-5xl">10x</div>
+          <div class="mt-2 text-primary-content/80">
+            {lang === 'ptbr' ? 'Aceleração de deploy' : 'Deploy acceleration'}
           </div>
         </div>
         <div>
-          <div class="text-4xl md:text-5xl font-bold">60%</div>
-          <div class="text-primary-content/80 mt-2">
-            {lang === 'ptbr' ? "Redução de custos" : "Cost reduction"}
+          <div class="text-4xl font-bold md:text-5xl">60%</div>
+          <div class="mt-2 text-primary-content/80">
+            {lang === 'ptbr' ? 'Redução de custos' : 'Cost reduction'}
           </div>
         </div>
       </div>
@@ -235,20 +257,22 @@ const certifications = [
   <!-- CTA -->
   <section class="py-16">
     <div class="container mx-auto px-4 text-center">
-      <h2 class="text-3xl font-bold mb-4">
-        {lang === 'ptbr' ? "Precisa de Expertise Específica?" : "Need Specific Expertise?"}
+      <h2 class="mb-4 text-3xl font-bold">
+        {lang === 'ptbr' ? 'Precisa de Expertise Específica?' : 'Need Specific Expertise?'}
       </h2>
-      <p class="text-base-content/70 mb-8 max-w-2xl mx-auto">
-        {lang === 'ptbr'
-          ? "Conte-nos sobre seu desafio técnico e vamos discutir como nossa experiência pode ajudar seu projeto."
-          : "Tell us about your technical challenge and let's discuss how our experience can help your project."}
+      <p class="mx-auto mb-8 max-w-2xl text-base-content/70">
+        {
+          lang === 'ptbr'
+            ? 'Conte-nos sobre seu desafio técnico e vamos discutir como nossa experiência pode ajudar seu projeto.'
+            : "Tell us about your technical challenge and let's discuss how our experience can help your project."
+        }
       </p>
       <div class="flex flex-wrap justify-center gap-4">
         <a href={`/${lang}/solucoes`} class="btn btn-outline">
-          {lang === 'ptbr' ? "Ver Soluções" : "View Solutions"}
+          {lang === 'ptbr' ? 'Ver Soluções' : 'View Solutions'}
         </a>
         <a href={`/${lang}/contato`} class="btn btn-primary">
-          {lang === 'ptbr' ? "Fale Conosco" : "Contact Us"}
+          {lang === 'ptbr' ? 'Fale Conosco' : 'Contact Us'}
         </a>
       </div>
     </div>

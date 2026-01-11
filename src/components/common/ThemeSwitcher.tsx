@@ -28,7 +28,7 @@ export function ThemeSwitcher() {
   return (
     <button
       onClick={toggleTheme}
-      className="btn btn-ghost btn-circle"
+      className="btn btn-circle btn-ghost"
       aria-label={isDark ? 'Light mode' : 'Dark mode'}
     >
       {isDark ? (

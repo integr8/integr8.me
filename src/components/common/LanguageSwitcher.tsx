@@ -18,16 +18,12 @@ export function LanguageSwitcher({ currentLang }: LanguageSwitcherProps) {
 
   return (
     <div className="dropdown dropdown-end">
-      <button
-        tabIndex={0}
-        className="btn btn-ghost btn-circle"
-        aria-label="Change language"
-      >
+      <button tabIndex={0} className="btn btn-circle btn-ghost" aria-label="Change language">
         <Icon name="GlobeAltIcon" className="h-5 w-5" />
       </button>
       <ul
         tabIndex={0}
-        className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+        className="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow"
       >
         {Object.entries(LANGUAGES).map(([code, name]) => (
           <li key={code}>

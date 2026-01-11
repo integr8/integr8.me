@@ -1,10 +1,20 @@
 ---
-title: "DevSecOps & Security"
-category: "security-data"
-description: "We integrate security at every stage of the development cycle (Shift-Left) with Policy as Code, Supply Chain Security and Runtime Protection."
-icon: "ShieldCheckIcon"
+title: 'DevSecOps & Security'
+category: 'security-data'
+description: 'We integrate security at every stage of the development cycle (Shift-Left) with Policy as Code, Supply Chain Security and Runtime Protection.'
+icon: 'ShieldCheckIcon'
 weight: 6
-technologies: ["Falco / Sysdig", "OPA / Gatekeeper / Kyverno", "Trivy / Grype / Snyk", "SonarQube / CodeQL", "HashiCorp Vault", "Sigstore / Cosign", "Cert-Manager", "SIEM Integration"]
+technologies:
+  [
+    'Falco / Sysdig',
+    'OPA / Gatekeeper / Kyverno',
+    'Trivy / Grype / Snyk',
+    'SonarQube / CodeQL',
+    'HashiCorp Vault',
+    'Sigstore / Cosign',
+    'Cert-Manager',
+    'SIEM Integration',
+  ]
 ---
 
 import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
@@ -13,20 +23,32 @@ import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/con
 
 Modern development speed has created new security challenges:
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🚧", title: "Security as Gatekeeper", description: "Bottlenecks at end of pipeline delaying releases" },
-    { icon: "⚙️", title: "Insecure Configurations", description: "Issues undetected until production" },
-    { icon: "📦", title: "Dependency Vulnerabilities", description: "Open source supply chain vulnerable" },
-    { icon: "🔑", title: "Scattered Secrets", description: "Credentials in repos and configs" },
-    { icon: "📋", title: "Manual Compliance", description: "Doesn't scale with frequent deploys" },
-    { icon: "👁️", title: "Lack of Visibility", description: "Malicious behaviors undetected" }
+    {
+      icon: '🚧',
+      title: 'Security as Gatekeeper',
+      description: 'Bottlenecks at end of pipeline delaying releases',
+    },
+    {
+      icon: '⚙️',
+      title: 'Insecure Configurations',
+      description: 'Issues undetected until production',
+    },
+    {
+      icon: '📦',
+      title: 'Dependency Vulnerabilities',
+      description: 'Open source supply chain vulnerable',
+    },
+    { icon: '🔑', title: 'Scattered Secrets', description: 'Credentials in repos and configs' },
+    { icon: '📋', title: 'Manual Compliance', description: "Doesn't scale with frequent deploys" },
+    { icon: '👁️', title: 'Lack of Visibility', description: 'Malicious behaviors undetected' },
   ]}
   columns={3}
 />
 
 <Callout type="warning" title="Obsolete Model">
-The traditional security model as "last checkpoint" doesn't work in continuous delivery.
+  The traditional security model as "last checkpoint" doesn't work in continuous delivery.
 </Callout>
 
 ## DevSecOps Maturity Model
@@ -36,34 +58,39 @@ The traditional security model as "last checkpoint" doesn't work in continuous d
   levels={[
     {
       level: 1,
-      title: "Reactive",
-      description: "Security at end of process",
-      items: ["Manual pen tests", "No automated scanning", "Hardcoded secrets", "Ad-hoc compliance"]
+      title: 'Reactive',
+      description: 'Security at end of process',
+      items: [
+        'Manual pen tests',
+        'No automated scanning',
+        'Hardcoded secrets',
+        'Ad-hoc compliance',
+      ],
     },
     {
       level: 2,
-      title: "Basic",
-      description: "First automations",
-      items: ["Basic CI scanning", "Basic Vault", "Some policies", "Manual reports"]
+      title: 'Basic',
+      description: 'First automations',
+      items: ['Basic CI scanning', 'Basic Vault', 'Some policies', 'Manual reports'],
     },
     {
       level: 3,
-      title: "Integrated",
-      description: "Security in pipeline",
-      items: ["SAST/SCA/DAST", "Policy as Code", "Secret management", "Container scanning"]
+      title: 'Integrated',
+      description: 'Security in pipeline',
+      items: ['SAST/SCA/DAST', 'Policy as Code', 'Secret management', 'Container scanning'],
     },
     {
       level: 4,
-      title: "Proactive",
-      description: "Complete Shift-Left",
-      items: ["Security in IDE", "Supply chain security", "Runtime protection", "SBOM/SLSA"]
+      title: 'Proactive',
+      description: 'Complete Shift-Left',
+      items: ['Security in IDE', 'Supply chain security', 'Runtime protection', 'SBOM/SLSA'],
     },
     {
       level: 5,
-      title: "Zero Trust",
-      description: "Security as culture",
-      items: ["Security champions", "Threat modeling", "Chaos security", "Bug bounty"]
-    }
+      title: 'Zero Trust',
+      description: 'Security as culture',
+      items: ['Security champions', 'Threat modeling', 'Chaos security', 'Bug bounty'],
+    },
   ]}
 />
 
@@ -74,33 +101,45 @@ The traditional security model as "last checkpoint" doesn't work in continuous d
 <Timeline
   title="Security at Every Stage"
   items={[
-    { phase: "IDE", title: "Security in Editor", description: "Pre-commit hooks, IDE extensions, instant feedback" },
-    { phase: "CI", title: "Pipeline Security", description: "SAST, SCA, Secret Scanning, IaC Security" },
-    { phase: "Registry", title: "Container Security", description: "Image scanning, hardened base images" },
-    { phase: "Runtime", title: "Production Security", description: "Falco, Network Policies, WAF" }
+    {
+      phase: 'IDE',
+      title: 'Security in Editor',
+      description: 'Pre-commit hooks, IDE extensions, instant feedback',
+    },
+    {
+      phase: 'CI',
+      title: 'Pipeline Security',
+      description: 'SAST, SCA, Secret Scanning, IaC Security',
+    },
+    {
+      phase: 'Registry',
+      title: 'Container Security',
+      description: 'Image scanning, hardened base images',
+    },
+    { phase: 'Runtime', title: 'Production Security', description: 'Falco, Network Policies, WAF' },
   ]}
 />
 
 ### Policy as Code
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🛡️", title: "OPA Gatekeeper", description: "Complex policies in Rego" },
-    { icon: "📋", title: "Kyverno", description: "Declarative policies in YAML" },
-    { icon: "✅", title: "Pod Security Standards", description: "Baseline and Restricted" },
-    { icon: "📊", title: "CIS Benchmarks", description: "Automated compliance" }
+    { icon: '🛡️', title: 'OPA Gatekeeper', description: 'Complex policies in Rego' },
+    { icon: '📋', title: 'Kyverno', description: 'Declarative policies in YAML' },
+    { icon: '✅', title: 'Pod Security Standards', description: 'Baseline and Restricted' },
+    { icon: '📊', title: 'CIS Benchmarks', description: 'Automated compliance' },
   ]}
   columns={4}
 />
 
 ### Supply Chain Security
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "📜", title: "SBOM", description: "Automated Software Bill of Materials" },
-    { icon: "✍️", title: "Sigstore/Cosign", description: "Image signing" },
-    { icon: "🔗", title: "SLSA", description: "Supply-chain Levels compliance" },
-    { icon: "📋", title: "In-toto", description: "Provenance attestations" }
+    { icon: '📜', title: 'SBOM', description: 'Automated Software Bill of Materials' },
+    { icon: '✍️', title: 'Sigstore/Cosign', description: 'Image signing' },
+    { icon: '🔗', title: 'SLSA', description: 'Supply-chain Levels compliance' },
+    { icon: '📋', title: 'In-toto', description: 'Provenance attestations' },
   ]}
   columns={4}
 />
@@ -110,21 +149,33 @@ The traditional security model as "last checkpoint" doesn't work in continuous d
 <Timeline
   title="Secrets Stack"
   items={[
-    { phase: "Vault", title: "HashiCorp Vault", description: "Centralized secrets, dynamic secrets, PKI" },
-    { phase: "K8s", title: "External Secrets", description: "Auto sync with Vault" },
-    { phase: "GitOps", title: "Sealed Secrets", description: "Secure secrets in Git" },
-    { phase: "TLS", title: "Cert-Manager", description: "Automated certificates" }
+    {
+      phase: 'Vault',
+      title: 'HashiCorp Vault',
+      description: 'Centralized secrets, dynamic secrets, PKI',
+    },
+    { phase: 'K8s', title: 'External Secrets', description: 'Auto sync with Vault' },
+    { phase: 'GitOps', title: 'Sealed Secrets', description: 'Secure secrets in Git' },
+    { phase: 'TLS', title: 'Cert-Manager', description: 'Automated certificates' },
   ]}
 />
 
 ## Results
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🛡️", title: "-95% vulnerabilities", description: "Critical blocked before production" },
-    { icon: "⚡", title: "-80% remediation time", description: "Shift-left detects early" },
-    { icon: "🔐", title: "Zero exposed secrets", description: "Scanning and centralized management" },
-    { icon: "✅", title: "100% SBOM coverage", description: "Verifiable supply chain" }
+    {
+      icon: '🛡️',
+      title: '-95% vulnerabilities',
+      description: 'Critical blocked before production',
+    },
+    { icon: '⚡', title: '-80% remediation time', description: 'Shift-left detects early' },
+    {
+      icon: '🔐',
+      title: 'Zero exposed secrets',
+      description: 'Scanning and centralized management',
+    },
+    { icon: '✅', title: '100% SBOM coverage', description: 'Verifiable supply chain' },
   ]}
   columns={4}
 />

@@ -1,10 +1,20 @@
 ---
-title: "Data Engineering & AI"
-category: "security-data"
-description: "We build modern data platforms, Data Lakes/Lakehouses and scalable ML infrastructure to transform data into competitive advantage."
-icon: "CircleStackIcon"
+title: 'Data Engineering & AI'
+category: 'security-data'
+description: 'We build modern data platforms, Data Lakes/Lakehouses and scalable ML infrastructure to transform data into competitive advantage.'
+icon: 'CircleStackIcon'
 weight: 5
-technologies: ["Databricks / Delta Lake", "Apache Spark (PySpark)", "Kafka / Confluent / Flink", "Airflow / Dagster", "AWS Glue / Athena / Redshift", "dbt (Data Build Tool)", "Oracle / DB2 / SQL Server", "MLflow / Kubeflow"]
+technologies:
+  [
+    'Databricks / Delta Lake',
+    'Apache Spark (PySpark)',
+    'Kafka / Confluent / Flink',
+    'Airflow / Dagster',
+    'AWS Glue / Athena / Redshift',
+    'dbt (Data Build Tool)',
+    'Oracle / DB2 / SQL Server',
+    'MLflow / Kubeflow',
+  ]
 ---
 
 import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
@@ -13,14 +23,18 @@ import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/con
 
 Data is the new oil, but many companies fail to extract value:
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🏢", title: "Data Silos", description: "Isolated departments preventing unified view" },
-    { icon: "🐌", title: "Slow Pipelines", description: "ETLs that break and take hours or days" },
-    { icon: "❓", title: "Quality Issues", description: "Data undermining decision confidence" },
-    { icon: "📜", title: "ETL Technical Debt", description: "Years of undocumented scripts" },
-    { icon: "📈", title: "Cannot Scale", description: "Growing volumes without infrastructure" },
-    { icon: "🤖", title: "Data-AI Gap", description: "ML cannot reliably access needed data" }
+    {
+      icon: '🏢',
+      title: 'Data Silos',
+      description: 'Isolated departments preventing unified view',
+    },
+    { icon: '🐌', title: 'Slow Pipelines', description: 'ETLs that break and take hours or days' },
+    { icon: '❓', title: 'Quality Issues', description: 'Data undermining decision confidence' },
+    { icon: '📜', title: 'ETL Technical Debt', description: 'Years of undocumented scripts' },
+    { icon: '📈', title: 'Cannot Scale', description: 'Growing volumes without infrastructure' },
+    { icon: '🤖', title: 'Data-AI Gap', description: 'ML cannot reliably access needed data' },
   ]}
   columns={3}
 />
@@ -32,34 +46,40 @@ Data is the new oil, but many companies fail to extract value:
   levels={[
     {
       level: 1,
-      title: "Ad-Hoc",
-      description: "Scattered data without management",
-      items: ["Isolated spreadsheets", "Manual ETL", "No documentation", "Unknown quality"]
+      title: 'Ad-Hoc',
+      description: 'Scattered data without management',
+      items: ['Isolated spreadsheets', 'Manual ETL', 'No documentation', 'Unknown quality'],
     },
     {
       level: 2,
-      title: "Operational",
-      description: "Basic data warehouse",
-      items: ["Traditional DW", "Batch ETL", "Basic reports", "Some metrics"]
+      title: 'Operational',
+      description: 'Basic data warehouse',
+      items: ['Traditional DW', 'Batch ETL', 'Basic reports', 'Some metrics'],
     },
     {
       level: 3,
-      title: "Integrated",
-      description: "Modern Data Stack",
-      items: ["Data Lake/Lakehouse", "dbt transformations", "Data catalog", "Quality checks"]
+      title: 'Integrated',
+      description: 'Modern Data Stack',
+      items: ['Data Lake/Lakehouse', 'dbt transformations', 'Data catalog', 'Quality checks'],
     },
     {
       level: 4,
-      title: "Advanced",
-      description: "Data Mesh and ML",
-      items: ["Data Mesh", "Real-time streaming", "Feature store", "MLOps", "Self-service analytics"]
+      title: 'Advanced',
+      description: 'Data Mesh and ML',
+      items: [
+        'Data Mesh',
+        'Real-time streaming',
+        'Feature store',
+        'MLOps',
+        'Self-service analytics',
+      ],
     },
     {
       level: 5,
-      title: "Data-Driven",
-      description: "Data as strategic asset",
-      items: ["Data Products", "AI/ML in production", "Automated governance", "Data monetization"]
-    }
+      title: 'Data-Driven',
+      description: 'Data as strategic asset',
+      items: ['Data Products', 'AI/ML in production', 'Automated governance', 'Data monetization'],
+    },
   ]}
 />
 
@@ -67,12 +87,20 @@ Data is the new oil, but many companies fail to extract value:
 
 ### Data Mesh Architecture
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🏠", title: "Domain Ownership", description: "Business teams own their data products" },
-    { icon: "📦", title: "Data as Product", description: "Datasets with SLAs and documentation" },
-    { icon: "🔧", title: "Self-Service Infra", description: "Platform enabling autonomy" },
-    { icon: "🏛️", title: "Federated Governance", description: "Global standards, local implementation" }
+    {
+      icon: '🏠',
+      title: 'Domain Ownership',
+      description: 'Business teams own their data products',
+    },
+    { icon: '📦', title: 'Data as Product', description: 'Datasets with SLAs and documentation' },
+    { icon: '🔧', title: 'Self-Service Infra', description: 'Platform enabling autonomy' },
+    {
+      icon: '🏛️',
+      title: 'Federated Governance',
+      description: 'Global standards, local implementation',
+    },
   ]}
   columns={4}
 />
@@ -82,34 +110,38 @@ Data is the new oil, but many companies fail to extract value:
 <Timeline
   title="Lakehouse Architecture"
   items={[
-    { phase: "Ingest", title: "Data Ingestion", description: "Kafka, Debezium CDC, APIs, Files" },
-    { phase: "Store", title: "Lakehouse", description: "Delta Lake, Iceberg on S3/ADLS/GCS" },
-    { phase: "Transform", title: "dbt + Spark", description: "Versioned and tested SQL transformations" },
-    { phase: "Serve", title: "Analytics & ML", description: "Athena, Databricks, Feature Stores" }
+    { phase: 'Ingest', title: 'Data Ingestion', description: 'Kafka, Debezium CDC, APIs, Files' },
+    { phase: 'Store', title: 'Lakehouse', description: 'Delta Lake, Iceberg on S3/ADLS/GCS' },
+    {
+      phase: 'Transform',
+      title: 'dbt + Spark',
+      description: 'Versioned and tested SQL transformations',
+    },
+    { phase: 'Serve', title: 'Analytics & ML', description: 'Athena, Databricks, Feature Stores' },
   ]}
 />
 
 ### MLOps & GenAI
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🧪", title: "Experiment Tracking", description: "MLflow, Weights & Biases" },
-    { icon: "📊", title: "Feature Store", description: "Feast, Tecton for reusability" },
-    { icon: "🚀", title: "Model Serving", description: "SageMaker, Vertex AI, KServe" },
-    { icon: "🧠", title: "Vector DBs", description: "Pinecone, Weaviate, pgvector" },
-    { icon: "💬", title: "RAG Architecture", description: "LLM + Retrieval for GenAI" }
+    { icon: '🧪', title: 'Experiment Tracking', description: 'MLflow, Weights & Biases' },
+    { icon: '📊', title: 'Feature Store', description: 'Feast, Tecton for reusability' },
+    { icon: '🚀', title: 'Model Serving', description: 'SageMaker, Vertex AI, KServe' },
+    { icon: '🧠', title: 'Vector DBs', description: 'Pinecone, Weaviate, pgvector' },
+    { icon: '💬', title: 'RAG Architecture', description: 'LLM + Retrieval for GenAI' },
   ]}
   columns={5}
 />
 
 ## Results
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🚀", title: "500M+ events/day", description: "Sub-second streaming pipelines" },
-    { icon: "⚡", title: "-90% ETL time", description: "Migration to Spark/dbt" },
-    { icon: "💰", title: "-70% storage", description: "Lifecycle policies and optimized formats" },
-    { icon: "⏱️", title: "Weeks → Minutes", description: "Time-to-insight with self-service" }
+    { icon: '🚀', title: '500M+ events/day', description: 'Sub-second streaming pipelines' },
+    { icon: '⚡', title: '-90% ETL time', description: 'Migration to Spark/dbt' },
+    { icon: '💰', title: '-70% storage', description: 'Lifecycle policies and optimized formats' },
+    { icon: '⏱️', title: 'Weeks → Minutes', description: 'Time-to-insight with self-service' },
   ]}
   columns={4}
 />

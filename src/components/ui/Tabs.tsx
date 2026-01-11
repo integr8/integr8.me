@@ -18,7 +18,7 @@ export function Tabs({ items, defaultActiveIndex = 0, centered = false }: TabsPr
 
   return (
     <div className="flex flex-col">
-      <div className={`tabs tabs-boxed ${centered ? 'justify-center' : ''}`}>
+      <div className={`tabs-boxed tabs ${centered ? 'justify-center' : ''}`}>
         {items.map((item, index) => (
           <button
             key={index}
@@ -30,9 +30,7 @@ export function Tabs({ items, defaultActiveIndex = 0, centered = false }: TabsPr
           </button>
         ))}
       </div>
-      <div className="mt-4">
-        {items[activeIndex] && items[activeIndex].content}
-      </div>
+      <div className="mt-4">{items[activeIndex] && items[activeIndex].content}</div>
     </div>
   );
 }

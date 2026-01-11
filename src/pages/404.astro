@@ -6,14 +6,14 @@ const lang = 'ptbr';
 ---
 
 <BaseLayout>
-  <div class="min-h-screen flex flex-col items-center justify-center bg-base-100">
+  <div class="flex min-h-screen flex-col items-center justify-center bg-base-100">
     <div class="text-center">
       <div class="mb-8">
-        <Icon name="ExclamationTriangleIcon" className="h-24 w-24 text-error mx-auto" client:load />
+        <Icon name="ExclamationTriangleIcon" className="mx-auto h-24 w-24 text-error" client:load />
       </div>
-      <h1 class="text-5xl font-bold mb-4">404</h1>
-      <h2 class="text-2xl font-semibold mb-4">Página não encontrada</h2>
-      <p class="text-base-content/70 mb-8 max-w-md mx-auto">
+      <h1 class="mb-4 text-5xl font-bold">404</h1>
+      <h2 class="mb-4 text-2xl font-semibold">Página não encontrada</h2>
+      <p class="mx-auto mb-8 max-w-md text-base-content/70">
         A página que você procura não existe ou foi movida. Verifique a URL e tente novamente.
       </p>
       <a href={`/${lang}/`} class="btn btn-primary gap-2">

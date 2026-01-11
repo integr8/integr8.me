@@ -1,10 +1,20 @@
 ---
-title: "Engenharia de Software"
-category: "engineering"
-description: "Transformamos e modernizamos aplicações com arquiteturas escaláveis, código de qualidade e práticas de desenvolvimento sustentáveis."
-icon: "CodeBracketSquareIcon"
+title: 'Engenharia de Software'
+category: 'engineering'
+description: 'Transformamos e modernizamos aplicações com arquiteturas escaláveis, código de qualidade e práticas de desenvolvimento sustentáveis.'
+icon: 'CodeBracketSquareIcon'
 weight: 9
-technologies: ["Domain-Driven Design", "Event-Driven Architecture", "API-First Design", "Clean Architecture", "Microservices / Modular Monolith", "Event Sourcing / CQRS", "Strangler Fig Pattern", "Contract Testing"]
+technologies:
+  [
+    'Domain-Driven Design',
+    'Event-Driven Architecture',
+    'API-First Design',
+    'Clean Architecture',
+    'Microservices / Modular Monolith',
+    'Event Sourcing / CQRS',
+    'Strangler Fig Pattern',
+    'Contract Testing',
+  ]
 ---
 
 import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
@@ -13,14 +23,22 @@ import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/con
 
 Organizações enfrentam desafios cada vez mais complexos para manter e evoluir suas aplicações:
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🏚️", title: "Sistemas legados", description: "Críticos mas difíceis de modificar ou escalar" },
-    { icon: "🔗", title: "Acoplamento excessivo", description: "Mudanças simples causam efeitos cascata" },
-    { icon: "💳", title: "Dívida técnica", description: "Cada feature mais lenta de entregar" },
-    { icon: "🧪", title: "Falta de testes", description: "Medo de quebrar paralisa o time" },
-    { icon: "🏋️", title: "Monolito inflexível", description: "Não escala com o negócio" },
-    { icon: "🧠", title: "Knowledge silos", description: "Só alguns entendem partes críticas" }
+    {
+      icon: '🏚️',
+      title: 'Sistemas legados',
+      description: 'Críticos mas difíceis de modificar ou escalar',
+    },
+    {
+      icon: '🔗',
+      title: 'Acoplamento excessivo',
+      description: 'Mudanças simples causam efeitos cascata',
+    },
+    { icon: '💳', title: 'Dívida técnica', description: 'Cada feature mais lenta de entregar' },
+    { icon: '🧪', title: 'Falta de testes', description: 'Medo de quebrar paralisa o time' },
+    { icon: '🏋️', title: 'Monolito inflexível', description: 'Não escala com o negócio' },
+    { icon: '🧠', title: 'Knowledge silos', description: 'Só alguns entendem partes críticas' },
   ]}
   columns={3}
 />
@@ -32,34 +50,46 @@ Organizações enfrentam desafios cada vez mais complexos para manter e evoluir 
   levels={[
     {
       level: 1,
-      title: "Ad-Hoc",
-      description: "Código sem padrões",
-      items: ["Big ball of mud", "Sem testes", "Docs inexistentes", "Deploys manuais"]
+      title: 'Ad-Hoc',
+      description: 'Código sem padrões',
+      items: ['Big ball of mud', 'Sem testes', 'Docs inexistentes', 'Deploys manuais'],
     },
     {
       level: 2,
-      title: "Básico",
-      description: "Primeiros padrões",
-      items: ["Alguma estrutura", "Testes unitários", "Code review", "CI básico"]
+      title: 'Básico',
+      description: 'Primeiros padrões',
+      items: ['Alguma estrutura', 'Testes unitários', 'Code review', 'CI básico'],
     },
     {
       level: 3,
-      title: "Padronizado",
-      description: "Arquitetura definida",
-      items: ["Clean Architecture", "Test pyramid", "Contract tests", "API-first", "CD"]
+      title: 'Padronizado',
+      description: 'Arquitetura definida',
+      items: ['Clean Architecture', 'Test pyramid', 'Contract tests', 'API-first', 'CD'],
     },
     {
       level: 4,
-      title: "Avançado",
-      description: "DDD e patterns maduros",
-      items: ["Domain-Driven Design", "Event-Driven", "Microservices/Modular", "CQRS/ES", "Fitness functions"]
+      title: 'Avançado',
+      description: 'DDD e patterns maduros',
+      items: [
+        'Domain-Driven Design',
+        'Event-Driven',
+        'Microservices/Modular',
+        'CQRS/ES',
+        'Fitness functions',
+      ],
     },
     {
       level: 5,
-      title: "Excelente",
-      description: "Engenharia como diferencial",
-      items: ["Evolutionary architecture", "Platform thinking", "Inner-source", "Tech radar", "Architecture as code"]
-    }
+      title: 'Excelente',
+      description: 'Engenharia como diferencial',
+      items: [
+        'Evolutionary architecture',
+        'Platform thinking',
+        'Inner-source',
+        'Tech radar',
+        'Architecture as code',
+      ],
+    },
   ]}
 />
 
@@ -70,40 +100,56 @@ Organizações enfrentam desafios cada vez mais complexos para manter e evoluir 
 <Timeline
   title="Domain-Driven Design"
   items={[
-    { phase: "Strategic", title: "Event Storming", description: "Descoberta de domínio com negócio" },
-    { phase: "Tactical", title: "Bounded Contexts", description: "Fronteiras claras entre domínios" },
-    { phase: "Language", title: "Ubiquitous Language", description: "Linguagem compartilhada dev/negócio" },
-    { phase: "Patterns", title: "Aggregates & Events", description: "Consistência e comunicação" }
+    {
+      phase: 'Strategic',
+      title: 'Event Storming',
+      description: 'Descoberta de domínio com negócio',
+    },
+    {
+      phase: 'Tactical',
+      title: 'Bounded Contexts',
+      description: 'Fronteiras claras entre domínios',
+    },
+    {
+      phase: 'Language',
+      title: 'Ubiquitous Language',
+      description: 'Linguagem compartilhada dev/negócio',
+    },
+    { phase: 'Patterns', title: 'Aggregates & Events', description: 'Consistência e comunicação' },
   ]}
 />
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🧅", title: "Clean Architecture", description: "Separation of concerns, dependency inversion" },
-    { icon: "📦", title: "Aggregates", description: "Consistência de domínio" },
-    { icon: "🏛️", title: "Repositories", description: "Persistência agnóstica" },
-    { icon: "📨", title: "Domain Events", description: "Comunicação entre contextos" }
+    {
+      icon: '🧅',
+      title: 'Clean Architecture',
+      description: 'Separation of concerns, dependency inversion',
+    },
+    { icon: '📦', title: 'Aggregates', description: 'Consistência de domínio' },
+    { icon: '🏛️', title: 'Repositories', description: 'Persistência agnóstica' },
+    { icon: '📨', title: 'Domain Events', description: 'Comunicação entre contextos' },
   ]}
   columns={4}
 />
 
 ### Arquiteturas Modernas
 
-| Pattern | Quando Usar | Benefício |
-|---------|-------------|-----------|
-| **Microservices** | Escala e autonomia | Deploy independente por domínio |
-| **Modular Monolith** | Simplicidade primeiro | Evolução gradual, ops simples |
-| **Event-Driven** | Desacoplamento | Audit trail, escalabilidade |
-| **CQRS/ES** | Reads ≠ Writes | Performance otimizada |
+| Pattern              | Quando Usar           | Benefício                       |
+| -------------------- | --------------------- | ------------------------------- |
+| **Microservices**    | Escala e autonomia    | Deploy independente por domínio |
+| **Modular Monolith** | Simplicidade primeiro | Evolução gradual, ops simples   |
+| **Event-Driven**     | Desacoplamento        | Audit trail, escalabilidade     |
+| **CQRS/ES**          | Reads ≠ Writes        | Performance otimizada           |
 
 ### API Design
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "📋", title: "API-First", description: "OpenAPI spec antes de código" },
-    { icon: "🌐", title: "REST", description: "Recursos bem modelados, HATEOAS" },
-    { icon: "📊", title: "GraphQL", description: "Federation, DataLoader, Subscriptions" },
-    { icon: "⚡", title: "gRPC", description: "Alta performance, streaming" }
+    { icon: '📋', title: 'API-First', description: 'OpenAPI spec antes de código' },
+    { icon: '🌐', title: 'REST', description: 'Recursos bem modelados, HATEOAS' },
+    { icon: '📊', title: 'GraphQL', description: 'Federation, DataLoader, Subscriptions' },
+    { icon: '⚡', title: 'gRPC', description: 'Alta performance, streaming' },
   ]}
   columns={4}
 />
@@ -113,25 +159,29 @@ Organizações enfrentam desafios cada vez mais complexos para manter e evoluir 
 <Timeline
   title="Pirâmide de Testes"
   items={[
-    { phase: "Unit", title: "Comportamento", description: "Testes focados em comportamento, não implementação" },
-    { phase: "Integration", title: "Boundaries", description: "Testes em fronteiras do sistema" },
-    { phase: "Contract", title: "Pact", description: "Consumer-driven contracts entre serviços" },
-    { phase: "E2E", title: "Journeys", description: "Jornadas críticas do usuário" }
+    {
+      phase: 'Unit',
+      title: 'Comportamento',
+      description: 'Testes focados em comportamento, não implementação',
+    },
+    { phase: 'Integration', title: 'Boundaries', description: 'Testes em fronteiras do sistema' },
+    { phase: 'Contract', title: 'Pact', description: 'Consumer-driven contracts entre serviços' },
+    { phase: 'E2E', title: 'Journeys', description: 'Jornadas críticas do usuário' },
   ]}
 />
 
 ### Modernização de Legado
 
 <Callout type="info" title="Strangler Fig Pattern">
-Migração incremental, feature-by-feature, com rollback seguro a qualquer momento.
+  Migração incremental, feature-by-feature, com rollback seguro a qualquer momento.
 </Callout>
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🌿", title: "Strangler Fig", description: "Migração incremental segura" },
-    { icon: "🛡️", title: "Anti-Corruption Layer", description: "Isolamento do novo vs legado" },
-    { icon: "🔄", title: "CDC", description: "Change Data Capture para sync" },
-    { icon: "🏗️", title: "Seam Extraction", description: "Decomposição progressiva" }
+    { icon: '🌿', title: 'Strangler Fig', description: 'Migração incremental segura' },
+    { icon: '🛡️', title: 'Anti-Corruption Layer', description: 'Isolamento do novo vs legado' },
+    { icon: '🔄', title: 'CDC', description: 'Change Data Capture para sync' },
+    { icon: '🏗️', title: 'Seam Extraction', description: 'Decomposição progressiva' },
   ]}
   columns={4}
 />
@@ -139,17 +189,20 @@ Migração incremental, feature-by-feature, com rollback seguro a qualquer momen
 ## Tech Stack
 
 **Backend:**
+
 - Java/Kotlin: Spring Boot, Quarkus, Micronaut
 - Python: FastAPI, Django
 - Node.js: NestJS, Fastify
 - Go: Chi, Gin
 
 **Frontend:**
+
 - React: Next.js, Remix
 - Vue.js: Nuxt.js
 - Mobile: React Native, Flutter
 
 **Data & Messaging:**
+
 - PostgreSQL, MongoDB, Redis
 - Kafka, Pulsar, RabbitMQ
 - Elasticsearch
@@ -157,22 +210,24 @@ Migração incremental, feature-by-feature, com rollback seguro a qualquer momen
 ## Certificações
 
 **DDD & Architecture:**
+
 - Domain-Driven Design Practitioners
 - Event Storming Facilitators
 - Strategic & Tactical patterns
 
 **Cloud & Platform:**
+
 - AWS Certified Solutions Architect
 - CNCF Certified Kubernetes Administrator
 
 ## Resultados
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🚀", title: "-50% Lead Time", description: "Features entregues mais rápido" },
-    { icon: "🐛", title: "-70% Bugs", description: "Qualidade via testes e design" },
-    { icon: "📈", title: "+100% Deploy Freq", description: "Mais deploys por dia" },
-    { icon: "🔧", title: "-80% Hotfixes", description: "Menos emergências" }
+    { icon: '🚀', title: '-50% Lead Time', description: 'Features entregues mais rápido' },
+    { icon: '🐛', title: '-70% Bugs', description: 'Qualidade via testes e design' },
+    { icon: '📈', title: '+100% Deploy Freq', description: 'Mais deploys por dia' },
+    { icon: '🔧', title: '-80% Hotfixes', description: 'Menos emergências' },
   ]}
   columns={4}
 />

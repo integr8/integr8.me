@@ -5,7 +5,10 @@ import { Badge } from '@components/common/Badge';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  const paths: { params: { lang: string; slug: string }; props: { post: CollectionEntry<'blog'> } }[] = [];
+  const paths: {
+    params: { lang: string; slug: string };
+    props: { post: CollectionEntry<'blog'> };
+  }[] = [];
 
   const langMap: Record<string, string> = {
     ptbr: 'ptbr',
@@ -36,13 +39,10 @@ const { post } = Astro.props;
 const { Content } = await post.render();
 ---
 
-<BaseLayout 
-  title={`${post.data.title} - Blog Integr8`} 
-  description={post.data.description}
->
-  <div class="container mx-auto px-4 py-12 max-w-4xl">
+<BaseLayout title={`${post.data.title} - Blog Integr8`} description={post.data.description}>
+  <div class="container mx-auto max-w-4xl px-4 py-12">
     <!-- Breadcrumbs -->
-    <div class="text-sm breadcrumbs mb-8">
+    <div class="breadcrumbs mb-8 text-sm">
       <ul>
         <li><a href={`/${lang}`}>{lang === 'ptbr' ? 'Início' : 'Home'}</a></li>
         <li><a href={`/${lang}/blog`}>Blog</a></li>
@@ -52,30 +52,45 @@ const { Content } = await post.render();
 
     <!-- Header -->
     <header class="mb-12">
-      {post.data.image && (
-        <figure class="mb-8 rounded-lg overflow-hidden">
-          <img src={post.data.image} alt={post.data.title} class="w-full h-64 object-cover" onerror="this.parentElement.style.display='none'" />
-        </figure>
-      )}
-      
-      <div class="flex items-center gap-3 mb-4">
-        {post.data.category && (
-          <Badge variant="primary">{post.data.category}</Badge>
-        )}
-        {post.data.read_time && (
-          <span class="text-sm text-base-content/60">{post.data.read_time} min read</span>
-        )}
+      {
+        post.data.image && (
+          <figure class="mb-8 overflow-hidden rounded-lg">
+            <img
+              src={post.data.image}
+              alt={post.data.title}
+              class="h-64 w-full object-cover"
+              onerror="this.parentElement.style.display='none'"
+            />
+          </figure>
+        )
+      }
+
+      <div class="mb-4 flex items-center gap-3">
+        {post.data.category && <Badge variant="primary">{post.data.category}</Badge>}
+        {
+          post.data.read_time && (
+            <span class="text-sm text-base-content/60">{post.data.read_time} min read</span>
+          )
+        }
       </div>
-      
-      <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
-      
-      {post.data.description && (
-        <p class="text-xl text-base-content/70 mb-6">{post.data.description}</p>
-      )}
-      
+
+      <h1 class="mb-4 text-4xl font-bold">{post.data.title}</h1>
+
+      {
+        post.data.description && (
+          <p class="mb-6 text-xl text-base-content/70">{post.data.description}</p>
+        )
+      }
+
       <div class="flex items-center gap-4 text-sm text-base-content/60">
         {post.data.author && <span>Por {post.data.author}</span>}
-        {post.data.date && <span>{new Date(post.data.date).toLocaleDateString(lang === 'ptbr' ? 'pt-BR' : 'en-US')}</span>}
+        {
+          post.data.date && (
+            <span>
+              {new Date(post.data.date).toLocaleDateString(lang === 'ptbr' ? 'pt-BR' : 'en-US')}
+            </span>
+          )
+        }
       </div>
     </header>
 
@@ -85,7 +100,7 @@ const { Content } = await post.render();
     </article>
 
     <!-- Back link -->
-    <div class="mt-12 pt-8 border-t border-base-300">
+    <div class="mt-12 border-t border-base-300 pt-8">
       <a href={`/${lang}/blog`} class="btn btn-outline">
         ← {lang === 'ptbr' ? 'Voltar ao Blog' : 'Back to Blog'}
       </a>

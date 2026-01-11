@@ -13,12 +13,7 @@ export interface IconProps {
 
 type IconName = keyof typeof outline;
 
-export function Icon({
-  name,
-  variant = 'outline',
-  className = 'h-6 w-6',
-  ...props
-}: IconProps) {
+export function Icon({ name, variant = 'outline', className = 'h-6 w-6', ...props }: IconProps) {
   let iconSet: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>>;
 
   switch (variant) {

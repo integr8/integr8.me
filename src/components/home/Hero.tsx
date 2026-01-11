@@ -17,7 +17,7 @@ export interface HeroProps {
 export function Hero({ badge, title, subtitle, cta, backgroundImage }: HeroProps) {
   return (
     <div
-      className="hero bg-cover bg-center relative"
+      className="hero relative bg-cover bg-center"
       style={backgroundImage ? { backgroundImage: `url(${backgroundImage})` } : undefined}
     >
       <div className="hero-overlay bg-opacity-60"></div>
@@ -28,11 +28,11 @@ export function Hero({ badge, title, subtitle, cta, backgroundImage }: HeroProps
               {badge}
             </Badge>
           )}
-          <h1 className="mb-5 text-4xl md:text-5xl font-bold leading-tight">{title}</h1>
+          <h1 className="mb-5 text-4xl font-bold leading-tight md:text-5xl">{title}</h1>
           {subtitle && <p className="mb-8 text-lg leading-relaxed">{subtitle}</p>}
 
           {cta && (
-            <div className="flex gap-4 justify-center flex-wrap">
+            <div className="flex flex-wrap justify-center gap-4">
               <a href={cta.primary.href}>
                 <Button variant="primary" size="lg" className="gap-2">
                   <Icon name="RocketLaunchIcon" className="h-5 w-5" />

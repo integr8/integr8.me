@@ -35,16 +35,14 @@ const typeStyles = {
 
 export function Callout({ type = 'info', title, children }: CalloutProps) {
   const styles = typeStyles[type];
-  
+
   return (
-    <div className={`${styles.bg} border-l-4 ${styles.border} p-4 my-6 rounded-r-lg`}>
-      <div className="flex items-center gap-2 font-semibold mb-2">
+    <div className={`${styles.bg} border-l-4 ${styles.border} my-6 rounded-r-lg p-4`}>
+      <div className="mb-2 flex items-center gap-2 font-semibold">
         <span>{styles.icon}</span>
         <span>{title || styles.title}</span>
       </div>
-      <div className="text-base-content/80">
-        {children}
-      </div>
+      <div className="text-base-content/80">{children}</div>
     </div>
   );
 }

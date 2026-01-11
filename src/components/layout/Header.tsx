@@ -34,7 +34,7 @@ export function Header({ lang, translations }: HeaderProps) {
   };
 
   return (
-    <div className="navbar bg-base-100 shadow-lg sticky top-0 z-40">
+    <div className="navbar sticky top-0 z-40 bg-base-100 shadow-lg">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -42,7 +42,7 @@ export function Header({ lang, translations }: HeaderProps) {
           </label>
           <ul
             tabIndex={0}
-            className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+            className="menu dropdown-content z-[1] w-52 rounded-box bg-base-100 p-2 shadow"
           >
             {mainItems.map((item) => (
               <li key={item.key}>
@@ -55,7 +55,7 @@ export function Header({ lang, translations }: HeaderProps) {
           </ul>
         </div>
         <a href={`/${lang}/`} className="btn btn-ghost text-xl">
-          <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-white font-bold">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary font-bold text-white">
             I8
           </div>
         </a>

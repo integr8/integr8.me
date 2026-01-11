@@ -15,13 +15,7 @@ export interface Props {
   ogType?: string;
 }
 
-const {
-  title,
-  description,
-  image,
-  canonical,
-  ogType,
-} = Astro.props;
+const { title, description, image, canonical, ogType } = Astro.props;
 
 // Extract lang from URL
 const pathSegments = Astro.url.pathname.split('/').filter(Boolean);
@@ -34,18 +28,18 @@ const translations = getTranslations(lang);
 const allSolutions = await getCollection('solutions');
 const langFolder = lang === 'en' ? 'en' : 'ptbr';
 const solutions = allSolutions
-  .filter(s => s.id.startsWith(langFolder + '/'))
-  .map(s => ({
+  .filter((s) => s.id.startsWith(langFolder + '/'))
+  .map((s) => ({
     slug: s.id.replace(langFolder + '/', '').replace('.mdx', ''),
-    title: s.data.title
+    title: s.data.title,
   }))
   .sort((a, b) => a.title.localeCompare(b.title));
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang={lang === 'ptbr' ? 'pt-BR' : 'en'} data-theme="integr8">
   <head>
-    <SEO 
+    <SEO
       title={title}
       description={description}
       image={image}
@@ -60,36 +54,34 @@ const solutions = allSolutions
       <slot />
     </main>
     <Footer lang={lang} solutions={solutions} />
-  </body>
-</html>
-
-<style is:global>
-  :root {
-    font-family: 'Inter', system-ui, sans-serif;
-    color-scheme: light dark;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  main {
-    flex: 1;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+  </body><style is:global>
+    :root {
+      font-family: 'Inter', system-ui, sans-serif;
+      color-scheme: light dark;
     }
-  }
-</style>
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</html>

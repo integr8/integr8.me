@@ -1,10 +1,19 @@
 ---
-title: "Arquitetura Cloud & FinOps"
-category: "cloud-platform"
-description: "Desenhamos infraestruturas resilientes e otimizadas em AWS, Azure e GCP com foco em redução de custos, segurança e excelência operacional."
-icon: "CloudIcon"
+title: 'Arquitetura Cloud & FinOps'
+category: 'cloud-platform'
+description: 'Desenhamos infraestruturas resilientes e otimizadas em AWS, Azure e GCP com foco em redução de custos, segurança e excelência operacional.'
+icon: 'CloudIcon'
 weight: 1
-technologies: ["AWS (EKS, Lambda, RDS, S3, CloudFront)", "Azure (AKS, ARM, Azure Functions)", "GCP (GKE, Cloud Run, BigQuery)", "Terraform / OpenTofu", "Crossplane", "Karpenter", "Pulumi"]
+technologies:
+  [
+    'AWS (EKS, Lambda, RDS, S3, CloudFront)',
+    'Azure (AKS, ARM, Azure Functions)',
+    'GCP (GKE, Cloud Run, BigQuery)',
+    'Terraform / OpenTofu',
+    'Crossplane',
+    'Karpenter',
+    'Pulumi',
+  ]
 ---
 
 import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
@@ -13,14 +22,38 @@ import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/con
 
 A computação em nuvem promete escalabilidade infinita e agilidade de negócios, mas sem a arquitetura correta, rapidamente se torna um centro de custo ingovernável:
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "💸", title: "Gastos descontrolados", description: "Faturas que crescem exponencialmente sem valor correspondente" },
-    { icon: "🔓", title: "Vulnerabilidades", description: "Serviços mal configurados e políticas IAM permissivas" },
-    { icon: "🔀", title: "Complexidade operacional", description: "Infraestrutura dispersa sem padronização" },
-    { icon: "🚫", title: "Migrações fracassadas", description: "Presos entre legado e cloud incompleto" },
-    { icon: "📋", title: "Lacunas de conformidade", description: "Riscos regulatórios e falhas de auditoria" },
-    { icon: "🏚️", title: "Lift & Shift", description: "Problemas movidos do on-premise para cloud a custo maior" }
+    {
+      icon: '💸',
+      title: 'Gastos descontrolados',
+      description: 'Faturas que crescem exponencialmente sem valor correspondente',
+    },
+    {
+      icon: '🔓',
+      title: 'Vulnerabilidades',
+      description: 'Serviços mal configurados e políticas IAM permissivas',
+    },
+    {
+      icon: '🔀',
+      title: 'Complexidade operacional',
+      description: 'Infraestrutura dispersa sem padronização',
+    },
+    {
+      icon: '🚫',
+      title: 'Migrações fracassadas',
+      description: 'Presos entre legado e cloud incompleto',
+    },
+    {
+      icon: '📋',
+      title: 'Lacunas de conformidade',
+      description: 'Riscos regulatórios e falhas de auditoria',
+    },
+    {
+      icon: '🏚️',
+      title: 'Lift & Shift',
+      description: 'Problemas movidos do on-premise para cloud a custo maior',
+    },
   ]}
   columns={3}
 />
@@ -32,34 +65,57 @@ A computação em nuvem promete escalabilidade infinita e agilidade de negócios
   levels={[
     {
       level: 1,
-      title: "Exploratório",
-      description: "Primeiros experimentos em cloud",
-      items: ["VMs básicas", "Console manual", "Sem automação", "Custos desconhecidos"]
+      title: 'Exploratório',
+      description: 'Primeiros experimentos em cloud',
+      items: ['VMs básicas', 'Console manual', 'Sem automação', 'Custos desconhecidos'],
     },
     {
       level: 2,
-      title: "Fundamentado",
-      description: "Primeiros workloads em produção",
-      items: ["IaC básico (Terraform)", "Landing zone inicial", "Monitoramento básico", "Algumas tags de custo"]
+      title: 'Fundamentado',
+      description: 'Primeiros workloads em produção',
+      items: [
+        'IaC básico (Terraform)',
+        'Landing zone inicial',
+        'Monitoramento básico',
+        'Algumas tags de custo',
+      ],
     },
     {
       level: 3,
-      title: "Padronizado",
-      description: "Práticas Well-Architected",
-      items: ["Multi-account/subscription", "IaC modular", "GitOps para infra", "FinOps básico", "Security baselines"]
+      title: 'Padronizado',
+      description: 'Práticas Well-Architected',
+      items: [
+        'Multi-account/subscription',
+        'IaC modular',
+        'GitOps para infra',
+        'FinOps básico',
+        'Security baselines',
+      ],
     },
     {
       level: 4,
-      title: "Avançado",
-      description: "Operações cloud-native otimizadas",
-      items: ["Multi-cloud/híbrido", "Crossplane/Pulumi", "FinOps maduro", "Chaos engineering", "Zero-trust"]
+      title: 'Avançado',
+      description: 'Operações cloud-native otimizadas',
+      items: [
+        'Multi-cloud/híbrido',
+        'Crossplane/Pulumi',
+        'FinOps maduro',
+        'Chaos engineering',
+        'Zero-trust',
+      ],
     },
     {
       level: 5,
-      title: "Otimizado",
-      description: "Excelência operacional contínua",
-      items: ["Plataforma self-service", "FinOps automatizado", "Compliance contínuo", "Cost anomaly detection", "Sustainability metrics"]
-    }
+      title: 'Otimizado',
+      description: 'Excelência operacional contínua',
+      items: [
+        'Plataforma self-service',
+        'FinOps automatizado',
+        'Compliance contínuo',
+        'Cost anomaly detection',
+        'Sustainability metrics',
+      ],
+    },
   ]}
 />
 
@@ -69,14 +125,34 @@ A computação em nuvem promete escalabilidade infinita e agilidade de negócios
 
 Implementamos os pilares dos **AWS/Azure/GCP Well-Architected Frameworks**:
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "⚙️", title: "Excelência Operacional", description: "Runbooks automatizados, IaC, monitoramento contínuo" },
-    { icon: "🛡️", title: "Segurança", description: "Zero-trust, menor privilégio, criptografia end-to-end" },
-    { icon: "🔄", title: "Confiabilidade", description: "Multi-região, DR automatizado, chaos engineering" },
-    { icon: "⚡", title: "Performance", description: "Right-sizing, caching, database tuning" },
-    { icon: "💰", title: "Otimização de Custos", description: "Reserved instances, Spot, lifecycle management" },
-    { icon: "🌱", title: "Sustentabilidade", description: "Eficiência de recursos, carbon footprint" }
+    {
+      icon: '⚙️',
+      title: 'Excelência Operacional',
+      description: 'Runbooks automatizados, IaC, monitoramento contínuo',
+    },
+    {
+      icon: '🛡️',
+      title: 'Segurança',
+      description: 'Zero-trust, menor privilégio, criptografia end-to-end',
+    },
+    {
+      icon: '🔄',
+      title: 'Confiabilidade',
+      description: 'Multi-região, DR automatizado, chaos engineering',
+    },
+    { icon: '⚡', title: 'Performance', description: 'Right-sizing, caching, database tuning' },
+    {
+      icon: '💰',
+      title: 'Otimização de Custos',
+      description: 'Reserved instances, Spot, lifecycle management',
+    },
+    {
+      icon: '🌱',
+      title: 'Sustentabilidade',
+      description: 'Eficiência de recursos, carbon footprint',
+    },
   ]}
   columns={3}
 />
@@ -86,34 +162,51 @@ Implementamos os pilares dos **AWS/Azure/GCP Well-Architected Frameworks**:
 <Timeline
   title="Implementação FinOps"
   items={[
-    { phase: "Visibilidade", title: "Dashboards Unificados", description: "Custos consolidados de todas as contas e providers" },
-    { phase: "Alocação", title: "Tagging & Chargeback", description: "Atribuição de custos a times e projetos" },
-    { phase: "Otimização", title: "Right-sizing & Spot", description: "Até 90% de economia com Spot Instances" },
-    { phase: "Governança", title: "Alertas & Guardrails", description: "Detecção de anomalias e budget alerts" }
+    {
+      phase: 'Visibilidade',
+      title: 'Dashboards Unificados',
+      description: 'Custos consolidados de todas as contas e providers',
+    },
+    {
+      phase: 'Alocação',
+      title: 'Tagging & Chargeback',
+      description: 'Atribuição de custos a times e projetos',
+    },
+    {
+      phase: 'Otimização',
+      title: 'Right-sizing & Spot',
+      description: 'Até 90% de economia com Spot Instances',
+    },
+    {
+      phase: 'Governança',
+      title: 'Alertas & Guardrails',
+      description: 'Detecção de anomalias e budget alerts',
+    },
   ]}
 />
 
 <Callout type="success" title="Resultados Típicos">
-Redução de **30-50% nas faturas cloud** através de right-sizing, reserved instances e otimização Spot.
+  Redução de **30-50% nas faturas cloud** através de right-sizing, reserved instances e otimização
+  Spot.
 </Callout>
 
 ### Infraestrutura como Código (IaC)
 
-| Ferramenta | Uso | Benefício |
-|------------|-----|-----------|
-| **Terraform/OpenTofu** | IaC multi-cloud | Módulos reutilizáveis, state management |
-| **Crossplane** | K8s-native IaC | Self-service, composição de recursos |
-| **Pulumi** | IaC em linguagens reais | TypeScript/Python/Go para infra |
-| **GitOps** | Entrega de infra | PRs, aprovações, audit trail |
+| Ferramenta             | Uso                     | Benefício                               |
+| ---------------------- | ----------------------- | --------------------------------------- |
+| **Terraform/OpenTofu** | IaC multi-cloud         | Módulos reutilizáveis, state management |
+| **Crossplane**         | K8s-native IaC          | Self-service, composição de recursos    |
+| **Pulumi**             | IaC em linguagens reais | TypeScript/Python/Go para infra         |
+| **GitOps**             | Entrega de infra        | PRs, aprovações, audit trail            |
 
 ### Estratégias Multi-Cloud & Híbridas
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "🔶", title: "AWS", description: "EKS, Lambda, RDS, CloudFront, S3" },
-    { icon: "🔷", title: "Azure", description: "AKS, Functions, SQL, Azure AD" },
-    { icon: "🔴", title: "GCP", description: "GKE, Cloud Run, BigQuery, Anthos" },
-    { icon: "🔗", title: "Híbrido", description: "Integração com on-premise e edge" }
+    { icon: '🔶', title: 'AWS', description: 'EKS, Lambda, RDS, CloudFront, S3' },
+    { icon: '🔷', title: 'Azure', description: 'AKS, Functions, SQL, Azure AD' },
+    { icon: '🔴', title: 'GCP', description: 'GKE, Cloud Run, BigQuery, Anthos' },
+    { icon: '🔗', title: 'Híbrido', description: 'Integração com on-premise e edge' },
   ]}
   columns={4}
 />
@@ -123,34 +216,52 @@ Redução de **30-50% nas faturas cloud** através de right-sizing, reserved ins
 <Timeline
   title="Jornada de Transformação Cloud"
   items={[
-    { phase: "2-4 semanas", title: "Assessment", description: "Revisão de arquitetura, gaps de segurança, oportunidades de custo" },
-    { phase: "4-8 semanas", title: "Design", description: "Arquitetura target, estratégia de migração, POCs" },
-    { phase: "8-16 semanas", title: "Implementação", description: "IaC, migração, monitoramento, capacitação" },
-    { phase: "Contínua", title: "Otimização", description: "FinOps contínuo, evolução de arquitetura, QBRs" }
+    {
+      phase: '2-4 semanas',
+      title: 'Assessment',
+      description: 'Revisão de arquitetura, gaps de segurança, oportunidades de custo',
+    },
+    {
+      phase: '4-8 semanas',
+      title: 'Design',
+      description: 'Arquitetura target, estratégia de migração, POCs',
+    },
+    {
+      phase: '8-16 semanas',
+      title: 'Implementação',
+      description: 'IaC, migração, monitoramento, capacitação',
+    },
+    {
+      phase: 'Contínua',
+      title: 'Otimização',
+      description: 'FinOps contínuo, evolução de arquitetura, QBRs',
+    },
   ]}
 />
 
 ## Certificações
 
 **Cloud Providers:**
+
 - AWS Certified Solutions Architect – Professional
 - AWS Certified DevOps Engineer – Professional
 - Azure Solutions Architect Expert
 - Google Cloud Professional Cloud Architect
 
 **Segurança & Compliance:**
+
 - AWS Certified Security – Specialty
 - Azure Security Engineer Associate
 - LGPD, PCI-DSS, SOC 2, HIPAA
 
 ## Resultados de Negócio
 
-<FeatureGrid 
+<FeatureGrid
   features={[
-    { icon: "💰", title: "-30-50% Custos", description: "Redução significativa nas faturas cloud" },
-    { icon: "⚡", title: "Zero Downtime", description: "Migrações sem interrupção de serviço" },
-    { icon: "✅", title: "99.99% Uptime", description: "Alta disponibilidade multi-região" },
-    { icon: "🚀", title: "4x Mais Rápido", description: "Provisionamento de novos ambientes" }
+    { icon: '💰', title: '-30-50% Custos', description: 'Redução significativa nas faturas cloud' },
+    { icon: '⚡', title: 'Zero Downtime', description: 'Migrações sem interrupção de serviço' },
+    { icon: '✅', title: '99.99% Uptime', description: 'Alta disponibilidade multi-região' },
+    { icon: '🚀', title: '4x Mais Rápido', description: 'Provisionamento de novos ambientes' },
   ]}
   columns={4}
 />

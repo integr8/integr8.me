@@ -1,11 +1,11 @@
 ---
-title: "GitOps: The Future of Continuous Delivery with ArgoCD and Flux"
+title: 'GitOps: The Future of Continuous Delivery with ArgoCD and Flux'
 date: 2024-01-10
-author: "Integr8 Team"
-description: "Discover how GitOps transforms the way teams manage infrastructure and deployments on Kubernetes"
-category: "devops"
-tags: ["GitOps", "ArgoCD", "Flux", "Kubernetes", "CI/CD"]
-image: "/images/blog/gitops-cover.png"
+author: 'Integr8 Team'
+description: 'Discover how GitOps transforms the way teams manage infrastructure and deployments on Kubernetes'
+category: 'devops'
+tags: ['GitOps', 'ArgoCD', 'Flux', 'Kubernetes', 'CI/CD']
+image: '/images/blog/gitops-cover.png'
 read_time: 8
 featured: true
 ---
@@ -24,12 +24,15 @@ GitOps is an operational model that brings DevOps practices to infrastructure ma
 ## GitOps Benefits
 
 ### Complete Traceability
+
 ```
 Code commit → PR review → Merge → Automatic deployment
 ```
+
 Every change is auditable and traceable.
 
 ### Declarative vs Imperative
+
 ```yaml
 # GitOps (Declarative)
 apiVersion: apps/v1
@@ -44,15 +47,19 @@ spec:
 Versus imperative scripts that say "how" instead of "what".
 
 ### Disaster Recovery
+
 If the cluster is destroyed, recreating is simple:
+
 ```bash
 argocd app sync production
 ```
+
 Everything lives in Git!
 
 ## ArgoCD vs Flux
 
 ### ArgoCD
+
 - Visual dashboard
 - UI to manage applications
 - Better for teams starting out
@@ -80,6 +87,7 @@ spec:
 ```
 
 ### Flux
+
 - CLI-first
 - More flexible and composable
 - Notification webhooks
@@ -143,6 +151,7 @@ kubectl set image deployment/api api=myapi:v1.2.3
 ### 3. Drift Detection
 
 ArgoCD/Flux detect divergences:
+
 ```
 Desired State (Git) ≠ Actual State (Cluster) → Alert!
 ```
@@ -200,6 +209,6 @@ GitOps is not just a tool, it is a **cultural shift**. It enables:
 ✅ Safer deploys via PRs  
 ✅ Fast disaster recovery  
 ✅ Consistent experience across environments  
-✅ Built-in compliance and auditability  
+✅ Built-in compliance and auditability
 
 If your organization still deploys manually, **it is time to move to GitOps**.

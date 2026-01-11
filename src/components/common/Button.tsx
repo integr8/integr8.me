@@ -18,7 +18,7 @@ export function Button({
   ...props
 }: ButtonProps) {
   const baseClasses = 'btn transition-all font-medium';
-  
+
   const variantClasses = {
     primary: 'btn-primary',
     secondary: 'btn-secondary',
@@ -34,12 +34,7 @@ export function Button({
 
   return (
     <button
-      className={classNames(
-        baseClasses,
-        variantClasses[variant],
-        sizeClasses[size],
-        className
-      )}
+      className={classNames(baseClasses, variantClasses[variant], sizeClasses[size], className)}
       disabled={disabled || isLoading}
       {...props}
     >

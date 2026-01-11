@@ -1,11 +1,11 @@
 ---
-title: "GitOps: O Futuro do Continuous Delivery com ArgoCD e Flux"
+title: 'GitOps: O Futuro do Continuous Delivery com ArgoCD e Flux'
 date: 2024-01-10
-author: "Integr8 Team"
-description: "Descubra como GitOps transforma a forma como times gerenciam infraestrutura e deployments em Kubernetes"
-category: "devops"
-tags: ["GitOps", "ArgoCD", "Flux", "Kubernetes", "CI/CD"]
-image: "/images/blog/gitops-cover.png"
+author: 'Integr8 Team'
+description: 'Descubra como GitOps transforma a forma como times gerenciam infraestrutura e deployments em Kubernetes'
+category: 'devops'
+tags: ['GitOps', 'ArgoCD', 'Flux', 'Kubernetes', 'CI/CD']
+image: '/images/blog/gitops-cover.png'
 read_time: 8
 featured: true
 ---
@@ -24,6 +24,7 @@ GitOps é um modelo operacional que aplica práticas DevOps à gestão de infrae
 ## Benefícios do GitOps
 
 ### Rastreabilidade Completa
+
 ```
 Commit de código → PR review → Merge → Deployment automático
 ```
@@ -31,6 +32,7 @@ Commit de código → PR review → Merge → Deployment automático
 Cada mudança é auditável e rastreável.
 
 ### Declarativo vs Imperativo
+
 ```yaml
 # GitOps (Declarativo)
 apiVersion: apps/v1
@@ -45,7 +47,9 @@ spec:
 Vs. scripts imperativos que dizem "como" em vez de "o quê".
 
 ### Recuperação de Desastres
+
 Se cluster é destruído, recriar é simples:
+
 ```bash
 argocd app sync production
 ```
@@ -55,6 +59,7 @@ Tudo está no Git!
 ## ArgoCD vs Flux
 
 ### ArgoCD
+
 - Dashboard visual
 - UI para gerenciar aplicações
 - Melhor para times iniciantes
@@ -82,6 +87,7 @@ spec:
 ```
 
 ### Flux
+
 - CLI-first
 - Mais flexível e composable
 - Notification webhooks
@@ -145,6 +151,7 @@ kubectl set image deployment/api api=myapi:v1.2.3
 ### 3. Drift Detection
 
 ArgoCD/Flux detectam divergências:
+
 ```
 Desired State (Git) ≠ Actual State (Cluster) → Alert!
 ```
@@ -202,6 +209,6 @@ GitOps não é apenas uma ferramenta, é uma **mudança cultural**. Permite:
 ✅ Deploy mais seguro via PRs  
 ✅ Recovery rápido em desastres  
 ✅ Experiência consistente entre ambientes  
-✅ Compliance e auditoria automática  
+✅ Compliance e auditoria automática
 
 Se sua organização ainda faz deploys manuais, **é hora de migrar para GitOps**.

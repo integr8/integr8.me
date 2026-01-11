@@ -16,22 +16,30 @@ export interface MaturityStepperProps {
 export function MaturityStepper({ title, levels, currentLevel }: MaturityStepperProps) {
   return (
     <div className="my-8">
-      {title && (
-        <h3 className="text-2xl font-bold mb-6 text-base-content">{title}</h3>
-      )}
+      {title && <h3 className="mb-6 text-2xl font-bold text-base-content">{title}</h3>}
       <div className="space-y-10">
         {/* Horizontal track with circles */}
         <div className="relative">
-          <div className="absolute left-0 right-0 top-1/2 h-px bg-base-200" aria-hidden="true"></div>
-          <div className="flex items-center justify-between gap-4 lg:gap-6 overflow-x-auto no-scrollbar px-2 md:px-4 py-2">
+          <div
+            className="absolute left-0 right-0 top-1/2 h-px bg-base-200"
+            aria-hidden="true"
+          ></div>
+          <div className="no-scrollbar flex items-center justify-between gap-4 overflow-x-auto px-2 py-2 md:px-4 lg:gap-6">
             {levels.map((level) => {
               const isActive = currentLevel ? level.level <= currentLevel : false;
               const isCurrent = currentLevel === level.level;
               return (
-                <div key={level.level} className="relative z-10 flex flex-col items-center flex-1 min-w-[140px]">
+                <div
+                  key={level.level}
+                  className="relative z-10 flex min-w-[140px] flex-1 flex-col items-center"
+                >
                   <div
-                    className={`h-11 w-11 rounded-full flex items-center justify-center text-base-content font-semibold shadow-sm border ${
-                      isCurrent ? 'bg-primary text-primary-content border-primary' : isActive ? 'bg-base-100 border-primary/50' : 'bg-base-100 border-base-200'
+                    className={`flex h-11 w-11 items-center justify-center rounded-full border font-semibold text-base-content shadow-sm ${
+                      isCurrent
+                        ? 'border-primary bg-primary text-primary-content'
+                        : isActive
+                          ? 'border-primary/50 bg-base-100'
+                          : 'border-base-200 bg-base-100'
                     }`}
                     aria-label={`Nível ${level.level}`}
                   >
@@ -44,30 +52,41 @@ export function MaturityStepper({ title, levels, currentLevel }: MaturityStepper
         </div>
 
         {/* Content grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-5">
           {levels.map((level) => {
             const isActive = currentLevel ? level.level <= currentLevel : false;
             const isCurrent = currentLevel === level.level;
             return (
               <div
                 key={level.level}
-                className={`rounded-xl border p-5 h-full ${
-                  isCurrent ? 'border-primary/60 bg-primary/5' : isActive ? 'border-base-300 bg-base-50' : 'border-base-200 bg-base-100'
+                className={`h-full rounded-xl border p-5 ${
+                  isCurrent
+                    ? 'border-primary/60 bg-primary/5'
+                    : isActive
+                      ? 'bg-base-50 border-base-300'
+                      : 'border-base-200 bg-base-100'
                 }`}
               >
-                <div className="flex items-center gap-2 mb-3">
-                  <span className={`font-bold text-lg leading-tight ${isActive ? 'text-primary' : 'text-base-content'}`}>
+                <div className="mb-3 flex items-center gap-2">
+                  <span
+                    className={`text-lg font-bold leading-tight ${isActive ? 'text-primary' : 'text-base-content'}`}
+                  >
                     Nível {level.level}: {level.title}
                   </span>
                   {isCurrent && <span className="badge badge-primary badge-sm">Atual</span>}
                 </div>
                 {level.description && (
-                  <p className="text-sm text-base-content/70 mb-4 leading-relaxed">{level.description}</p>
+                  <p className="mb-4 text-sm leading-relaxed text-base-content/70">
+                    {level.description}
+                  </p>
                 )}
                 <ul className="space-y-2">
                   {level.items.map((item, itemIndex) => (
-                    <li key={itemIndex} className="flex items-start gap-2 text-sm text-base-content/80 leading-relaxed">
-                      <span className="text-primary mt-1">•</span>
+                    <li
+                      key={itemIndex}
+                      className="flex items-start gap-2 text-sm leading-relaxed text-base-content/80"
+                    >
+                      <span className="mt-1 text-primary">•</span>
                       <span>{item}</span>
                     </li>
                   ))}
@@ -85,23 +104,31 @@ export function MaturityStepper({ title, levels, currentLevel }: MaturityStepper
 export function MaturityStepperHorizontal({ title, levels, currentLevel }: MaturityStepperProps) {
   return (
     <div className="my-8">
-      {title && (
-        <h3 className="text-2xl font-bold mb-6 text-base-content">{title}</h3>
-      )}
-      
+      {title && <h3 className="mb-6 text-2xl font-bold text-base-content">{title}</h3>}
+
       <div className="space-y-10">
         {/* Horizontal track with circles */}
         <div className="relative">
-          <div className="absolute left-0 right-0 top-1/2 h-px bg-base-200" aria-hidden="true"></div>
-          <div className="flex items-center justify-between gap-4 lg:gap-6 overflow-x-auto no-scrollbar px-2 md:px-4 py-2">
+          <div
+            className="absolute left-0 right-0 top-1/2 h-px bg-base-200"
+            aria-hidden="true"
+          ></div>
+          <div className="no-scrollbar flex items-center justify-between gap-4 overflow-x-auto px-2 py-2 md:px-4 lg:gap-6">
             {levels.map((level) => {
               const isActive = currentLevel ? level.level <= currentLevel : false;
               const isCurrent = currentLevel === level.level;
               return (
-                <div key={level.level} className="relative z-10 flex flex-col items-center flex-1 min-w-[140px]">
+                <div
+                  key={level.level}
+                  className="relative z-10 flex min-w-[140px] flex-1 flex-col items-center"
+                >
                   <div
-                    className={`h-11 w-11 rounded-full flex items-center justify-center text-base-content font-semibold shadow-sm border ${
-                      isCurrent ? 'bg-primary text-primary-content border-primary' : isActive ? 'bg-base-100 border-primary/50' : 'bg-base-100 border-base-200'
+                    className={`flex h-11 w-11 items-center justify-center rounded-full border font-semibold text-base-content shadow-sm ${
+                      isCurrent
+                        ? 'border-primary bg-primary text-primary-content'
+                        : isActive
+                          ? 'border-primary/50 bg-base-100'
+                          : 'border-base-200 bg-base-100'
                     }`}
                     aria-label={`Nível ${level.level}`}
                   >
@@ -114,30 +141,41 @@ export function MaturityStepperHorizontal({ title, levels, currentLevel }: Matur
         </div>
 
         {/* Content grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-5">
           {levels.map((level) => {
             const isActive = currentLevel ? level.level <= currentLevel : false;
             const isCurrent = currentLevel === level.level;
             return (
               <div
                 key={level.level}
-                className={`rounded-xl border p-5 h-full ${
-                  isCurrent ? 'border-primary/60 bg-primary/5' : isActive ? 'border-base-300 bg-base-50' : 'border-base-200 bg-base-100'
+                className={`h-full rounded-xl border p-5 ${
+                  isCurrent
+                    ? 'border-primary/60 bg-primary/5'
+                    : isActive
+                      ? 'bg-base-50 border-base-300'
+                      : 'border-base-200 bg-base-100'
                 }`}
               >
-                <div className="flex items-center gap-2 mb-3">
-                  <span className={`font-bold text-lg leading-tight ${isActive ? 'text-primary' : 'text-base-content'}`}>
+                <div className="mb-3 flex items-center gap-2">
+                  <span
+                    className={`text-lg font-bold leading-tight ${isActive ? 'text-primary' : 'text-base-content'}`}
+                  >
                     Nível {level.level}: {level.title}
                   </span>
                   {isCurrent && <span className="badge badge-primary badge-sm">Atual</span>}
                 </div>
                 {level.description && (
-                  <p className="text-sm text-base-content/70 mb-4 leading-relaxed">{level.description}</p>
+                  <p className="mb-4 text-sm leading-relaxed text-base-content/70">
+                    {level.description}
+                  </p>
                 )}
                 <ul className="space-y-2">
                   {level.items.map((item, itemIndex) => (
-                    <li key={itemIndex} className="flex items-start gap-2 text-sm text-base-content/80 leading-relaxed">
-                      <span className="text-primary mt-1">•</span>
+                    <li
+                      key={itemIndex}
+                      className="flex items-start gap-2 text-sm leading-relaxed text-base-content/80"
+                    >
+                      <span className="mt-1 text-primary">•</span>
                       <span>{item}</span>
                     </li>
                   ))}
