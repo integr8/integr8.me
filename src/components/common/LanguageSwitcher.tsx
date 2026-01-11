@@ -12,6 +12,14 @@ export interface LanguageSwitcherProps {
 export function LanguageSwitcher({ currentLang }: LanguageSwitcherProps) {
   const handleLanguageChange = (lang: string) => {
     const currentPath = window.location.pathname;
+    
+    // Se estamos na raiz (/), redireciona para /{lang}/
+    if (currentPath === '/') {
+      window.location.href = `/${lang}/`;
+      return;
+    }
+    
+    // Caso contrário, substitui o idioma atual pelo novo
     const newPath = currentPath.replace(`/${currentLang}/`, `/${lang}/`);
     window.location.href = newPath;
   };
