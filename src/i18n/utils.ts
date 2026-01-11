@@ -12,9 +12,9 @@ export function getTranslations(lang: string) {
 
 export function t(key: string, lang: string): string {
   const translations = getTranslations(lang);
-  const result = key.split('.').reduce((obj: Record<string, any>, k: string) => {
+  const result = key.split('.').reduce((obj: Record<string, unknown>, k: string) => {
     return obj?.[k];
-  }, translations);
+  }, translations as Record<string, unknown>);
   return typeof result === 'string' ? result : key;
 }
 
