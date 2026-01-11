@@ -12,12 +12,16 @@ export function getTranslations(lang: string) {
 
 export function t(key: string, lang: string): string {
   const translations = getTranslations(lang);
-  const result = key.split('.').reduce(
-    (obj: Record<string, unknown>, k: string) => {
-      return obj?.[k];
-    },
-    translations as Record<string, unknown>
-  );
+  const result = key
+    .split('.')
+    .reduce<
+      Record<string, unknown> | string | undefined
+    >((obj: Record<string, unknown> | string | undefined, k: string): Record<string, unknown> | string | undefined => {
+      if (typeof obj === 'object' && obj !== null && k in obj) {
+        return obj[k] as Record<string, unknown> | string | undefined;
+      }
+      return undefined;
+    }, translations);
   return typeof result === 'string' ? result : key;
 }
 
