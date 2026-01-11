@@ -70,6 +70,9 @@ jobs:
       - name: Run Prettier check
         run: pnpm format:check
 
+      - name: Generate Astro types
+        run: pnpm astro sync
+
       - name: TypeScript type check
         run: pnpm typecheck
 
