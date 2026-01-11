@@ -1,9 +1,4 @@
 ---
-// Detectar idioma do navegador via Accept-Language header e redirecionar silenciosamente
-const acceptLanguage = Astro.request.headers.get('accept-language') || '';
-const isPtBr = acceptLanguage.toLowerCase().includes('pt');
-const targetLang = isPtBr ? 'ptbr' : 'en';
-
-// Redirecionar no servidor (sem mostrar página)
-return Astro.redirect(`/${targetLang}/`, 302);
+// Redirecionar para /ptbr/ por padrão
+return Astro.redirect('/ptbr/', 302);
 ---
