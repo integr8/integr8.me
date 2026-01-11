@@ -138,7 +138,10 @@ import {
 import { BiBuildingHouse, BiRocket } from 'react-icons/bi';
 import { TbBuildingSkyscraper } from 'react-icons/tb';
 
-type IconComponent = React.ComponentType<{ className?: string }>;
+type IconComponent = React.ComponentType<{
+  className?: string;
+  style?: React.CSSProperties;
+}>;
 
 const iconMap: Record<string, IconComponent> = {
   ArrowRightIcon: FiArrowRight,
