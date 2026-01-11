@@ -1,0 +1,10 @@
+# Mise configuration for Integr8 Website
+# https://mise.jdx.dev/
+
+[tools]
+node = "20"
+pnpm = "9"
+
+[env]
+# Use pnpm for package management
+NODE_ENV = "development"
