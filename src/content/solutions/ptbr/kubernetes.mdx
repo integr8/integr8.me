@@ -1,0 +1,162 @@
+---
+title: "Kubernetes & Containers"
+category: "cloud-platform"
+description: "Projetamos, implementamos e operamos ambientes Kubernetes de produção com foco em segurança, escalabilidade, multi-tenancy e excelência operacional."
+icon: "CubeIcon"
+weight: 4
+technologies: ["Kubernetes (CKA/CKS/CKAD/Kubestronaut)", "Helm & Kustomize", "Docker & Podman & Buildah", "Kubernetes Operators (Go/Kubebuilder)", "Service Mesh (Istio/Linkerd/Cilium)", "CNI (Calico, Cilium, AWS VPC CNI)", "Managed K8s (EKS, AKS, GKE)"]
+---
+
+import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
+
+## O Desafio
+
+Kubernetes se tornou o padrão de facto para orquestração de containers, mas sua complexidade pode sobrecarregar equipes sem expertise especializada:
+
+<FeatureGrid 
+  features={[
+    { icon: "⚙️", title: "Complexidade operacional", description: "Gerenciar clusters, upgrades, networking e storage em escala" },
+    { icon: "🔓", title: "Configurações de segurança", description: "Padrões inseguros expondo workloads a vulnerabilidades" },
+    { icon: "📚", title: "Gaps de expertise", description: "Distância entre 'Hello World' e produção crítica" },
+    { icon: "💸", title: "Custos descontrolados", description: "Configurações ineficientes de recursos" },
+    { icon: "🧱", title: "Dívida técnica", description: "Implementações iniciais sem arquitetura adequada" },
+    { icon: "🔍", title: "Falta de observabilidade", description: "Ambientes distribuídos complexos sem visibilidade" }
+  ]}
+  columns={3}
+/>
+
+<Callout type="warning" title="Atenção">
+Muitas organizações subestimam a profundidade de conhecimento necessária para operar Kubernetes de forma segura e eficiente em produção.
+</Callout>
+
+## Modelo de Maturidade Kubernetes
+
+<MaturityStepper
+  title="Níveis de Maturidade em Kubernetes"
+  levels={[
+    {
+      level: 1,
+      title: "Exploratório",
+      description: "Primeiros experimentos com containers e Kubernetes",
+      items: ["Docker básico", "Cluster de desenvolvimento", "Manifests manuais", "Single namespace"]
+    },
+    {
+      level: 2,
+      title: "Básico",
+      description: "Primeiros workloads em produção",
+      items: ["Managed Kubernetes (EKS/AKS/GKE)", "Helm básico", "Ingress configurado", "Probes de saúde"]
+    },
+    {
+      level: 3,
+      title: "Padronizado",
+      description: "Processos e segurança estabelecidos",
+      items: ["GitOps com ArgoCD/Flux", "RBAC configurado", "Network Policies", "Resource quotas", "Secrets externos"]
+    },
+    {
+      level: 4,
+      title: "Avançado",
+      description: "Operações sofisticadas e multi-tenant",
+      items: ["Service Mesh", "Custom Operators", "Multi-cluster", "Pod Security Standards", "Autoscaling avançado"]
+    },
+    {
+      level: 5,
+      title: "Otimizado",
+      description: "Excelência operacional e plataforma self-service",
+      items: ["Internal Developer Platform", "FinOps automatizado", "Chaos Engineering", "Zero-trust completo", "Kubestronaut expertise"]
+    }
+  ]}
+/>
+
+## Nossa Abordagem
+
+### Arquitetura de Clusters de Produção
+
+Projetamos arquiteturas Kubernetes para workloads de produção críticos:
+
+<Timeline
+  title="Design de Alta Disponibilidade"
+  items={[
+    { phase: "Control Plane", title: "Multi-zona HA", description: "Recuperação automática de falhas com control plane distribuído" },
+    { phase: "Workers", title: "Topologia Distribuída", description: "Resiliência zonal com workers em múltiplas availability zones" },
+    { phase: "Deploys", title: "Zero Downtime", description: "Pod Disruption Budgets e estratégias de rolling update" },
+    { phase: "Scheduling", title: "Placement Inteligente", description: "Anti-affinity rules e pod topology spread constraints" }
+  ]}
+/>
+
+### Arquitetura de Rede
+
+- **CNI Selection**: Calico, Cilium, AWS VPC CNI otimizado para seu workload
+- **Network Policies**: Microsegmentação e zero-trust networking
+- **Ingress Design**: TLS termination, rate limiting, WAF integration
+- **Load Balancers**: Integração com ALB, NLB, Cloud Load Balancers
+
+### Hardening de Segurança
+
+<FeatureGrid 
+  features={[
+    { icon: "🛡️", title: "Segurança de Cluster", description: "API server hardening, RBAC granular, OIDC integration" },
+    { icon: "📦", title: "Segurança de Workload", description: "Pod Security Standards, Security Contexts, Image scanning" },
+    { icon: "🌐", title: "Segurança de Rede", description: "Network policies, Service mesh mTLS, Egress control" },
+    { icon: "🔐", title: "Secrets Management", description: "Vault, AWS Secrets Manager, External Secrets Operator" }
+  ]}
+  columns={4}
+/>
+
+### Kubernetes Operators
+
+Desenvolvemos operadores customizados para automatizar operações específicas do seu negócio:
+
+- **Custom Operators em Go** usando Kubebuilder
+- **Automação de lifecycle** de aplicações complexas
+- **Integração com sistemas externos** e APIs
+- **Status reporting** e event handling
+
+**Casos de Uso:**
+- Provisionamento automatizado de databases
+- Gestão de certificados e rotação de secrets
+- Operações de backup e restore automatizadas
+- Scaling inteligente baseado em métricas de negócio
+
+### Service Mesh
+
+Implementamos service mesh para observabilidade e segurança avançadas:
+
+| Feature | Istio | Cilium | Linkerd |
+|---------|-------|--------|---------|
+| **Overhead** | Médio | Baixo (eBPF) | Baixo |
+| **mTLS** | ✅ Completo | ✅ eBPF-based | ✅ Automático |
+| **L7 Policies** | ✅ Avançado | ✅ Hubble | ✅ Service Profiles |
+| **Observabilidade** | Kiali, Jaeger | Hubble UI | Dashboard integrado |
+| **Multi-cluster** | ✅ | ✅ | ✅ |
+
+### Managed Kubernetes
+
+Expertise profunda em plataformas managed:
+
+<FeatureGrid 
+  features={[
+    { icon: "🔶", title: "Amazon EKS", description: "ALB, EBS, EFS, IAM, Fargate, Karpenter" },
+    { icon: "🔷", title: "Azure AKS", description: "Azure AD, Azure CNI, Azure Policy, Virtual Nodes" },
+    { icon: "🔴", title: "Google GKE", description: "Autopilot, Workload Identity, Anthos, Binary Authorization" }
+  ]}
+  columns={3}
+/>
+
+## Certificações
+
+<Callout type="success" title="Equipe Kubestronaut">
+Nossa equipe possui **todas as certificações CNCF disponíveis**, incluindo o título **Kubestronaut** (conjunto completo de 5 certificações).
+</Callout>
+
+**CNCF Kubernetes:**
+- **CKA** – Certified Kubernetes Administrator
+- **CKAD** – Certified Kubernetes Application Developer
+- **CKS** – Certified Kubernetes Security Specialist
+- **KCNA** – Kubernetes and Cloud Native Associate
+- **KCSA** – Kubernetes and Cloud Security Associate
+
+**Cloud Providers:**
+- AWS Certified Solutions Architect Professional
+- AWS Certified DevOps Engineer Professional
+- Azure Solutions Architect Expert
+- Google Cloud Professional Cloud Architect

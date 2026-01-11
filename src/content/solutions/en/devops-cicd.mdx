@@ -1,0 +1,112 @@
+---
+title: "DevOps & Modern CI/CD"
+category: "engineering"
+description: "We automate the entire software delivery cycle with secure, efficient GitOps pipelines measured through DORA metrics."
+icon: "RocketLaunchIcon"
+weight: 3
+technologies: ["GitHub Actions", "GitLab CI", "ArgoCD / Flux", "Jenkins (Modernization)", "Tekton", "SonarQube", "Trivy / Snyk / Grype", "Sigstore / Cosign"]
+---
+
+import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
+
+## The Challenge
+
+Despite years of DevOps adoption, organizations still struggle with delivery bottlenecks:
+
+<FeatureGrid 
+  features={[
+    { icon: "🐌", title: "Manual Deployments", description: "Error-prone processes requiring coordination" },
+    { icon: "💔", title: "Fragile CI/CD", description: "Pipelines that break frequently" },
+    { icon: "📅", title: "Long Release Cycles", description: "Weeks or months from commit to production" },
+    { icon: "🔀", title: "Inconsistent Configs", description: "'Works on my machine' and production issues" },
+    { icon: "🏚️", title: "Legacy Pipelines", description: "Complex Jenkins setups hard to scale" },
+    { icon: "🕳️", title: "Security Gaps", description: "Vulnerabilities reaching production" }
+  ]}
+  columns={3}
+/>
+
+## DevOps Maturity Model
+
+<MaturityStepper
+  title="DevOps/CI-CD Maturity Levels"
+  levels={[
+    {
+      level: 1,
+      title: "Manual",
+      description: "Predominantly manual processes",
+      items: ["Manual deploys", "Ad-hoc scripts", "No infra versioning", "Monthly cycles"]
+    },
+    {
+      level: 2,
+      title: "Automated",
+      description: "First automations implemented",
+      items: ["Basic CI", "Automated builds", "Unit tests", "Semi-automated deploys"]
+    },
+    {
+      level: 3,
+      title: "Standardized",
+      description: "DevOps practices established",
+      items: ["Full CD", "Infrastructure as Code", "Basic GitOps", "Quality gates"]
+    },
+    {
+      level: 4,
+      title: "Advanced",
+      description: "Optimized continuous delivery",
+      items: ["Complete GitOps", "Progressive delivery", "DORA metrics", "DevSecOps integrated"]
+    },
+    {
+      level: 5,
+      title: "Elite",
+      description: "Delivery engineering excellence",
+      items: ["On-demand deploys", "Lead time < 1 hour", "Change failure rate < 5%", "MTTR < 1 hour"]
+    }
+  ]}
+/>
+
+## Our Approach
+
+### GitOps & Continuous Delivery
+
+<FeatureGrid 
+  features={[
+    { icon: "📁", title: "Git as Source of Truth", description: "All infra and app state versioned in Git" },
+    { icon: "📋", title: "Declarative Delivery", description: "K8s manifests, Helm charts, Kustomize" },
+    { icon: "🔄", title: "Automated Reconciliation", description: "ArgoCD/Flux sync desired vs actual state" },
+    { icon: "📊", title: "Full Auditability", description: "Every change traceable via Git history" }
+  ]}
+  columns={4}
+/>
+
+### DORA Metrics
+
+<FeatureGrid 
+  features={[
+    { icon: "🚀", title: "Deployment Frequency", description: "How often code goes to production" },
+    { icon: "⏱️", title: "Lead Time", description: "Time from commit to production" },
+    { icon: "🔧", title: "MTTR", description: "Time to recover from failures" },
+    { icon: "❌", title: "Change Failure Rate", description: "% of deploys causing incidents" }
+  ]}
+  columns={4}
+/>
+
+### Secure Pipelines (DevSecOps)
+
+| Category | Tools | Purpose |
+|----------|-------|---------|
+| **SAST** | SonarQube, CodeQL | Static code analysis |
+| **SCA** | Snyk, Dependabot | Dependency vulnerabilities |
+| **Container** | Trivy, Grype | Image scanning |
+| **Secrets** | GitLeaks, TruffleHog | Secret detection |
+| **Signing** | Sigstore/Cosign | Supply chain security |
+
+## Results
+
+<FeatureGrid 
+  features={[
+    { icon: "📈", title: "Daily Deploys", description: "From monthly to hundreds of daily deploys" },
+    { icon: "⚡", title: "MTTR in Minutes", description: "From hours to minutes with automated rollback" },
+    { icon: "🎯", title: "Zero Drift", description: "Zero Configuration Drift via GitOps" },
+    { icon: "✅", title: "-80% Failures", description: "80% reduction in deploy failures" }
+  ]}
+  columns={4}
+/>

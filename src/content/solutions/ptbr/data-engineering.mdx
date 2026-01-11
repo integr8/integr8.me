@@ -1,0 +1,160 @@
+---
+title: "Engenharia de Dados & AI"
+category: "security-data"
+description: "Construímos plataformas de dados modernas, Data Lakes/Lakehouses e infraestrutura de ML escalável para transformar dados em vantagem competitiva."
+icon: "CircleStackIcon"
+weight: 5
+technologies: ["Databricks / Delta Lake", "Apache Spark (PySpark)", "Kafka / Confluent / Flink", "Airflow / Dagster", "AWS Glue / Athena / Redshift", "dbt (Data Build Tool)", "Oracle / DB2 / SQL Server", "MLflow / Kubeflow"]
+---
+
+import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
+
+## O Desafio
+
+Dados são o novo petróleo, mas muitas empresas falham em extrair valor deles:
+
+<FeatureGrid 
+  features={[
+    { icon: "🏢", title: "Silos de dados", description: "Departamentos isolados impedindo visão unificada" },
+    { icon: "🐌", title: "Pipelines lentos", description: "ETLs que quebram e demoram horas ou dias" },
+    { icon: "❓", title: "Qualidade duvidosa", description: "Dados que minam a confiança em decisões" },
+    { icon: "📜", title: "Dívida técnica ETL", description: "Anos de scripts não documentados" },
+    { icon: "📈", title: "Incapacidade de escalar", description: "Volumes crescentes sem infraestrutura" },
+    { icon: "🤖", title: "Gap dados-AI", description: "ML não consegue acessar dados necessários" }
+  ]}
+  columns={3}
+/>
+
+## Modelo de Maturidade de Dados
+
+<MaturityStepper
+  title="Níveis de Maturidade em Dados"
+  levels={[
+    {
+      level: 1,
+      title: "Ad-Hoc",
+      description: "Dados dispersos sem gestão",
+      items: ["Planilhas isoladas", "ETL manual", "Sem documentação", "Qualidade desconhecida"]
+    },
+    {
+      level: 2,
+      title: "Operacional",
+      description: "Data warehouse básico",
+      items: ["DW tradicional", "ETL batch", "Relatórios básicos", "Algumas métricas"]
+    },
+    {
+      level: 3,
+      title: "Integrado",
+      description: "Modern Data Stack",
+      items: ["Data Lake/Lakehouse", "dbt transformations", "Data catalog", "Quality checks", "Lineage básico"]
+    },
+    {
+      level: 4,
+      title: "Avançado",
+      description: "Data Mesh e ML",
+      items: ["Data Mesh", "Real-time streaming", "Feature store", "MLOps", "Self-service analytics"]
+    },
+    {
+      level: 5,
+      title: "Data-Driven",
+      description: "Dados como ativo estratégico",
+      items: ["Data Products", "AI/ML em produção", "Governança automatizada", "Monetização de dados", "GenAI infrastructure"]
+    }
+  ]}
+/>
+
+## Nossa Abordagem
+
+### Arquitetura Data Mesh
+
+Implementamos **Data Mesh** para escalar além dos gargalos de times centralizados:
+
+<FeatureGrid 
+  features={[
+    { icon: "🏠", title: "Propriedade de Domínio", description: "Times de negócio são donos de seus data products" },
+    { icon: "📦", title: "Dados como Produto", description: "Datasets com SLAs e documentação" },
+    { icon: "🔧", title: "Infra Self-Service", description: "Plataforma que permite autonomia" },
+    { icon: "🏛️", title: "Governança Federada", description: "Standards globais, implementação local" }
+  ]}
+  columns={4}
+/>
+
+### Modern Data Stack
+
+<Timeline
+  title="Arquitetura Lakehouse"
+  items={[
+    { phase: "Ingestão", title: "Data Ingestion", description: "Kafka, Debezium CDC, APIs, Files" },
+    { phase: "Storage", title: "Lakehouse", description: "Delta Lake, Iceberg em S3/ADLS/GCS" },
+    { phase: "Transform", title: "dbt + Spark", description: "Transformações SQL versionadas e testadas" },
+    { phase: "Serve", title: "Analytics & ML", description: "Athena, Databricks, Feature Stores" }
+  ]}
+/>
+
+### Streaming & Real-Time
+
+Para cenários críticos de baixa latência:
+
+| Tecnologia | Uso | Latência |
+|------------|-----|----------|
+| **Kafka/Confluent** | Event streaming | ms |
+| **Flink** | Stream processing | ms-s |
+| **Spark Streaming** | Micro-batch | segundos |
+| **Debezium** | CDC | ms |
+
+**Casos de Uso:**
+- Dashboards real-time de KPIs
+- Detecção de fraude em tempo real
+- Recomendações sub-segundo
+- IoT data ingestion em escala
+
+### MLOps & GenAI
+
+<FeatureGrid 
+  features={[
+    { icon: "🧪", title: "Experiment Tracking", description: "MLflow, Weights & Biases" },
+    { icon: "📊", title: "Feature Store", description: "Feast, Tecton para reutilização" },
+    { icon: "🚀", title: "Model Serving", description: "SageMaker, Vertex AI, KServe" },
+    { icon: "📈", title: "Model Monitoring", description: "Drift detection, A/B testing" },
+    { icon: "🧠", title: "Vector DBs", description: "Pinecone, Weaviate, pgvector" },
+    { icon: "💬", title: "RAG Architecture", description: "LLM + Retrieval para GenAI" }
+  ]}
+  columns={3}
+/>
+
+### Bancos Mission-Critical
+
+<Callout type="info" title="Expertise Enterprise">
+Profundidade técnica em Oracle, DB2, SQL Server para performance tuning, HA e migração.
+</Callout>
+
+### Governança & Compliance
+
+- **Data Catalog**: Alation, Collibra, AWS Glue Data Catalog
+- **Data Lineage**: End-to-end automatizado
+- **Data Quality**: Profiling e monitoring contínuo
+- **LGPD/GDPR**: Classificação, consent management, right to be forgotten
+
+## Certificações
+
+**Modern Data Stack:**
+- AWS Certified Data Engineer
+- Databricks Certified Data Engineer Professional
+- Google Cloud Professional Data Engineer
+
+**Enterprise:**
+- Oracle Certified Professional (OCP)
+- IBM Certified Database Administrator – DB2
+- Confluent Certified Developer for Apache Kafka
+
+## Resultados
+
+<FeatureGrid 
+  features={[
+    { icon: "🚀", title: "500M+ eventos/dia", description: "Pipelines streaming sub-segundo" },
+    { icon: "⚡", title: "-90% tempo ETL", description: "Migração para Spark/dbt" },
+    { icon: "💰", title: "-70% storage", description: "Lifecycle policies e formatos otimizados" },
+    { icon: "⏱️", title: "Semanas → Minutos", description: "Time-to-insight com self-service" }
+  ]}
+  columns={4}
+/>

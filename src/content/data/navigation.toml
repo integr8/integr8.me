@@ -1,0 +1,92 @@
+[[main]]
+key = "solutions"
+href = "/solucoes"
+icon = "RocketLaunchIcon"
+
+  [[main.children]]
+  key = "cloud-platform"
+  icon = "CloudIcon"
+  
+    [[main.children.items]]
+    key = "platform-engineering"
+    href = "/solucoes/cloud-platform/platform-engineering"
+    icon = "ServerStackIcon"
+    
+    [[main.children.items]]
+    key = "kubernetes"
+    href = "/solucoes/cloud-platform/kubernetes"
+    icon = "CubeIcon"
+    
+    [[main.children.items]]
+    key = "cloud-architecture"
+    href = "/solucoes/cloud-platform/cloud-architecture"
+    icon = "CloudIcon"
+
+  [[main.children]]
+  key = "engineering"
+  icon = "CogIcon"
+  
+    [[main.children.items]]
+    key = "devops-cicd"
+    href = "/solucoes/engineering/devops-cicd"
+    icon = "RocketLaunchIcon"
+    
+    [[main.children.items]]
+    key = "developer-experience"
+    href = "/solucoes/engineering/developer-experience"
+    icon = "CodeBracketIcon"
+
+    [[main.children.items]]
+    key = "software-engineering"
+    href = "/solucoes/engineering/software-engineering"
+    icon = "CodeBracketSquareIcon"
+
+    [[main.children.items]]
+    key = "observability-sre"
+    href = "/solucoes/engineering/observability-sre"
+    icon = "ChartBarSquareIcon"
+
+  [[main.children]]
+  key = "security-data"
+  icon = "ShieldCheckIcon"
+  
+    [[main.children.items]]
+    key = "devsecops"
+    href = "/solucoes/security-data/devsecops"
+    icon = "ShieldCheckIcon"
+    
+    [[main.children.items]]
+    key = "data-engineering"
+    href = "/solucoes/security-data/data-engineering"
+    icon = "CircleStackIcon"
+
+[[main]]
+key = "capabilities"
+href = "/capacidades"
+icon = "CpuChipIcon"
+
+[[main]]
+key = "how-we-work"
+href = "/como-trabalhamos"
+icon = "ClipboardDocumentListIcon"
+
+[[main]]
+key = "about"
+href = "/sobre"
+icon = "UserGroupIcon"
+
+[[main]]
+key = "cases"
+href = "/cases"
+icon = "TrophyIcon"
+
+[[main]]
+key = "blog"
+href = "/blog"
+icon = "NewspaperIcon"
+
+[[main]]
+key = "contact"
+href = "/contato"
+icon = "ChatBubbleLeftRightIcon"
+is_cta = true

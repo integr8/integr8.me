@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '@layouts/PageLayout.astro';
+import { Badge } from '@components/common/Badge';
+import { Button } from '@components/common/Button';
+import { Icon } from '@components/common/Icon';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ptbr' } },
+    { params: { lang: 'en' } }
+  ];
+}
+
+const { lang } = Astro.params;
+const allSolutions = await getCollection('solutions');
+const solutions = allSolutions.filter(s => s.id.startsWith(`${lang}/`));
+
+const breadcrumbs = [
+  { label: lang === 'ptbr' ? 'Início' : 'Home', href: `/${lang}` },
+  { label: lang === 'ptbr' ? 'Soluções' : 'Solutions' },
+];
+---
+
+<PageLayout
+  title="Nossas Soluções"
+  description="Expertise técnica para acelerar sua jornada cloud-native"
+  breadcrumbs={breadcrumbs}
+>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-12">
+    {solutions.map((solution) => (
+      <a href={`/${lang}/solucoes/${solution.slug.split('/').pop()}`} class="card bg-base-200/50 border border-base-300 shadow-lg hover:shadow-xl hover:border-primary/30 transition-all">
+        <div class="card-body items-center text-center">
+          <Icon name={solution.data.icon} className="h-12 w-12 text-primary" client:load />
+          <h3 class="card-title text-lg mt-4 text-base-content">{solution.data.title}</h3>
+          <p class="text-sm text-base-content/80">{solution.data.description}</p>
+          
+          {solution.data.technologies && (
+            <div class="flex flex-wrap gap-2 justify-center mt-4">
+              {solution.data.technologies.slice(0, 3).map((tech: string) => (
+                <Badge key={tech} variant="primary" size="sm">
+                  {tech}
+                </Badge>
+              ))}
+            </div>
+          )}
+          
+          <div class="card-actions mt-4">
+            <Button variant="primary" size="sm">
+              {lang === 'ptbr' ? 'Saiba mais' : 'Learn more'}
+              <Icon name="ArrowRightIcon" className="h-4 w-4" client:load />
+            </Button>
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+</PageLayout>

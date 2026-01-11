@@ -1,0 +1,119 @@
+---
+title: "Platform Engineering (IDP)"
+category: "cloud-platform"
+description: "Build Internal Developer Platforms (IDPs) that abstract infrastructure complexity and enable developer self-service with golden paths and templates."
+icon: "Cog8ToothIcon"
+weight: 2
+technologies: ["Backstage.io", "Crossplane", "Kratix", "ArgoCD / Flux", "Terraform / OpenTofu", "Kubernetes Operators", "Score / Humanitec", "Port.io / Cortex"]
+---
+
+import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
+
+## The Challenge
+
+Organizations struggle with platform complexity that slows down development:
+
+<FeatureGrid 
+  features={[
+    { icon: "🧠", title: "Cognitive Overload", description: "Developers need to understand K8s, networking, security" },
+    { icon: "⏱️", title: "Slow Provisioning", description: "Weeks to get a new environment or service" },
+    { icon: "🔀", title: "Inconsistency", description: "Each team does infrastructure differently" },
+    { icon: "📋", title: "Ticket Hell", description: "Tickets for everything instead of self-service" },
+    { icon: "🚧", title: "Bottlenecks", description: "Platform teams as gatekeepers blocking delivery" },
+    { icon: "📚", title: "Scattered Docs", description: "No single source of truth for platform usage" }
+  ]}
+  columns={3}
+/>
+
+## Platform Maturity Model
+
+<MaturityStepper
+  title="Platform Engineering Maturity Levels"
+  levels={[
+    {
+      level: 1,
+      title: "Ad-Hoc",
+      description: "No platform, teams own everything",
+      items: ["Manual provisioning", "Inconsistent setups", "Tribal knowledge", "Ticket-based requests"]
+    },
+    {
+      level: 2,
+      title: "Standardized",
+      description: "Shared tooling and patterns",
+      items: ["IaC templates", "Basic automation", "Some documentation", "Shared CI/CD"]
+    },
+    {
+      level: 3,
+      title: "Self-Service",
+      description: "Developer portal and automation",
+      items: ["Backstage/Portal", "GitOps workflows", "Golden paths", "Basic abstractions"]
+    },
+    {
+      level: 4,
+      title: "Managed",
+      description: "True Internal Developer Platform",
+      items: ["Self-service APIs", "Crossplane/Operators", "SLOs for platform", "Developer experience metrics"]
+    },
+    {
+      level: 5,
+      title: "Optimized",
+      description: "Platform as a Product",
+      items: ["Platform team as product team", "Continuous improvement", "Developer NPS", "Industry reference"]
+    }
+  ]}
+/>
+
+## Our Approach
+
+### Developer Portal (Backstage.io)
+
+<Timeline
+  title="Portal Components"
+  items={[
+    { phase: "Catalog", title: "Service Catalog", description: "All services, APIs, and ownership centralized" },
+    { phase: "Templates", title: "Software Templates", description: "Self-service project creation" },
+    { phase: "Docs", title: "TechDocs", description: "Integrated technical documentation" },
+    { phase: "Plugins", title: "Extensibility", description: "Custom plugins for your needs" }
+  ]}
+/>
+
+### Infrastructure Abstraction
+
+<FeatureGrid 
+  features={[
+    { icon: "☸️", title: "Crossplane", description: "K8s-native infrastructure as code" },
+    { icon: "🎯", title: "Kratix", description: "Platform-as-a-Product framework" },
+    { icon: "📝", title: "Score", description: "Developer-centric workload spec" },
+    { icon: "🔧", title: "Operators", description: "Custom Kubernetes operators" }
+  ]}
+  columns={4}
+/>
+
+### Golden Paths
+
+<Callout type="success" title="Golden Paths">
+Pre-paved roads that make the right thing the easy thing for developers.
+</Callout>
+
+- Service templates with best practices baked in
+- Pre-configured CI/CD pipelines
+- Security policies automatically applied
+- Observability out of the box
+
+## Certifications
+
+- CNCF Certified Kubernetes Administrator (CKA)
+- AWS Certified DevOps Engineer – Professional
+- Backstage Certified Developer
+
+## Results
+
+<FeatureGrid 
+  features={[
+    { icon: "⚡", title: "Minutes not weeks", description: "New service provisioning" },
+    { icon: "🎯", title: "+80% Self-Service", description: "Reduced tickets" },
+    { icon: "📈", title: "+50% Velocity", description: "Developer productivity" },
+    { icon: "😊", title: "+40 NPS", description: "Developer satisfaction" }
+  ]}
+  columns={4}
+/>

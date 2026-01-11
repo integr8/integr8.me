@@ -1,0 +1,11 @@
+---
+import { LanguageSwitcher } from './LanguageSwitcher';
+
+interface Props {
+  currentLang: string;
+}
+
+const { currentLang } = Astro.props;
+---
+
+<LanguageSwitcher currentLang={currentLang} client:load />

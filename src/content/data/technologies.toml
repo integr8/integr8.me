@@ -1,0 +1,119 @@
+[[categories]]
+id = "cloud"
+icon = "CloudIcon"
+
+[categories.name]
+ptbr = "Cloud Providers"
+en = "Cloud Providers"
+
+  [[categories.items]]
+  name = "AWS"
+  services = ["EKS", "Lambda", "S3", "RDS", "DynamoDB", "CloudFormation", "CDK"]
+  
+  [[categories.items]]
+  name = "Azure"
+  services = ["AKS", "Functions", "Blob Storage", "Cosmos DB", "Bicep"]
+  
+  [[categories.items]]
+  name = "GCP"
+  services = ["GKE", "Cloud Run", "BigQuery", "Cloud Build"]
+  
+  [[categories.items]]
+  name = "Oracle Cloud"
+  services = ["OKE", "Autonomous DB"]
+
+[[categories]]
+id = "containers"
+icon = "CubeIcon"
+
+[categories.name]
+ptbr = "Containers & Orquestração"
+en = "Containers & Orchestration"
+
+  [[categories.items]]
+  name = "Kubernetes"
+  services = ["EKS", "AKS", "GKE", "OpenShift", "Rancher"]
+  
+  [[categories.items]]
+  name = "Docker"
+  services = ["Compose", "Swarm", "BuildKit"]
+  
+  [[categories.items]]
+  name = "Service Mesh"
+  services = ["Istio", "Linkerd", "Cilium"]
+
+[[categories]]
+id = "cicd"
+icon = "ArrowPathIcon"
+
+[categories.name]
+ptbr = "CI/CD & GitOps"
+en = "CI/CD & GitOps"
+
+  [[categories.items]]
+  name = "GitOps"
+  services = ["ArgoCD", "Flux", "Kustomize"]
+  
+  [[categories.items]]
+  name = "CI/CD"
+  services = ["GitHub Actions", "GitLab CI", "Jenkins", "Tekton"]
+  
+  [[categories.items]]
+  name = "IaC"
+  services = ["Terraform", "Pulumi", "Crossplane", "Ansible"]
+
+[[categories]]
+id = "observability"
+icon = "ChartBarIcon"
+
+[categories.name]
+ptbr = "Observabilidade"
+en = "Observability"
+
+  [[categories.items]]
+  name = "Monitoring"
+  services = ["Prometheus", "Grafana", "Datadog", "New Relic"]
+  
+  [[categories.items]]
+  name = "Logging"
+  services = ["ELK Stack", "Loki", "Fluentd"]
+  
+  [[categories.items]]
+  name = "Tracing"
+  services = ["Jaeger", "OpenTelemetry", "Tempo"]
+
+[[categories]]
+id = "security"
+icon = "ShieldCheckIcon"
+
+[categories.name]
+ptbr = "Segurança"
+en = "Security"
+
+  [[categories.items]]
+  name = "Security Tools"
+  services = ["Vault", "Trivy", "Falco", "OPA", "Kyverno"]
+  
+  [[categories.items]]
+  name = "Identity"
+  services = ["Keycloak", "OIDC", "SAML"]
+
+[[categories]]
+id = "data"
+icon = "CircleStackIcon"
+
+[categories.name]
+ptbr = "Dados"
+en = "Data"
+
+  [[categories.items]]
+  name = "Streaming"
+  services = ["Kafka", "Pulsar", "Kinesis", "EventBridge"]
+  
+  [[categories.items]]
+  name = "Databases"
+  services = ["PostgreSQL", "MongoDB", "Redis", "Cassandra"]
+  
+  [[categories.items]]
+  name = "Data Platform"
+  services = ["Spark", "Airflow", "dbt", "Databricks"]

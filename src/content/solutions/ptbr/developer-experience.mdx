@@ -1,0 +1,162 @@
+---
+title: "Developer Experience (DevEx)"
+category: "engineering"
+description: "Reduza o atrito, aumente a produtividade e acelere o time-to-market com ferramentas, processos e cultura otimizados para desenvolvedores."
+icon: "CodeBracketIcon"
+weight: 8
+technologies: ["Backstage.io", "DORA Metrics / SPACE Framework", "MkDocs / TechDocs / Docusaurus", "CLI Tools (Go/Rust/Python)", "Remote Dev Environments (Gitpod/Codespaces)", "AI Coding Assistants (Copilot)"]
+---
+
+import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
+
+## O Desafio
+
+A produtividade do desenvolvedor é diferencial competitivo crítico, mas muitas organizações falham em criar ambientes onde engenheiros façam seu melhor trabalho:
+
+<FeatureGrid 
+  features={[
+    { icon: "🔧", title: "Fadiga de ferramentas", description: "Dezenas de sistemas para tarefas simples" },
+    { icon: "💻", title: "Ambientes inconsistentes", description: "Horas para setup, 'funciona na minha máquina'" },
+    { icon: "📚", title: "Documentação dispersa", description: "Interrupções constantes para obter contexto" },
+    { icon: "🐌", title: "Onboarding lento", description: "Semanas ou meses para produtividade" },
+    { icon: "🧠", title: "Carga cognitiva", description: "Infra e ops desviando foco do código de valor" },
+    { icon: "📊", title: "Falta de métricas", description: "Impossível saber onde melhorar" }
+  ]}
+  columns={3}
+/>
+
+<Callout type="info" title="ROI Mensurável">
+Investir em Developer Experience não é "mimimi"—é estratégia de negócio com ROI mensurável.
+</Callout>
+
+## Modelo de Maturidade DevEx
+
+<MaturityStepper
+  title="Níveis de Maturidade em Developer Experience"
+  levels={[
+    {
+      level: 1,
+      title: "Caótico",
+      description: "Sem padrões ou suporte",
+      items: ["Setup manual", "Docs inexistentes", "Onboarding ad-hoc", "Nenhuma métrica"]
+    },
+    {
+      level: 2,
+      title: "Básico",
+      description: "Primeiros padrões estabelecidos",
+      items: ["Templates básicos", "Wiki/Confluence", "Algum tooling", "CI/CD funcional"]
+    },
+    {
+      level: 3,
+      title: "Padronizado",
+      description: "Plataforma de desenvolvedor",
+      items: ["Portal (Backstage)", "Docs-as-Code", "DORA metrics", "Self-service básico", "Remote dev envs"]
+    },
+    {
+      level: 4,
+      title: "Otimizado",
+      description: "Experiência excepcional",
+      items: ["Self-service completo", "Preview environments", "AI assistants", "SPACE framework", "< 1 dia onboarding"]
+    },
+    {
+      level: 5,
+      title: "Excelente",
+      description: "Referência da indústria",
+      items: ["Developer Portal maduro", "Golden paths", "Inner-source culture", "Continuous improvement", "Developer advocacy"]
+    }
+  ]}
+/>
+
+## Nossa Abordagem
+
+### Medição com DORA Metrics
+
+<FeatureGrid 
+  features={[
+    { icon: "🚀", title: "Deployment Frequency", description: "Com que frequência código vai para produção" },
+    { icon: "⏱️", title: "Lead Time", description: "Tempo de commit até produção" },
+    { icon: "🔧", title: "MTTR", description: "Tempo para restaurar serviço" },
+    { icon: "❌", title: "Change Failure Rate", description: "% de deploys problemáticos" }
+  ]}
+  columns={4}
+/>
+
+### SPACE Framework
+
+Visão completa de produtividade:
+
+| Dimensão | Descrição | Métricas |
+|----------|-----------|----------|
+| **Satisfaction** | Felicidade do dev | Surveys, eNPS |
+| **Performance** | Output e qualidade | Throughput, quality |
+| **Activity** | Atividade | Commits, PRs, reviews |
+| **Communication** | Colaboração | Response times, async |
+| **Efficiency** | Flow state | Interruptions, wait time |
+
+### Plataforma de Desenvolvedor (Backstage)
+
+<Timeline
+  title="Componentes do Portal"
+  items={[
+    { phase: "Catálogo", title: "Service Catalog", description: "Todos os serviços, APIs e ownership centralizados" },
+    { phase: "Templates", title: "Software Templates", description: "Self-service para novos projetos" },
+    { phase: "Docs", title: "TechDocs", description: "Documentação técnica integrada" },
+    { phase: "Search", title: "Busca Unificada", description: "Código, docs e serviços em um lugar" }
+  ]}
+/>
+
+### Ambientes de Desenvolvimento
+
+<FeatureGrid 
+  features={[
+    { icon: "☁️", title: "Remote Dev Envs", description: "Gitpod, GitHub Codespaces" },
+    { icon: "🐳", title: "Devcontainers", description: "Configuração reproduzível" },
+    { icon: "🔗", title: "Preview Environments", description: "URL única por PR" },
+    { icon: "⚡", title: "Hot Reload", description: "Fast feedback loops" }
+  ]}
+  columns={4}
+/>
+
+### Documentação como Código
+
+- **MkDocs Material** para docs bonitas e pesquisáveis
+- **ADRs** (Architecture Decision Records) para decisões
+- **Runbooks** para operações e troubleshooting
+- **Geração automática** de API docs
+- **Diagramas as Code** com Mermaid, PlantUML
+
+### AI-Assisted Development
+
+<FeatureGrid 
+  features={[
+    { icon: "🤖", title: "GitHub Copilot", description: "AI coding assistant rollout" },
+    { icon: "👀", title: "AI Code Review", description: "Review assistido por AI" },
+    { icon: "🧪", title: "Test Generation", description: "Testes automatizados" },
+    { icon: "📝", title: "Doc Generation", description: "Documentação via AI" }
+  ]}
+  columns={4}
+/>
+
+## Certificações
+
+**DevOps & Platform:**
+- CNCF Certified Kubernetes Administrator (CKA)
+- AWS Certified DevOps Engineer – Professional
+- Microsoft Certified: DevOps Engineer Expert
+
+**Frameworks:**
+- DORA Metrics Implementation
+- SPACE Framework
+- Team Topologies
+
+## Resultados
+
+<FeatureGrid 
+  features={[
+    { icon: "⚡", title: "1 dia onboarding", description: "De semanas para horas" },
+    { icon: "🚀", title: "+50% produtividade", description: "Menos atrito, mais código" },
+    { icon: "📉", title: "-70% interrupções", description: "Self-service funciona" },
+    { icon: "😊", title: "+40 eNPS", description: "Desenvolvedores satisfeitos" }
+  ]}
+  columns={4}
+/>

@@ -1,0 +1,43 @@
+[[certifications]]
+id = "cncf"
+name = "CNCF Kubestronaut"
+short_name = "CNCF"
+logo = "/images/certifications/cncf.svg"
+description = "Complete Kubernetes certification set"
+badges = ["CKA", "CKAD", "CKS", "KCNA", "KCSA"]
+
+[[certifications]]
+id = "aws"
+name = "AWS Certified"
+short_name = "AWS"
+logo = "/images/certifications/aws.svg"
+description = "Professional level certifications"
+badges = ["Solutions Architect Pro", "DevOps Engineer Pro", "Data Engineer"]
+
+[[certifications]]
+id = "azure"
+name = "Microsoft Azure"
+short_name = "Azure"
+logo = "/images/certifications/azure.svg"
+description = "Expert level certifications"
+badges = ["Solutions Architect Expert", "DevOps Engineer Expert"]
+
+[[certifications]]
+id = "oracle"
+name = "Oracle Certified"
+short_name = "Oracle"
+logo = "/images/certifications/oracle.svg"
+description = "Professional certifications"
+badges = ["OCP Java", "OCP Database"]
+
+[[certifications]]
+id = "ibm"
+name = "IBM Certified"
+short_name = "IBM"
+logo = "/images/certifications/ibm.svg"
+
+[[certifications]]
+id = "itil"
+name = "ITIL Foundation"
+short_name = "ITIL"
+logo = "/images/certifications/itil.svg"

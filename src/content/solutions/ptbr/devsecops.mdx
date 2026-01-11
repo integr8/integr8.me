@@ -1,0 +1,168 @@
+---
+title: "DevSecOps & Segurança"
+category: "security-data"
+description: "Integramos segurança em todas as etapas do ciclo de desenvolvimento (Shift-Left) com Policy as Code, Supply Chain Security e Runtime Protection."
+icon: "ShieldCheckIcon"
+weight: 6
+technologies: ["Falco / Sysdig", "OPA / Gatekeeper / Kyverno", "Trivy / Grype / Snyk", "SonarQube / CodeQL", "HashiCorp Vault", "Sigstore / Cosign", "Cert-Manager", "SIEM Integration"]
+---
+
+import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
+
+## O Desafio
+
+A velocidade do desenvolvimento moderno criou novos desafios de segurança:
+
+<FeatureGrid 
+  features={[
+    { icon: "🚧", title: "Segurança gatekeeper", description: "Gargalos no final do pipeline atrasando releases" },
+    { icon: "⚙️", title: "Configurações inseguras", description: "Problemas passam despercebidos até produção" },
+    { icon: "📦", title: "Vulnerabilidades em deps", description: "Supply chain de código aberto vulnerável" },
+    { icon: "🔑", title: "Secrets espalhados", description: "Credenciais em repos e configs" },
+    { icon: "📋", title: "Compliance manual", description: "Não escala com deploys frequentes" },
+    { icon: "👁️", title: "Falta de visibilidade", description: "Comportamentos maliciosos não detectados" }
+  ]}
+  columns={3}
+/>
+
+<Callout type="warning" title="Modelo Obsoleto">
+O modelo tradicional de segurança como "último checkpoint" não funciona no mundo de continuous delivery.
+</Callout>
+
+## Modelo de Maturidade DevSecOps
+
+<MaturityStepper
+  title="Níveis de Maturidade em DevSecOps"
+  levels={[
+    {
+      level: 1,
+      title: "Reativo",
+      description: "Segurança no final do processo",
+      items: ["Pen tests manuais", "Sem scanning automatizado", "Secrets hardcoded", "Compliance ad-hoc"]
+    },
+    {
+      level: 2,
+      title: "Básico",
+      description: "Primeiras automações",
+      items: ["Scanning básico no CI", "Vault básico", "Algumas políticas", "Relatórios manuais"]
+    },
+    {
+      level: 3,
+      title: "Integrado",
+      description: "Security no pipeline",
+      items: ["SAST/SCA/DAST", "Policy as Code", "Secret management", "Container scanning", "Quality gates"]
+    },
+    {
+      level: 4,
+      title: "Proativo",
+      description: "Shift-Left completo",
+      items: ["Security no IDE", "Supply chain security", "Runtime protection", "SBOM/SLSA", "Auto-remediation"]
+    },
+    {
+      level: 5,
+      title: "Zero Trust",
+      description: "Segurança como cultura",
+      items: ["Security champions", "Threat modeling", "Chaos security", "Bug bounty", "Compliance contínuo"]
+    }
+  ]}
+/>
+
+## Nossa Abordagem
+
+### Shift-Left Security
+
+<Timeline
+  title="Segurança em Cada Etapa"
+  items={[
+    { phase: "IDE", title: "Security no Editor", description: "Pre-commit hooks, extensões de IDE, feedback instantâneo" },
+    { phase: "CI", title: "Pipeline Security", description: "SAST, SCA, Secret Scanning, IaC Security" },
+    { phase: "Registry", title: "Container Security", description: "Image scanning, base images hardened" },
+    { phase: "Runtime", title: "Production Security", description: "Falco, Network Policies, WAF" }
+  ]}
+/>
+
+### Ferramentas de Scanning
+
+| Categoria | Ferramentas | Propósito |
+|-----------|-------------|-----------|
+| **SAST** | SonarQube, CodeQL, Semgrep | Análise estática de código |
+| **SCA** | Snyk, Dependabot, OWASP | Vulnerabilidades em dependências |
+| **Container** | Trivy, Grype, Clair | Scanning de imagens |
+| **IaC** | Checkov, tfsec, Terrascan | Terraform/K8s security |
+| **Secrets** | GitLeaks, TruffleHog | Detecção de secrets expostos |
+
+### Policy as Code
+
+<FeatureGrid 
+  features={[
+    { icon: "🛡️", title: "OPA Gatekeeper", description: "Políticas complexas em Rego" },
+    { icon: "📋", title: "Kyverno", description: "Políticas declarativas em YAML" },
+    { icon: "✅", title: "Pod Security Standards", description: "Baseline e Restricted" },
+    { icon: "📊", title: "CIS Benchmarks", description: "Compliance automatizado" }
+  ]}
+  columns={4}
+/>
+
+**Políticas Comuns:**
+- Proibição de containers root
+- Limites obrigatórios de recursos
+- Registries permitidos (allowlist)
+- Labels obrigatórios
+- Network policies deny-all padrão
+
+### Supply Chain Security
+
+<FeatureGrid 
+  features={[
+    { icon: "📜", title: "SBOM", description: "Software Bill of Materials automatizado" },
+    { icon: "✍️", title: "Sigstore/Cosign", description: "Assinatura de imagens" },
+    { icon: "🔗", title: "SLSA", description: "Supply-chain Levels compliance" },
+    { icon: "📋", title: "In-toto", description: "Attestations de proveniência" }
+  ]}
+  columns={4}
+/>
+
+### Runtime Security
+
+**Falco / Sysdig:**
+- Detecção de shell spawning
+- File modifications anômalas
+- Network anomalies
+- Privilege escalation
+- Container escape attempts
+- Crypto mining detection
+
+### Gestão de Secrets
+
+<Timeline
+  title="Stack de Secrets"
+  items={[
+    { phase: "Vault", title: "HashiCorp Vault", description: "Secrets centralizados, dynamic secrets, PKI" },
+    { phase: "K8s", title: "External Secrets", description: "Sync automático com Vault" },
+    { phase: "GitOps", title: "Sealed Secrets", description: "Secrets seguros em Git" },
+    { phase: "TLS", title: "Cert-Manager", description: "Certificados automatizados" }
+  ]}
+/>
+
+## Certificações
+
+**Security:**
+- CNCF Certified Kubernetes Security Specialist (CKS)
+- AWS Certified Security – Specialty
+- Certified Ethical Hacker (CEH)
+
+**Compliance:**
+- PCI-DSS, HIPAA, SOC 2
+- LGPD/GDPR, ISO 27001
+
+## Resultados
+
+<FeatureGrid 
+  features={[
+    { icon: "🛡️", title: "-95% vulnerabilidades", description: "Críticas bloqueadas antes de produção" },
+    { icon: "⚡", title: "-80% tempo remediação", description: "Shift-left detecta cedo" },
+    { icon: "🔐", title: "Zero secrets expostos", description: "Scanning e gestão centralizada" },
+    { icon: "✅", title: "100% SBOM coverage", description: "Supply chain verificável" }
+  ]}
+  columns={4}
+/>

@@ -1,0 +1,177 @@
+[nav]
+home = "Home"
+solutions = "Solutions"
+about = "About"
+cases = "Cases"
+blog = "Blog"
+contact = "Contact"
+capabilities = "Capabilities"
+how-we-work = "How We Work"
+
+[nav.categories]
+cloud-platform = "Cloud & Platform"
+devops-delivery = "DevOps & Delivery"
+security-data = "Security & Data"
+engineering = "Engineering"
+
+[hero]
+badge = "CNCF Kubestronaut • AWS Professional • Azure Expert"
+title = "End-to-End Cloud-Native Engineering"
+subtitle = "DevOps, Platform Engineering and Data with measurable results"
+
+[hero.cta]
+primary = "Schedule Conversation"
+secondary = "View Solutions"
+
+[solutions]
+title = "Our Solutions"
+subtitle = "Technical expertise to accelerate your cloud-native journey"
+view_all = "View All Solutions"
+learn_more = "Learn more"
+technologies = "Technologies"
+interested = "Interested in this solution?"
+lets_talk = "Let's talk about your project"
+get_in_touch = "Get in Touch"
+related = "Related Solutions"
+
+[about]
+title = "About Integr8"
+
+[about.nav]
+who_we_are = "Who We Are"
+methodology = "Methodology"
+certifications = "Certifications"
+technologies = "Technologies"
+
+[about.philosophy]
+headline = "Practitioners, not consultants"
+description = "Our expertise comes from building and operating systems in production in high-scale environments"
+
+[about.philosophy.principles]
+dont_recommend = "We don't recommend what we haven't done"
+work_alongside = "We work alongside your team"
+focus_outcomes = "Focus on outcomes, not activities"
+build_capabilities = "We build capabilities, not dependencies"
+
+[about.differentiators.certified]
+title = "Certified Experts"
+description = "CNCF Kubestronaut, AWS Professional, Azure Expert, Oracle OCP"
+icon = "AcademicCapIcon"
+
+[about.differentiators.hands_on]
+title = "Hands-on Delivery"
+description = "We build alongside your team, not just advise"
+icon = "WrenchScrewdriverIcon"
+
+[about.differentiators.results]
+title = "Measurable Results"
+description = "Proven DORA metrics and business impact"
+icon = "ChartBarIcon"
+
+[about.engagement.assessment]
+title = "Assessment & Strategy"
+duration = "2-4 weeks"
+description = "In-depth analysis with actionable recommendations"
+icon = "MagnifyingGlassIcon"
+
+[about.engagement.implementation]
+title = "Hands-on Implementation"
+duration = "2-6 months"
+description = "Solution implementation with knowledge transfer"
+icon = "WrenchScrewdriverIcon"
+
+[about.engagement.augmentation]
+title = "Staff Augmentation"
+duration = "3+ months"
+description = "Engineers integrated into your team"
+icon = "UserPlusIcon"
+
+[about.engagement.mentoring]
+title = "Mentoring & Enablement"
+duration = "Flexible"
+description = "Accelerate your team's learning curve"
+icon = "AcademicCapIcon"
+
+[cases]
+title = "Success Stories"
+subtitle = "Real results we deliver for our clients"
+challenge = "The Challenge"
+approach = "Our Approach"
+results = "Results"
+testimonial = "What they say"
+
+[cases.filters]
+all = "All"
+fintech = "Fintech"
+ecommerce = "E-commerce"
+enterprise = "Enterprise"
+
+[blog]
+title = "Blog"
+subtitle = "Technical insights, best practices and news"
+read_time = "min read"
+share = "Share"
+related_posts = "Related Posts"
+toc = "In this article"
+
+[blog.categories]
+all = "All"
+devops = "DevOps"
+kubernetes = "Kubernetes"
+cloud = "Cloud"
+platform = "Platform"
+data = "Data"
+
+[contact]
+title = "Let's Talk"
+subtitle = "Tell us about your project and challenges"
+response_time = "We respond within 24 business hours"
+
+[contact.form]
+name = "Name"
+email = "Email"
+company = "Company"
+interest = "Interest"
+select_solution = "Select a solution..."
+message = "Message"
+placeholder = "Describe your project or challenge..."
+submit = "Send Message"
+sending = "Sending..."
+success = "Message sent! We'll get back to you soon."
+error = "Error sending. Please try again."
+
+[cta]
+title = "Ready to transform your infrastructure?"
+subtitle = "Let's talk about how we can help"
+primary = "Schedule Conversation"
+secondary = "View Solutions"
+
+[footer]
+description = "Technical consulting specialized in DevOps, Cloud, Kubernetes and Platform Engineering"
+copyright = "All rights reserved"
+
+[footer.sections]
+solutions = "Solutions"
+company = "Company"
+connect = "Connect"
+
+[common]
+home = "Home"
+back = "Back"
+view_all = "View all"
+other = "Other"
+
+[accessibility]
+skip_to_content = "Skip to content"
+main_nav = "Main navigation"
+open_menu = "Open menu"
+close_menu = "Close menu"
+current_page = "Current page"
+new_window = "Opens in new window"
+dark_mode = "Dark mode"
+light_mode = "Light mode"
+
+[errors.not_found]
+title = "Page not found"
+description = "The page you're looking for doesn't exist or has been moved"
+cta = "Back to home"

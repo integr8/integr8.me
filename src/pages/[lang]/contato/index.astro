@@ -1,0 +1,172 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import { Button } from '@components/common/Button';
+import { Icon } from '@components/common/Icon';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ptbr' } },
+    { params: { lang: 'en' } }
+  ];
+}
+
+const { lang } = Astro.params;
+---
+
+<PageLayout
+  title="Contato"
+  description="Entre em contato com a Integr8 para discutir seu projeto"
+>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto py-12">
+    <!-- Contact Form -->
+    <div>
+      <h2 class="text-2xl font-bold mb-6">Envie sua mensagem</h2>
+      <form class="space-y-4" action="#">
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text flex items-center gap-2">
+              <Icon name="UserIcon" className="h-4 w-4" client:load />
+              Nome
+            </span>
+          </label>
+          <input
+            type="text"
+            placeholder="Seu nome"
+            class="input input-bordered"
+            required
+          />
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text flex items-center gap-2">
+              <Icon name="EnvelopeIcon" className="h-4 w-4" client:load />
+              Email
+            </span>
+          </label>
+          <input
+            type="email"
+            placeholder="seu@email.com"
+            class="input input-bordered"
+            required
+          />
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text flex items-center gap-2">
+              <Icon name="BuildingOfficeIcon" className="h-4 w-4" client:load />
+              Empresa
+            </span>
+          </label>
+          <input
+            type="text"
+            placeholder="Sua empresa"
+            class="input input-bordered"
+            required
+          />
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text flex items-center gap-2">
+              <Icon name="RocketLaunchIcon" className="h-4 w-4" client:load />
+              Interesse
+            </span>
+          </label>
+          <select class="select select-bordered" required>
+            <option disabled selected>Selecione uma solução...</option>
+            <option>Platform Engineering</option>
+            <option>Kubernetes</option>
+            <option>DevOps/CI-CD</option>
+            <option>Cloud Architecture</option>
+            <option>Outro</option>
+          </select>
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text flex items-center gap-2">
+              <Icon name="ChatBubbleLeftRightIcon" className="h-4 w-4" client:load />
+              Mensagem
+            </span>
+          </label>
+          <textarea
+            class="textarea textarea-bordered h-32"
+            placeholder="Descreva seu projeto ou desafio..."
+            required
+          ></textarea>
+        </div>
+
+        <Button variant="primary" size="lg" className="w-full gap-2">
+          <Icon name="PaperAirplaneIcon" className="h-5 w-5" client:load />
+          Enviar Mensagem
+        </Button>
+      </form>
+    </div>
+
+    <!-- Contact Info -->
+    <div>
+      <h2 class="text-2xl font-bold mb-6">Informações de Contato</h2>
+      
+      <div class="space-y-8">
+        <div class="card bg-base-100 shadow-lg">
+          <div class="card-body">
+            <div class="flex items-start gap-4">
+              <Icon name="EnvelopeIcon" className="h-6 w-6 text-primary mt-1" client:load />
+              <div>
+                <h3 class="font-semibold mb-1">Email</h3>
+                <a href="mailto:contato@integr8.me" class="text-primary hover:underline">
+                  contato@integr8.me
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-lg">
+          <div class="card-body">
+            <div class="flex items-start gap-4">
+              <Icon name="GlobeAltIcon" className="h-6 w-6 text-primary mt-1" client:load />
+              <div>
+                <h3 class="font-semibold mb-1">LinkedIn</h3>
+                <a
+                  href="https://linkedin.com/company/integr8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-primary hover:underline"
+                >
+                  linkedin.com/company/integr8
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card bg-base-100 shadow-lg">
+          <div class="card-body">
+            <div class="flex items-start gap-4">
+              <Icon name="CodeBracketIcon" className="h-6 w-6 text-primary mt-1" client:load />
+              <div>
+                <h3 class="font-semibold mb-1">GitHub</h3>
+                <a
+                  href="https://github.com/integr8"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-primary hover:underline"
+                >
+                  github.com/integr8
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-info">
+          <Icon name="InformationCircleIcon" className="h-5 w-5" client:load />
+          <span>Respondemos em até 24h úteis</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</PageLayout>

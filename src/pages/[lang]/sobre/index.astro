@@ -1,0 +1,227 @@
+---
+import PageLayout from '@layouts/PageLayout.astro';
+import { Icon } from '@components/common/Icon';
+import { Button } from '@components/common/Button';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ptbr' } },
+    { params: { lang: 'en' } }
+  ];
+}
+
+const { lang } = Astro.params;
+
+const sections = [
+  {
+    id: 'quem-somos',
+    label: 'Quem Somos',
+    icon: 'UserGroupIcon',
+  },
+  {
+    id: 'metodologia',
+    label: 'Metodologia',
+    icon: 'CogIcon',
+  },
+  {
+    id: 'certificacoes',
+    label: 'Certificações',
+    icon: 'AcademicCapIcon',
+  },
+  {
+    id: 'tecnologias',
+    label: 'Tecnologias',
+    icon: 'CodeBracketIcon',
+  },
+];
+---
+
+<PageLayout
+  title="Sobre a Integr8"
+  description="Conheça a Integr8, especialistas em DevOps, Cloud, Kubernetes e Platform Engineering"
+>
+  <!-- Sticky Navigation -->
+  <div class="sticky top-20 z-30 bg-base-100 border-b border-base-200">
+    <div class="container mx-auto px-4">
+      <div class="tabs tabs-bordered overflow-x-auto">
+        {sections.map((section) => (
+          <a href={`#${section.id}`} class="tab gap-2 whitespace-nowrap">
+            <Icon name={section.icon} className="h-4 w-4" client:load />
+            {section.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Quem Somos Section -->
+  <section id="quem-somos" class="py-16">
+    <h2 class="text-3xl font-bold mb-8">Quem Somos</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="card bg-base-100 shadow-lg">
+        <div class="card-body items-center text-center">
+          <Icon name="AcademicCapIcon" className="h-12 w-12 text-primary" client:load />
+          <h3 class="card-title mt-4">Especialistas Certificados</h3>
+          <p class="text-base-content/70">
+            CNCF Kubestronaut, AWS Professional, Azure Expert, Oracle OCP e mais.
+          </p>
+        </div>
+      </div>
+
+      <div class="card bg-base-100 shadow-lg">
+        <div class="card-body items-center text-center">
+          <Icon name="WrenchScrewdriverIcon" className="h-12 w-12 text-primary" client:load />
+          <h3 class="card-title mt-4">Entrega Hands-on</h3>
+          <p class="text-base-content/70">
+            Construímos junto com seu time, não apenas aconselhamos.
+          </p>
+        </div>
+      </div>
+
+      <div class="card bg-base-100 shadow-lg">
+        <div class="card-body items-center text-center">
+          <Icon name="ChartBarIcon" className="h-12 w-12 text-primary" client:load />
+          <h3 class="card-title mt-4">Resultados Mensuráveis</h3>
+          <p class="text-base-content/70">
+            Métricas DORA e impacto de negócio comprovados.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Metodologia Section -->
+  <section id="metodologia" class="py-16">
+    <h2 class="text-3xl font-bold mb-8">Nossa Metodologia</h2>
+    <ul class="steps steps-vertical lg:steps-horizontal w-full">
+      <li class="step step-primary" data-content="1">
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="MagnifyingGlassIcon" className="h-8 w-8 text-primary" client:load />
+          <span class="font-medium">Assessment</span>
+          <span class="text-sm text-base-content/60">2-4 semanas</span>
+        </div>
+      </li>
+      <li class="step step-primary" data-content="2">
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="WrenchScrewdriverIcon" className="h-8 w-8 text-primary" client:load />
+          <span class="font-medium">Implementação</span>
+          <span class="text-sm text-base-content/60">2-6 meses</span>
+        </div>
+      </li>
+      <li class="step step-primary" data-content="3">
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="UserPlusIcon" className="h-8 w-8" client:load />
+          <span class="font-medium">Augmentation</span>
+          <span class="text-sm text-base-content/60">3+ meses</span>
+        </div>
+      </li>
+      <li class="step" data-content="4">
+        <div class="flex flex-col items-center gap-2">
+          <Icon name="AcademicCapIcon" className="h-8 w-8" client:load />
+          <span class="font-medium">Enablement</span>
+          <span class="text-sm text-base-content/60">Flexível</span>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Certificações Section -->
+  <section id="certificacoes" class="py-16">
+    <h2 class="text-3xl font-bold mb-8">Certificações</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="card bg-base-100 shadow-lg">
+        <div class="card-body">
+          <h3 class="card-title text-lg">CNCF Kubestronaut</h3>
+          <p class="text-sm text-base-content/70 mb-4">
+            Kubernetes certification set: CKA, CKAD, CKS, KCNA, KCSA
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge badge-primary">CKA</span>
+            <span class="badge badge-primary">CKAD</span>
+            <span class="badge badge-primary">CKS</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-base-100 shadow-lg">
+        <div class="card-body">
+          <h3 class="card-title text-lg">AWS Certified</h3>
+          <p class="text-sm text-base-content/70 mb-4">
+            Professional level certifications
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge badge-secondary">Solutions Architect</span>
+            <span class="badge badge-secondary">DevOps Engineer</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bg-base-100 shadow-lg">
+        <div class="card-body">
+          <h3 class="card-title text-lg">Microsoft Azure</h3>
+          <p class="text-sm text-base-content/70 mb-4">
+            Expert level certifications
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span class="badge badge-accent">Solutions Architect Expert</span>
+            <span class="badge badge-accent">DevOps Engineer Expert</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tecnologias Section -->
+  <section id="tecnologias" class="py-16">
+    <h2 class="text-3xl font-bold mb-8">Tecnologias</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div>
+        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+          <Icon name="CloudIcon" className="h-6 w-6 text-primary" client:load />
+          Cloud Providers
+        </h3>
+        <ul class="space-y-3">
+          <li><strong>AWS:</strong> EKS, Lambda, S3, RDS, DynamoDB</li>
+          <li><strong>Azure:</strong> AKS, Functions, Blob Storage, Cosmos DB</li>
+          <li><strong>GCP:</strong> GKE, Cloud Run, BigQuery</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+          <Icon name="CubeIcon" className="h-6 w-6 text-primary" client:load />
+          Containers & Orquestração
+        </h3>
+        <ul class="space-y-3">
+          <li><strong>Kubernetes:</strong> EKS, AKS, GKE, OpenShift</li>
+          <li><strong>Docker:</strong> Compose, Swarm</li>
+          <li><strong>Service Mesh:</strong> Istio, Linkerd</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+          <Icon name="ArrowPathIcon" className="h-6 w-6 text-primary" client:load />
+          CI/CD & GitOps
+        </h3>
+        <ul class="space-y-3">
+          <li><strong>GitOps:</strong> ArgoCD, Flux, Kustomize</li>
+          <li><strong>CI/CD:</strong> GitHub Actions, GitLab CI, Jenkins</li>
+          <li><strong>IaC:</strong> Terraform, Pulumi, Ansible</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+          <Icon name="ChartBarIcon" className="h-6 w-6 text-primary" client:load />
+          Observabilidade
+        </h3>
+        <ul class="space-y-3">
+          <li><strong>Monitoring:</strong> Prometheus, Grafana, Datadog</li>
+          <li><strong>Logging:</strong> ELK Stack, Loki</li>
+          <li><strong>Tracing:</strong> Jaeger, OpenTelemetry</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</PageLayout>

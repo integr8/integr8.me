@@ -1,0 +1,74 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '@layouts/PageLayout.astro';
+import { Badge } from '@components/common/Badge';
+import { Button } from '@components/common/Button';
+import { Icon } from '@components/common/Icon';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ptbr' } },
+    { params: { lang: 'en' } }
+  ];
+}
+
+const { lang } = Astro.params;
+const cases = await getCollection('cases');
+const viewCaseLabel = lang === 'ptbr' ? 'Ver Case Completo' : 'View Full Case';
+
+const breadcrumbs = [
+  { label: lang === 'ptbr' ? 'Início' : 'Home', href: `/${lang}` },
+  { label: 'Cases' },
+];
+---
+
+<PageLayout
+  title="Cases de Sucesso"
+  description="Resultados reais que entregamos para nossos clientes"
+  breadcrumbs={breadcrumbs}
+>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-12">
+    {cases.map((caseItem) => (
+      <a 
+        href={`/${lang}/cases/${caseItem.slug.split('/').pop()}`}
+        class="card bg-base-100 shadow-lg hover:shadow-xl transition-shadow block"
+      >
+        <div class="card-body">
+          <div class="flex items-center gap-3 mb-4">
+            <Icon name="TrophyIcon" className="h-6 w-6 text-warning" client:load />
+            {caseItem.data.industry && (
+              <Badge variant="warning">{caseItem.data.industry}</Badge>
+            )}
+          </div>
+          
+          <h3 class="card-title text-xl">{caseItem.data.title}</h3>
+          <p class="text-sm text-base-content/70 mb-4">{caseItem.data.client}</p>
+          
+          <div class="divider my-2"></div>
+          
+          <div>
+            <p class="text-sm font-semibold mb-2">O Desafio:</p>
+            <p class="text-sm text-base-content/70">{caseItem.data.challenge}</p>
+          </div>
+          
+          {caseItem.data.technologies && (
+            <div class="flex flex-wrap gap-2 mt-4">
+              {caseItem.data.technologies.slice(0, 3).map((tech: string) => (
+                <Badge key={tech} variant="primary" size="sm">
+                  {tech}
+                </Badge>
+              ))}
+            </div>
+          )}
+          
+          <div class="card-actions justify-end mt-4">
+            <span class="inline-flex items-center gap-2 text-primary font-semibold">
+              {viewCaseLabel}
+              <Icon name="ArrowRightIcon" className="h-4 w-4" client:load />
+            </span>
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+</PageLayout>

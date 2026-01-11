@@ -1,0 +1,177 @@
+---
+title: "DevOps & CI/CD Moderno"
+category: "engineering"
+description: "Automatizamos todo o ciclo de entrega de software com pipelines GitOps seguros, eficientes e mensuráveis através de métricas DORA."
+icon: "RocketLaunchIcon"
+weight: 3
+technologies: ["GitHub Actions", "GitLab CI", "ArgoCD / Flux", "Jenkins (Modernização)", "Tekton", "SonarQube", "Trivy / Snyk / Grype", "Sigstore / Cosign"]
+---
+
+import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
+
+## O Desafio
+
+Apesar de anos de adoção DevOps, muitas organizações ainda lutam com gargalos fundamentais de entrega:
+
+<FeatureGrid 
+  features={[
+    { icon: "🐌", title: "Deployments manuais", description: "Processos propensos a erros que requerem coordenação entre times" },
+    { icon: "💔", title: "Scripts frágeis de CI/CD", description: "Pipelines que quebram frequentemente e são difíceis de manter" },
+    { icon: "📅", title: "Ciclos de release longos", description: "Semanas ou meses entre commits e produção" },
+    { icon: "🔀", title: "Configurações inconsistentes", description: "'Funciona na minha máquina' e problemas em produção" },
+    { icon: "🏚️", title: "Pipelines legados", description: "Jenkins complexos, lentos e difíceis de escalar" },
+    { icon: "🕳️", title: "Lacunas de segurança", description: "Vulnerabilidades passando despercebidas até produção" }
+  ]}
+  columns={3}
+/>
+
+<Callout type="info" title="Insight">
+Ferramentas sozinhas não resolvem esses problemas—é necessária uma implementação holística de práticas DevOps.
+</Callout>
+
+## Modelo de Maturidade DevOps
+
+<MaturityStepper
+  title="Níveis de Maturidade DevOps/CI-CD"
+  levels={[
+    {
+      level: 1,
+      title: "Manual",
+      description: "Processos predominantemente manuais",
+      items: ["Deploys manuais", "Scripts ad-hoc", "Sem versionamento de infra", "Ciclos mensais"]
+    },
+    {
+      level: 2,
+      title: "Automatizado",
+      description: "Primeiras automações implementadas",
+      items: ["CI básico", "Build automatizado", "Testes unitários", "Deploys semi-automatizados"]
+    },
+    {
+      level: 3,
+      title: "Padronizado",
+      description: "Práticas DevOps estabelecidas",
+      items: ["CD completo", "Infrastructure as Code", "GitOps básico", "Quality gates", "Deploys diários"]
+    },
+    {
+      level: 4,
+      title: "Avançado",
+      description: "Entrega contínua otimizada",
+      items: ["GitOps completo", "Progressive delivery", "DORA metrics", "DevSecOps integrado", "Múltiplos deploys/dia"]
+    },
+    {
+      level: 5,
+      title: "Elite",
+      description: "Excelência em engenharia de entrega",
+      items: ["On-demand deploys", "Lead time < 1 hora", "Change failure rate < 5%", "MTTR < 1 hora", "Supply chain security"]
+    }
+  ]}
+/>
+
+## Nossa Abordagem
+
+### GitOps & Continuous Delivery
+
+Adotamos **GitOps** como a base para entrega de software moderna e confiável:
+
+<FeatureGrid 
+  features={[
+    { icon: "📁", title: "Git como Fonte de Verdade", description: "Todo estado de infraestrutura e aplicações versionado em Git" },
+    { icon: "📋", title: "Entrega Declarativa", description: "Kubernetes manifests, Helm charts e Kustomize overlays" },
+    { icon: "🔄", title: "Reconciliação Automatizada", description: "ArgoCD/Flux sincronizam continuamente estado real vs. desejado" },
+    { icon: "📊", title: "Auditabilidade Completa", description: "Cada mudança rastreável através do histórico Git" }
+  ]}
+  columns={4}
+/>
+
+### Implementação ArgoCD/Flux
+
+<Timeline
+  title="Jornada de Implementação GitOps"
+  items={[
+    { phase: "Setup", title: "Application of Applications", description: "Gerenciamento multi-app com estrutura hierárquica" },
+    { phase: "Ambientes", title: "Progressão de Ambientes", description: "Estratégias dev → staging → production" },
+    { phase: "Orquestração", title: "Sync Waves & Hooks", description: "Orquestração de deploy com dependências" },
+    { phase: "Monitoramento", title: "Health Checks", description: "Configuração de degraded states e alertas" }
+  ]}
+/>
+
+### Estratégias de Deployment
+
+| Estratégia | Descrição | Rollback | Risco |
+|------------|-----------|----------|-------|
+| **Blue-Green** | Dois ambientes idênticos | Instantâneo | Baixo |
+| **Canary** | Release gradual com métricas | Automático | Muito Baixo |
+| **Rolling** | Atualização gradual de pods | Rápido | Médio |
+| **Feature Flags** | Controle por feature | Instantâneo | Muito Baixo |
+
+### Pipelines Seguros (DevSecOps)
+
+<FeatureGrid 
+  features={[
+    { icon: "🔍", title: "SAST", description: "SonarQube, CodeQL para análise estática" },
+    { icon: "📦", title: "SCA", description: "Snyk, Dependabot para dependências" },
+    { icon: "🐳", title: "Container Scanning", description: "Trivy, Grype, Clair" },
+    { icon: "🔑", title: "Secret Scanning", description: "Prevenção de exposição de credenciais" },
+    { icon: "📜", title: "SBOM", description: "Software Bill of Materials e attestation" },
+    { icon: "✍️", title: "Assinatura de Imagens", description: "Sigstore/Cosign para supply chain" }
+  ]}
+  columns={3}
+/>
+
+### Modernização de Jenkins
+
+Modernizamos pipelines Jenkins gigantes para soluções cloud-native:
+
+<Timeline
+  title="Processo de Modernização"
+  items={[
+    { phase: "Assessment", title: "Inventário e Análise", description: "Mapeamento de pipelines, dependências e complexidade" },
+    { phase: "Estratégia", title: "Seleção de Plataforma", description: "GitHub Actions, GitLab CI, ou Tekton" },
+    { phase: "Migração", title: "Conversão Faseada", description: "Jenkinsfiles para workflows modernos" },
+    { phase: "Otimização", title: "Templates e Runners", description: "Shared libraries para templates reutilizáveis" }
+  ]}
+/>
+
+<Callout type="success" title="Resultados Típicos">
+- **70% de redução** no tempo de manutenção de pipelines
+- **Eliminação** de custos com servidores Jenkins
+- **Melhor integração** com workflows de desenvolvimento modernos
+</Callout>
+
+### Métricas DORA & Engineering Excellence
+
+Implementamos medição contínua de performance de engenharia:
+
+<FeatureGrid 
+  features={[
+    { icon: "🚀", title: "Deployment Frequency", description: "Com que frequência código vai para produção" },
+    { icon: "⏱️", title: "Lead Time", description: "Tempo de commit até produção" },
+    { icon: "🔧", title: "MTTR", description: "Tempo de recuperação de falhas" },
+    { icon: "❌", title: "Change Failure Rate", description: "% de deploys causando incidentes" }
+  ]}
+  columns={4}
+/>
+
+## Certificações
+
+**Kubernetes & Cloud-Native:**
+- CNCF Certified Kubernetes Administrator (CKA)
+- CNCF Certified Kubernetes Application Developer (CKAD)
+- CNCF Certified Kubernetes Security Specialist (CKS)
+
+**DevOps Cloud:**
+- AWS Certified DevOps Engineer – Professional
+- Microsoft Certified: DevOps Engineer Expert
+- Google Cloud Professional DevOps Engineer
+
+## Resultados de Negócio
+
+<FeatureGrid 
+  features={[
+    { icon: "📈", title: "Deploys Diários", description: "De mensais para centenas de deploys diários" },
+    { icon: "⚡", title: "MTTR em Minutos", description: "De horas para minutos com rollback automatizado" },
+    { icon: "🎯", title: "Zero Drift", description: "Zero Configuration Drift via GitOps" },
+    { icon: "✅", title: "-80% Falhas", description: "Redução de 80% em falhas de deploy" }
+  ]}
+  columns={4}
+/>

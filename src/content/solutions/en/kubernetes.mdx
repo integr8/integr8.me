@@ -1,0 +1,113 @@
+---
+title: "Kubernetes & Containers"
+category: "cloud-platform"
+description: "We design, implement and operate production Kubernetes environments with focus on security, scalability, multi-tenancy and operational excellence."
+icon: "CubeIcon"
+weight: 4
+technologies: ["Kubernetes (CKA/CKS/CKAD/Kubestronaut)", "Helm & Kustomize", "Docker & Podman & Buildah", "Kubernetes Operators (Go/Kubebuilder)", "Service Mesh (Istio/Linkerd/Cilium)", "CNI (Calico, Cilium, AWS VPC CNI)", "Managed K8s (EKS, AKS, GKE)"]
+---
+
+import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
+
+## The Challenge
+
+Kubernetes is the de facto standard for container orchestration, but its complexity can overwhelm teams:
+
+<FeatureGrid 
+  features={[
+    { icon: "⚙️", title: "Operational Complexity", description: "Managing clusters, upgrades, networking at scale" },
+    { icon: "🔓", title: "Security Defaults", description: "Insecure defaults exposing workloads" },
+    { icon: "📚", title: "Expertise Gaps", description: "Distance from Hello World to production" },
+    { icon: "💸", title: "Cost Overruns", description: "Inefficient resource configurations" },
+    { icon: "🧱", title: "Technical Debt", description: "Initial implementations without proper architecture" },
+    { icon: "🔍", title: "Lack of Observability", description: "Complex distributed environments" }
+  ]}
+  columns={3}
+/>
+
+## Kubernetes Maturity Model
+
+<MaturityStepper
+  title="Kubernetes Maturity Levels"
+  levels={[
+    {
+      level: 1,
+      title: "Exploratory",
+      description: "First experiments with containers",
+      items: ["Basic Docker", "Dev cluster", "Manual manifests", "Single namespace"]
+    },
+    {
+      level: 2,
+      title: "Basic",
+      description: "First production workloads",
+      items: ["Managed K8s (EKS/AKS/GKE)", "Basic Helm", "Ingress configured", "Health probes"]
+    },
+    {
+      level: 3,
+      title: "Standardized",
+      description: "Processes and security established",
+      items: ["GitOps with ArgoCD/Flux", "RBAC configured", "Network Policies", "Resource quotas"]
+    },
+    {
+      level: 4,
+      title: "Advanced",
+      description: "Sophisticated multi-tenant ops",
+      items: ["Service Mesh", "Custom Operators", "Multi-cluster", "Pod Security Standards"]
+    },
+    {
+      level: 5,
+      title: "Optimized",
+      description: "Operational excellence",
+      items: ["Internal Developer Platform", "Automated FinOps", "Chaos Engineering", "Zero-trust"]
+    }
+  ]}
+/>
+
+## Our Approach
+
+### Production Cluster Architecture
+
+<Timeline
+  title="High Availability Design"
+  items={[
+    { phase: "Control Plane", title: "Multi-zone HA", description: "Automatic failure recovery" },
+    { phase: "Workers", title: "Distributed Topology", description: "Zonal resilience" },
+    { phase: "Deploys", title: "Zero Downtime", description: "Pod Disruption Budgets" },
+    { phase: "Scheduling", title: "Smart Placement", description: "Anti-affinity and topology spread" }
+  ]}
+/>
+
+### Security Hardening
+
+<FeatureGrid 
+  features={[
+    { icon: "🛡️", title: "Cluster Security", description: "API server hardening, granular RBAC" },
+    { icon: "📦", title: "Workload Security", description: "Pod Security Standards, image scanning" },
+    { icon: "🌐", title: "Network Security", description: "Network policies, service mesh mTLS" },
+    { icon: "🔐", title: "Secrets Management", description: "Vault, External Secrets Operator" }
+  ]}
+  columns={4}
+/>
+
+### Managed Kubernetes
+
+<FeatureGrid 
+  features={[
+    { icon: "🔶", title: "Amazon EKS", description: "ALB, EBS, EFS, IAM, Fargate, Karpenter" },
+    { icon: "🔷", title: "Azure AKS", description: "Azure AD, Azure CNI, Azure Policy" },
+    { icon: "🔴", title: "Google GKE", description: "Autopilot, Workload Identity, Anthos" }
+  ]}
+  columns={3}
+/>
+
+## Certifications
+
+<Callout type="success" title="Kubestronaut Team">
+Our team holds **all available CNCF certifications**, including the **Kubestronaut** title.
+</Callout>
+
+- CKA – Certified Kubernetes Administrator
+- CKAD – Certified Kubernetes Application Developer
+- CKS – Certified Kubernetes Security Specialist
+- KCNA – Kubernetes and Cloud Native Associate
+- KCSA – Kubernetes and Cloud Security Associate

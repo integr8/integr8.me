@@ -1,0 +1,55 @@
+[[stats]]
+id = "years"
+value = 15
+suffix = "+"
+icon = "CalendarDaysIcon"
+
+[stats.label]
+ptbr = "Anos de Experiência"
+en = "Years of Experience"
+
+[stats.description]
+ptbr = "Em ambientes Fortune 500 e sistemas mission-critical"
+en = "In Fortune 500 and mission-critical environments"
+
+[[stats]]
+id = "events"
+value = 500
+suffix = "M+"
+icon = "ChartBarIcon"
+
+[stats.label]
+ptbr = "Eventos/Dia"
+en = "Events/Day"
+
+[stats.description]
+ptbr = "Plataformas de streaming de alta disponibilidade"
+en = "High-availability streaming platforms"
+
+[[stats]]
+id = "mttr"
+value = 40
+suffix = "%"
+icon = "ClockIcon"
+
+[stats.label]
+ptbr = "Redução MTTR"
+en = "MTTR Reduction"
+
+[stats.description]
+ptbr = "Metodologias SRE comprovadas"
+en = "Proven SRE methodologies"
+
+[[stats]]
+id = "savings"
+value = 30
+suffix = "%"
+icon = "CurrencyDollarIcon"
+
+[stats.label]
+ptbr = "Economia Cloud"
+en = "Cloud Savings"
+
+[stats.description]
+ptbr = "Via FinOps, Karpenter e Spot Instances"
+en = "Via FinOps, Karpenter and Spot Instances"

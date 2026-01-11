@@ -1,0 +1,118 @@
+---
+title: "Developer Experience (DevEx)"
+category: "engineering"
+description: "Reduce friction, increase productivity and accelerate time-to-market with tools, processes and culture optimized for developers."
+icon: "CodeBracketIcon"
+weight: 8
+technologies: ["Backstage.io", "DORA Metrics / SPACE Framework", "MkDocs / TechDocs / Docusaurus", "CLI Tools (Go/Rust/Python)", "Remote Dev Environments (Gitpod/Codespaces)", "AI Coding Assistants (Copilot)"]
+---
+
+import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
+
+## The Challenge
+
+Developer productivity is critical competitive advantage, but many organizations fail to create environments where engineers do their best work:
+
+<FeatureGrid 
+  features={[
+    { icon: "🔧", title: "Tool Fatigue", description: "Dozens of systems for simple tasks" },
+    { icon: "💻", title: "Inconsistent Environments", description: "Hours for setup, 'works on my machine'" },
+    { icon: "📚", title: "Scattered Documentation", description: "Constant interruptions for context" },
+    { icon: "🐌", title: "Slow Onboarding", description: "Weeks or months to productivity" },
+    { icon: "🧠", title: "Cognitive Load", description: "Infra and ops distracting from value code" },
+    { icon: "📊", title: "No Metrics", description: "Impossible to know where to improve" }
+  ]}
+  columns={3}
+/>
+
+<Callout type="info" title="Measurable ROI">
+Investing in Developer Experience is business strategy with measurable ROI.
+</Callout>
+
+## DevEx Maturity Model
+
+<MaturityStepper
+  title="Developer Experience Maturity Levels"
+  levels={[
+    {
+      level: 1,
+      title: "Chaotic",
+      description: "No standards or support",
+      items: ["Manual setup", "Non-existent docs", "Ad-hoc onboarding", "No metrics"]
+    },
+    {
+      level: 2,
+      title: "Basic",
+      description: "First standards established",
+      items: ["Basic templates", "Wiki/Confluence", "Some tooling", "Functional CI/CD"]
+    },
+    {
+      level: 3,
+      title: "Standardized",
+      description: "Developer platform",
+      items: ["Portal (Backstage)", "Docs-as-Code", "DORA metrics", "Basic self-service"]
+    },
+    {
+      level: 4,
+      title: "Optimized",
+      description: "Exceptional experience",
+      items: ["Complete self-service", "Preview environments", "AI assistants", "< 1 day onboarding"]
+    },
+    {
+      level: 5,
+      title: "Excellent",
+      description: "Industry reference",
+      items: ["Mature Developer Portal", "Golden paths", "Inner-source culture", "Developer advocacy"]
+    }
+  ]}
+/>
+
+## Our Approach
+
+### DORA Metrics
+
+<FeatureGrid 
+  features={[
+    { icon: "🚀", title: "Deployment Frequency", description: "How often code goes to production" },
+    { icon: "⏱️", title: "Lead Time", description: "Time from commit to production" },
+    { icon: "🔧", title: "MTTR", description: "Time to restore service" },
+    { icon: "❌", title: "Change Failure Rate", description: "% of problematic deploys" }
+  ]}
+  columns={4}
+/>
+
+### Developer Platform (Backstage)
+
+<Timeline
+  title="Portal Components"
+  items={[
+    { phase: "Catalog", title: "Service Catalog", description: "All services, APIs and ownership centralized" },
+    { phase: "Templates", title: "Software Templates", description: "Self-service for new projects" },
+    { phase: "Docs", title: "TechDocs", description: "Integrated technical documentation" },
+    { phase: "Search", title: "Unified Search", description: "Code, docs and services in one place" }
+  ]}
+/>
+
+### AI-Assisted Development
+
+<FeatureGrid 
+  features={[
+    { icon: "🤖", title: "GitHub Copilot", description: "AI coding assistant rollout" },
+    { icon: "👀", title: "AI Code Review", description: "AI-assisted review" },
+    { icon: "🧪", title: "Test Generation", description: "Automated tests" },
+    { icon: "📝", title: "Doc Generation", description: "Documentation via AI" }
+  ]}
+  columns={4}
+/>
+
+## Results
+
+<FeatureGrid 
+  features={[
+    { icon: "⚡", title: "1 day onboarding", description: "From weeks to hours" },
+    { icon: "🚀", title: "+50% productivity", description: "Less friction, more code" },
+    { icon: "📉", title: "-70% interruptions", description: "Self-service works" },
+    { icon: "😊", title: "+40 eNPS", description: "Satisfied developers" }
+  ]}
+  columns={4}
+/>

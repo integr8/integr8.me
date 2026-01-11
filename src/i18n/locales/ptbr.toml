@@ -1,0 +1,177 @@
+[nav]
+home = "Início"
+solutions = "Soluções"
+about = "Sobre"
+cases = "Cases"
+blog = "Blog"
+contact = "Contato"
+capabilities = "Capacidades"
+how-we-work = "Como Trabalhamos"
+
+[nav.categories]
+cloud-platform = "Cloud & Platform"
+devops-delivery = "DevOps & Delivery"
+security-data = "Segurança & Dados"
+engineering = "Engenharia"
+
+[hero]
+badge = "CNCF Kubestronaut • AWS Professional • Azure Expert"
+title = "Engenharia Cloud-Native de Ponta a Ponta"
+subtitle = "DevOps, Platform Engineering e Data com resultados mensuráveis"
+
+[hero.cta]
+primary = "Agendar Conversa"
+secondary = "Ver Soluções"
+
+[solutions]
+title = "Nossas Soluções"
+subtitle = "Expertise técnica para acelerar sua jornada cloud-native"
+view_all = "Ver Todas as Soluções"
+learn_more = "Saiba mais"
+technologies = "Tecnologias"
+interested = "Interessado nesta solução?"
+lets_talk = "Vamos conversar sobre seu projeto"
+get_in_touch = "Entrar em Contato"
+related = "Soluções Relacionadas"
+
+[about]
+title = "Sobre a Integr8"
+
+[about.nav]
+who_we_are = "Quem Somos"
+methodology = "Metodologia"
+certifications = "Certificações"
+technologies = "Tecnologias"
+
+[about.philosophy]
+headline = "Practitioners, not consultants"
+description = "Nossa expertise vem de construir e operar sistemas em produção em ambientes de alta escala"
+
+[about.philosophy.principles]
+dont_recommend = "Não recomendamos o que não fizemos"
+work_alongside = "Trabalhamos junto com seu time"
+focus_outcomes = "Foco em resultados, não atividades"
+build_capabilities = "Construímos capacidades, não dependências"
+
+[about.differentiators.certified]
+title = "Especialistas Certificados"
+description = "CNCF Kubestronaut, AWS Professional, Azure Expert, Oracle OCP"
+icon = "AcademicCapIcon"
+
+[about.differentiators.hands_on]
+title = "Entrega Hands-on"
+description = "Construímos junto com seu time, não apenas aconselhamos"
+icon = "WrenchScrewdriverIcon"
+
+[about.differentiators.results]
+title = "Resultados Mensuráveis"
+description = "Métricas DORA e impacto de negócio comprovados"
+icon = "ChartBarIcon"
+
+[about.engagement.assessment]
+title = "Assessment & Estratégia"
+duration = "2-4 semanas"
+description = "Análise profunda com recomendações acionáveis"
+icon = "MagnifyingGlassIcon"
+
+[about.engagement.implementation]
+title = "Implementação Hands-on"
+duration = "2-6 meses"
+description = "Implementação de soluções com transferência de conhecimento"
+icon = "WrenchScrewdriverIcon"
+
+[about.engagement.augmentation]
+title = "Staff Augmentation"
+duration = "3+ meses"
+description = "Engenheiros integrados ao seu time"
+icon = "UserPlusIcon"
+
+[about.engagement.mentoring]
+title = "Mentoria & Enablement"
+duration = "Flexível"
+description = "Acelere a curva de aprendizado do seu time"
+icon = "AcademicCapIcon"
+
+[cases]
+title = "Cases de Sucesso"
+subtitle = "Resultados reais que entregamos para nossos clientes"
+challenge = "O Desafio"
+approach = "Nossa Abordagem"
+results = "Resultados"
+testimonial = "O que dizem"
+
+[cases.filters]
+all = "Todos"
+fintech = "Fintech"
+ecommerce = "E-commerce"
+enterprise = "Enterprise"
+
+[blog]
+title = "Blog"
+subtitle = "Insights técnicos, boas práticas e novidades"
+read_time = "min de leitura"
+share = "Compartilhar"
+related_posts = "Posts Relacionados"
+toc = "Neste artigo"
+
+[blog.categories]
+all = "Todos"
+devops = "DevOps"
+kubernetes = "Kubernetes"
+cloud = "Cloud"
+platform = "Platform"
+data = "Data"
+
+[contact]
+title = "Vamos Conversar"
+subtitle = "Conte-nos sobre seu projeto e desafios"
+response_time = "Respondemos em até 24h úteis"
+
+[contact.form]
+name = "Nome"
+email = "Email"
+company = "Empresa"
+interest = "Interesse"
+select_solution = "Selecione uma solução..."
+message = "Mensagem"
+placeholder = "Descreva seu projeto ou desafio..."
+submit = "Enviar Mensagem"
+sending = "Enviando..."
+success = "Mensagem enviada! Retornaremos em breve."
+error = "Erro ao enviar. Tente novamente."
+
+[cta]
+title = "Pronto para transformar sua infraestrutura?"
+subtitle = "Vamos conversar sobre como podemos ajudar"
+primary = "Agendar Conversa"
+secondary = "Ver Soluções"
+
+[footer]
+description = "Consultoria técnica especializada em DevOps, Cloud, Kubernetes e Platform Engineering"
+copyright = "Todos os direitos reservados"
+
+[footer.sections]
+solutions = "Soluções"
+company = "Empresa"
+connect = "Conecte-se"
+
+[common]
+home = "Início"
+back = "Voltar"
+view_all = "Ver todos"
+other = "Outro"
+
+[accessibility]
+skip_to_content = "Pular para o conteúdo"
+main_nav = "Navegação principal"
+open_menu = "Abrir menu"
+close_menu = "Fechar menu"
+current_page = "Página atual"
+new_window = "Abre em nova janela"
+dark_mode = "Modo escuro"
+light_mode = "Modo claro"
+
+[errors.not_found]
+title = "Página não encontrada"
+description = "A página que você procura não existe ou foi movida"
+cta = "Voltar para o início"

@@ -1,0 +1,140 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { getTranslations } from '@i18n/utils';
+import { Badge } from '@components/common/Badge';
+import { Icon } from '@components/common/Icon';
+
+export async function getStaticPaths() {
+  const cases = await getCollection('cases');
+  const paths: { params: { lang: string; slug: string }; props: { caseItem: CollectionEntry<'cases'> } }[] = [];
+
+  const langMap: Record<string, string> = {
+    ptbr: 'ptbr',
+    en: 'en',
+  };
+
+  for (const caseItem of cases) {
+    const [folder, ...slugParts] = caseItem.id.split('/');
+    const lang = langMap[folder] || folder;
+    const slug = slugParts.join('/').replace(/\.(md|mdx)$/, '');
+
+    paths.push({
+      params: { lang, slug },
+      props: { caseItem },
+    });
+  }
+
+  return paths;
+}
+
+interface Props {
+  caseItem: CollectionEntry<'cases'>;
+}
+
+const { lang, slug } = Astro.params;
+const { caseItem } = Astro.props;
+const t = getTranslations(lang as 'ptbr' | 'en');
+
+const { Content } = await caseItem.render();
+---
+
+<BaseLayout 
+  title={`${caseItem.data.title} - Cases Integr8`} 
+  description={caseItem.data.challenge}
+>
+  <div class="container mx-auto px-4 py-12 max-w-4xl">
+    <!-- Breadcrumbs -->
+    <div class="text-sm breadcrumbs mb-8">
+      <ul>
+        <li><a href={`/${lang}`}>{lang === 'ptbr' ? 'Início' : 'Home'}</a></li>
+        <li><a href={`/${lang}/cases`}>Cases</a></li>
+        <li class="text-base-content/60">{caseItem.data.title}</li>
+      </ul>
+    </div>
+
+    <!-- Header -->
+    <header class="mb-12">
+      <div class="flex items-center gap-4 mb-6">
+        <Icon name="TrophyIcon" className="h-12 w-12 text-warning" client:load />
+        {caseItem.data.industry && (
+          <Badge variant="warning" size="lg">{caseItem.data.industry}</Badge>
+        )}
+      </div>
+      
+      <h1 class="text-4xl font-bold mb-4">{caseItem.data.title}</h1>
+      
+      {caseItem.data.client && (
+        <p class="text-xl text-base-content/70 mb-6">{caseItem.data.client}</p>
+      )}
+    </header>
+
+    <!-- Challenge & Solution Summary -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+      <div class="card bg-base-200">
+        <div class="card-body">
+          <h3 class="card-title text-lg">
+            <Icon name="ExclamationTriangleIcon" className="h-5 w-5 text-error" client:load />
+            {lang === 'ptbr' ? 'O Desafio' : 'The Challenge'}
+          </h3>
+          <p class="text-base-content/80">{caseItem.data.challenge}</p>
+        </div>
+      </div>
+      
+      {caseItem.data.solution && (
+        <div class="card bg-base-200">
+          <div class="card-body">
+            <h3 class="card-title text-lg">
+              <Icon name="CheckCircleIcon" className="h-5 w-5 text-success" client:load />
+              {lang === 'ptbr' ? 'A Solução' : 'The Solution'}
+            </h3>
+            <p class="text-base-content/80">{caseItem.data.solution}</p>
+          </div>
+        </div>
+      )}
+    </div>
+
+    <!-- Technologies -->
+    {caseItem.data.technologies && (
+      <div class="mb-12">
+        <h3 class="text-lg font-semibold mb-4">
+          {lang === 'ptbr' ? 'Tecnologias Utilizadas' : 'Technologies Used'}
+        </h3>
+        <div class="flex flex-wrap gap-2">
+          {caseItem.data.technologies.map((tech: string) => (
+            <Badge variant="primary">{tech}</Badge>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Results -->
+    {caseItem.data.results && (
+      <div class="mb-12">
+        <h3 class="text-lg font-semibold mb-4">
+          {lang === 'ptbr' ? 'Resultados' : 'Results'}
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {caseItem.data.results.map((result: any) => (
+            <div class="stat bg-base-200 rounded-lg">
+              <div class="stat-value text-primary">{result.value}</div>
+              <div class="stat-desc">{result.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Content -->
+    <article class="prose prose-lg max-w-none">
+      <Content />
+    </article>
+
+    <!-- Back link -->
+    <div class="mt-12 pt-8 border-t border-base-300">
+      <a href={`/${lang}/cases`} class="btn btn-outline">
+        ← {lang === 'ptbr' ? 'Voltar aos Cases' : 'Back to Cases'}
+      </a>
+    </div>
+  </div>
+</BaseLayout>

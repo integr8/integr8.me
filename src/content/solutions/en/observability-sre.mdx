@@ -1,0 +1,129 @@
+---
+title: "Observability & SRE"
+category: "engineering"
+description: "We implement modern observability with OpenTelemetry, Prometheus and SRE practices to ensure system reliability and performance."
+icon: "ChartBarSquareIcon"
+weight: 7
+technologies: ["OpenTelemetry", "Prometheus / Mimir / Thanos", "Grafana / Loki", "Jaeger / Tempo", "Datadog / New Relic", "PagerDuty / OpsGenie", "Chaos Engineering", "SLOs & Error Budgets"]
+---
+
+import { MaturityStepper, FeatureGrid, Callout, Timeline } from '@components/content';
+
+## The Challenge
+
+Modern distributed systems present unique observability challenges:
+
+<FeatureGrid 
+  features={[
+    { icon: "🔀", title: "Fragmented Monitoring", description: "Different tools for metrics, logs and traces" },
+    { icon: "🔔", title: "Alert Fatigue", description: "Bombarded with non-actionable alerts" },
+    { icon: "🐌", title: "Slow Troubleshooting", description: "Manual correlation between services" },
+    { icon: "📊", title: "Vanity Metrics", description: "Don't reflect real user experience" },
+    { icon: "💸", title: "Growing Costs", description: "Uncontrolled data volume" },
+    { icon: "🔥", title: "Constant Firefighting", description: "No time for proactive work" }
+  ]}
+  columns={3}
+/>
+
+## Observability Maturity Model
+
+<MaturityStepper
+  title="Observability Maturity Levels"
+  levels={[
+    {
+      level: 1,
+      title: "Reactive",
+      description: "Basic and fragmented",
+      items: ["Basic logs", "Infra metrics", "Ad-hoc alerts", "No traces"]
+    },
+    {
+      level: 2,
+      title: "Basic",
+      description: "Tools implemented",
+      items: ["Prometheus", "Basic dashboards", "Log aggregation", "Threshold alerts"]
+    },
+    {
+      level: 3,
+      title: "Integrated",
+      description: "Three pillars correlated",
+      items: ["OpenTelemetry", "Distributed tracing", "SLIs defined", "Structured logs"]
+    },
+    {
+      level: 4,
+      title: "Proactive",
+      description: "Mature SRE practices",
+      items: ["SLOs & Error Budgets", "Burn rate alerts", "Chaos Engineering", "RUM/Synthetic"]
+    },
+    {
+      level: 5,
+      title: "Optimized",
+      description: "Operational excellence",
+      items: ["AIOps", "Auto-remediation", "Predictive alerts", "Business metrics"]
+    }
+  ]}
+/>
+
+## Our Approach
+
+### OpenTelemetry Foundation
+
+<FeatureGrid 
+  features={[
+    { icon: "📈", title: "Metrics", description: "Histograms with exemplars linked to traces" },
+    { icon: "📝", title: "Logs", description: "Structured with trace_id and span_id" },
+    { icon: "🔗", title: "Traces", description: "End-to-end context propagation" },
+    { icon: "🔄", title: "Collector", description: "Processing, enrichment, routing" }
+  ]}
+  columns={4}
+/>
+
+<Callout type="success" title="Vendor Neutrality">
+OpenTelemetry ensures you're not locked into any observability vendor.
+</Callout>
+
+### SRE Practices
+
+<Timeline
+  title="SRE Journey"
+  items={[
+    { phase: "SLIs", title: "Definition", description: "Metrics based on user journey" },
+    { phase: "SLOs", title: "Objectives", description: "Targets agreed with stakeholders" },
+    { phase: "Error Budgets", title: "Management", description: "Burn rate tracking and policies" },
+    { phase: "Incidents", title: "Management", description: "Playbooks, postmortems, action items" }
+  ]}
+/>
+
+### Alerting Philosophy
+
+<Callout type="info" title="Effective Alerts">
+Alerts based on **symptoms** (user impact), not causes (high CPU).
+</Callout>
+
+- Multi-window, multi-burn-rate alerting
+- Runbooks linked to each alert
+- Severity based on user impact
+- Smart routing by team and schedule
+
+### Chaos Engineering
+
+<FeatureGrid 
+  features={[
+    { icon: "🐒", title: "Chaos Monkey", description: "Instance failures" },
+    { icon: "☸️", title: "Litmus Chaos", description: "Kubernetes-native" },
+    { icon: "🎮", title: "Game Days", description: "Planned exercises" },
+    { icon: "🛡️", title: "Steady State", description: "Automated validation" }
+  ]}
+  columns={4}
+/>
+
+## Results
+
+<FeatureGrid 
+  features={[
+    { icon: "⚡", title: "MTTD -70%", description: "Faster problem detection" },
+    { icon: "🔧", title: "MTTR -60%", description: "Faster resolution" },
+    { icon: "📉", title: "-80% Alerts", description: "Noise elimination" },
+    { icon: "💰", title: "-50% Costs", description: "Data volume optimization" }
+  ]}
+  columns={4}
+/>

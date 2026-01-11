@@ -1,0 +1,95 @@
+---
+import { SkipLink } from '@components/common/SkipLink';
+import Header from '@components/layout/Header.astro';
+import { Footer } from '@components/layout/Footer';
+import SEO from '@components/common/SEO.astro';
+import { getTranslations } from '@i18n/utils';
+import { getCollection } from 'astro:content';
+import '@styles/global.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  canonical?: string;
+  ogType?: string;
+}
+
+const {
+  title,
+  description,
+  image,
+  canonical,
+  ogType,
+} = Astro.props;
+
+// Extract lang from URL
+const pathSegments = Astro.url.pathname.split('/').filter(Boolean);
+const lang = ['ptbr', 'en'].includes(pathSegments[0]) ? pathSegments[0] : 'ptbr';
+
+// Load translations for the current language
+const translations = getTranslations(lang);
+
+// Load solutions for footer
+const allSolutions = await getCollection('solutions');
+const langFolder = lang === 'en' ? 'en' : 'ptbr';
+const solutions = allSolutions
+  .filter(s => s.id.startsWith(langFolder + '/'))
+  .map(s => ({
+    slug: s.id.replace(langFolder + '/', '').replace('.mdx', ''),
+    title: s.data.title
+  }))
+  .sort((a, b) => a.title.localeCompare(b.title));
+---
+
+<!DOCTYPE html>
+<html lang={lang === 'ptbr' ? 'pt-BR' : 'en'} data-theme="integr8">
+  <head>
+    <SEO 
+      title={title}
+      description={description}
+      image={image}
+      canonical={canonical}
+      ogType={ogType}
+    />
+  </head>
+  <body>
+    <SkipLink label={lang === 'ptbr' ? 'Pular para o conteúdo' : 'Skip to content'} />
+    <Header lang={lang} translations={translations} />
+    <main id="main-content" class="flex-1">
+      <slot />
+    </main>
+    <Footer lang={lang} solutions={solutions} />
+  </body>
+</html>
+
+<style is:global>
+  :root {
+    font-family: 'Inter', system-ui, sans-serif;
+    color-scheme: light dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>

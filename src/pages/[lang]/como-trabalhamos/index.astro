@@ -1,0 +1,459 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import { useTranslations } from '@i18n/utils';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'ptbr' } },
+    { params: { lang: 'en' } }
+  ];
+}
+
+const { lang } = Astro.params;
+const { t } = useTranslations(lang);
+
+const engagementModels = [
+  {
+    title: lang === 'ptbr' ? "Assessment & Consultoria Técnica" : "Assessment & Technical Consulting",
+    duration: lang === 'ptbr' ? "2-4 semanas" : "2-4 weeks",
+    description: lang === 'ptbr' 
+      ? "Análise aprofundada que fornece clareza e direção para sua jornada de transformação."
+      : "In-depth analysis that provides clarity and direction for your transformation journey.",
+    includes: lang === 'ptbr' ? [
+      "Avaliação de maturidade cloud-native e DevOps",
+      "Revisão de arquitetura de segurança e compliance",
+      "Análise de custos cloud e oportunidades de FinOps",
+      "Audit de pipelines CI/CD e práticas de desenvolvimento",
+      "Gap analysis contra melhores práticas da indústria"
+    ] : [
+      "Cloud-native and DevOps maturity assessment",
+      "Security and compliance architecture review",
+      "Cloud cost analysis and FinOps opportunities",
+      "CI/CD pipeline and development practices audit",
+      "Gap analysis against industry best practices"
+    ],
+    deliverables: lang === 'ptbr' ? [
+      "Relatório executivo com findings e riscos prioritizados",
+      "Roadmap técnico detalhado com quick wins",
+      "Business case quantificado para investimentos",
+      "Apresentação para stakeholders"
+    ] : [
+      "Executive report with prioritized findings and risks",
+      "Detailed technical roadmap with quick wins",
+      "Quantified business case for investments",
+      "Stakeholder presentation"
+    ]
+  },
+  {
+    title: lang === 'ptbr' ? "Implementação Hands-on" : "Hands-on Implementation",
+    duration: lang === 'ptbr' ? "8-16 semanas" : "8-16 weeks",
+    description: lang === 'ptbr'
+      ? "Trabalhamos diretamente no seu ambiente, implementando soluções de produção enquanto capacitamos sua equipe."
+      : "We work directly in your environment, implementing production solutions while empowering your team.",
+    areas: lang === 'ptbr' ? [
+      "Plataformas: Kubernetes, Service Mesh, IDPs",
+      "CI/CD: GitOps, pipelines seguros, quality gates",
+      "Observabilidade: Prometheus, Grafana, OpenTelemetry",
+      "Cloud: Migração, multi-região, FinOps",
+      "Segurança: DevSecOps, Policy as Code",
+      "Dados: Data platforms, streaming, MLOps"
+    ] : [
+      "Platforms: Kubernetes, Service Mesh, IDPs",
+      "CI/CD: GitOps, secure pipelines, quality gates",
+      "Observability: Prometheus, Grafana, OpenTelemetry",
+      "Cloud: Migration, multi-region, FinOps",
+      "Security: DevSecOps, Policy as Code",
+      "Data: Data platforms, streaming, MLOps"
+    ]
+  },
+  {
+    title: lang === 'ptbr' ? "Staff Augmentation" : "Staff Augmentation",
+    duration: lang === 'ptbr' ? "Flexível" : "Flexible",
+    description: lang === 'ptbr'
+      ? "Reforço temporário do seu time com especialistas de alto nível para projetos específicos."
+      : "Temporary reinforcement of your team with top-level specialists for specific projects.",
+    profiles: [
+      "Platform Engineers / SREs",
+      "DevOps Engineers",
+      "Cloud Architects",
+      "Data Engineers",
+      "Security Engineers",
+      "Software Engineers (Go, Java, Python)"
+    ]
+  },
+  {
+    title: lang === 'ptbr' ? "Mentoria e Capacitação" : "Mentorship & Training",
+    duration: lang === 'ptbr' ? "1-4 semanas" : "1-4 weeks",
+    description: lang === 'ptbr'
+      ? "Aceleramos a curva de aprendizado da sua equipe com transferência de conhecimento estruturada."
+      : "We accelerate your team's learning curve with structured knowledge transfer.",
+    formats: lang === 'ptbr' ? [
+      "Workshops técnicos: 1-3 dias de imersão",
+      "Bootcamps: Programas intensivos de 2-4 semanas",
+      "Mentoria contínua: Acompanhamento semanal",
+      "Pair programming: Trabalho lado a lado",
+      "Code review: Feedback detalhado"
+    ] : [
+      "Technical workshops: 1-3 day immersion",
+      "Bootcamps: 2-4 week intensive programs",
+      "Continuous mentorship: Weekly follow-up",
+      "Pair programming: Working side by side",
+      "Code review: Detailed feedback"
+    ]
+  }
+];
+
+const doraMetrics = [
+  {
+    name: "Deployment Frequency",
+    description: lang === 'ptbr' 
+      ? "Com que frequência código é deployado para produção"
+      : "How often code is deployed to production",
+    target: lang === 'ptbr' ? "Múltiplos deploys por dia" : "Multiple deploys per day"
+  },
+  {
+    name: "Lead Time for Changes",
+    description: lang === 'ptbr'
+      ? "Tempo do primeiro commit até produção"
+      : "Time from first commit to production",
+    target: lang === 'ptbr' ? "Menos de 1 dia" : "Less than 1 day"
+  },
+  {
+    name: "Mean Time to Recovery",
+    description: lang === 'ptbr'
+      ? "Quanto tempo para restaurar serviço após incidente"
+      : "How long to restore service after incident",
+    target: lang === 'ptbr' ? "Menos de 1 hora" : "Less than 1 hour"
+  },
+  {
+    name: "Change Failure Rate",
+    description: lang === 'ptbr'
+      ? "Percentual de deploys que causam incidentes"
+      : "Percentage of deploys causing incidents",
+    target: lang === 'ptbr' ? "Menos de 5%" : "Less than 5%"
+  }
+];
+
+const practices = lang === 'ptbr' ? [
+  { 
+    name: "Infrastructure as Code",
+    items: ["Todo ambiente reproduzível a partir de código", "Terraform, Ansible, Crossplane como standards", "Testes automatizados de infraestrutura"]
+  },
+  {
+    name: "GitOps",
+    items: ["Git como fonte única de verdade", "ArgoCD ou Flux para reconciliação", "Ambientes declarativos e auditáveis"]
+  },
+  {
+    name: "Observabilidade First",
+    items: ["Instrumentação antes de features", "Métricas, logs e traces correlacionados", "SLIs e SLOs para tudo que importa"]
+  },
+  {
+    name: "Security by Default",
+    items: ["Shift-left em todas as fases", "Policy as code com OPA/Kyverno", "Gestão centralizada de secrets"]
+  }
+] : [
+  {
+    name: "Infrastructure as Code",
+    items: ["Every environment reproducible from code", "Terraform, Ansible, Crossplane as standards", "Automated infrastructure testing"]
+  },
+  {
+    name: "GitOps",
+    items: ["Git as single source of truth", "ArgoCD or Flux for reconciliation", "Declarative and auditable environments"]
+  },
+  {
+    name: "Observability First",
+    items: ["Instrumentation before features", "Correlated metrics, logs and traces", "SLIs and SLOs for everything that matters"]
+  },
+  {
+    name: "Security by Default",
+    items: ["Shift-left in all phases", "Policy as code with OPA/Kyverno", "Centralized secrets management"]
+  }
+];
+---
+
+<BaseLayout 
+  title={lang === 'ptbr' ? "Como Trabalhamos" : "How We Work"}
+  description={lang === 'ptbr' 
+    ? "Combinamos expertise técnica de classe mundial com metodologias comprovadas para entregar resultados mensuráveis."
+    : "We combine world-class technical expertise with proven methodologies to deliver measurable results."}
+>
+  <!-- Hero Section -->
+  <section class="py-20 bg-gradient-to-b from-base-200 to-base-100">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">
+          {lang === 'ptbr' ? "Como Trabalhamos" : "How We Work"}
+        </h1>
+        <p class="text-xl text-base-content/70 mb-8">
+          {lang === 'ptbr' 
+            ? "Somos praticantes, não apenas consultores. Nossa expertise vem de construir e operar sistemas de produção em escala—não de apresentações de PowerPoint."
+            : "We are practitioners, not just consultants. Our expertise comes from building and operating production systems at scale—not from PowerPoint presentations."}
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <div class="badge badge-primary badge-lg">
+            {lang === 'ptbr' ? "Experiência Real de Produção" : "Real Production Experience"}
+          </div>
+          <div class="badge badge-secondary badge-lg">
+            {lang === 'ptbr' ? "Profundidade Técnica" : "Technical Depth"}
+          </div>
+          <div class="badge badge-accent badge-lg">
+            {lang === 'ptbr' ? "Foco em Resultados" : "Results Focused"}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Engagement Models -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12">
+        {lang === 'ptbr' ? "Modelos de Engajamento" : "Engagement Models"}
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {engagementModels.map((model) => (
+          <div class="card bg-base-200 shadow-xl">
+            <div class="card-body">
+              <h3 class="card-title text-primary">{model.title}</h3>
+              <div class="badge badge-outline">{model.duration}</div>
+              <p class="text-base-content/70 mt-2">{model.description}</p>
+              
+              {model.includes && (
+                <div class="mt-4">
+                  <h4 class="font-semibold mb-2">{lang === 'ptbr' ? "O que inclui:" : "What's included:"}</h4>
+                  <ul class="list-disc list-inside text-sm space-y-1">
+                    {model.includes.map((item) => <li>{item}</li>)}
+                  </ul>
+                </div>
+              )}
+              
+              {model.deliverables && (
+                <div class="mt-4">
+                  <h4 class="font-semibold mb-2">{lang === 'ptbr' ? "Entregáveis:" : "Deliverables:"}</h4>
+                  <ul class="list-disc list-inside text-sm space-y-1">
+                    {model.deliverables.map((item) => <li>{item}</li>)}
+                  </ul>
+                </div>
+              )}
+              
+              {model.areas && (
+                <div class="mt-4">
+                  <h4 class="font-semibold mb-2">{lang === 'ptbr' ? "Áreas:" : "Areas:"}</h4>
+                  <ul class="list-disc list-inside text-sm space-y-1">
+                    {model.areas.map((item) => <li>{item}</li>)}
+                  </ul>
+                </div>
+              )}
+              
+              {model.profiles && (
+                <div class="mt-4">
+                  <h4 class="font-semibold mb-2">{lang === 'ptbr' ? "Perfis:" : "Profiles:"}</h4>
+                  <div class="flex flex-wrap gap-2">
+                    {model.profiles.map((profile) => (
+                      <span class="badge badge-ghost badge-sm">{profile}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {model.formats && (
+                <div class="mt-4">
+                  <h4 class="font-semibold mb-2">{lang === 'ptbr' ? "Formatos:" : "Formats:"}</h4>
+                  <ul class="list-disc list-inside text-sm space-y-1">
+                    {model.formats.map((item) => <li>{item}</li>)}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Delivery Methodology -->
+  <section class="py-16 bg-base-200">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12">
+        {lang === 'ptbr' ? "Metodologia de Entrega" : "Delivery Methodology"}
+      </h2>
+      
+      <!-- Cycle -->
+      <div class="max-w-4xl mx-auto mb-16">
+        <ul class="steps steps-vertical lg:steps-horizontal w-full">
+          <li class="step step-primary">
+            <div class="text-left lg:text-center">
+              <span class="font-bold">Discovery</span>
+              <span class="text-sm block text-base-content/60">1-2 {lang === 'ptbr' ? "semanas" : "weeks"}</span>
+            </div>
+          </li>
+          <li class="step step-primary">
+            <div class="text-left lg:text-center">
+              <span class="font-bold">Foundation</span>
+              <span class="text-sm block text-base-content/60">2-4 {lang === 'ptbr' ? "semanas" : "weeks"}</span>
+            </div>
+          </li>
+          <li class="step step-primary">
+            <div class="text-left lg:text-center">
+              <span class="font-bold">{lang === 'ptbr' ? "Entrega Iterativa" : "Iterative Delivery"}</span>
+              <span class="text-sm block text-base-content/60">4-12 {lang === 'ptbr' ? "semanas" : "weeks"}</span>
+            </div>
+          </li>
+          <li class="step step-primary">
+            <div class="text-left lg:text-center">
+              <span class="font-bold">Transition</span>
+              <span class="text-sm block text-base-content/60">1-2 {lang === 'ptbr' ? "semanas" : "weeks"}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- DORA Metrics -->
+      <div class="max-w-5xl mx-auto">
+        <h3 class="text-2xl font-bold text-center mb-8">
+          {lang === 'ptbr' ? "Medição com DORA Metrics" : "Measurement with DORA Metrics"}
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {doraMetrics.map((metric) => (
+            <div class="card bg-base-100 shadow-md">
+              <div class="card-body p-4">
+                <h4 class="font-bold text-primary">{metric.name}</h4>
+                <p class="text-sm text-base-content/70">{metric.description}</p>
+                <div class="badge badge-success badge-sm mt-2">Target: {metric.target}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Engineering Practices -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12">
+        {lang === 'ptbr' ? "Práticas de Engenharia" : "Engineering Practices"}
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {practices.map((practice) => (
+          <div class="card bg-base-200">
+            <div class="card-body">
+              <h3 class="card-title text-lg">{practice.name}</h3>
+              <ul class="list-disc list-inside text-sm space-y-2 mt-2">
+                {practice.items.map((item) => <li>{item}</li>)}
+              </ul>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- What to Expect -->
+  <section class="py-16 bg-base-200">
+    <div class="container mx-auto px-4">
+      <h2 class="text-3xl font-bold text-center mb-12">
+        {lang === 'ptbr' ? "O Que Esperar de Nós" : "What to Expect From Us"}
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div class="flex gap-4">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-bold text-lg mb-2">
+              {lang === 'ptbr' ? "Transparência Total" : "Total Transparency"}
+            </h3>
+            <p class="text-base-content/70 text-sm">
+              {lang === 'ptbr'
+                ? "Comunicação proativa de riscos e bloqueios. Reports semanais de progresso. Sem surpresas ou custos escondidos."
+                : "Proactive communication of risks and blockers. Weekly progress reports. No surprises or hidden costs."}
+            </p>
+          </div>
+        </div>
+        
+        <div class="flex gap-4">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-bold text-lg mb-2">
+              {lang === 'ptbr' ? "Foco em Capacitação" : "Focus on Empowerment"}
+            </h3>
+            <p class="text-base-content/70 text-sm">
+              {lang === 'ptbr'
+                ? "Seu time será capaz de operar sem nós. Documentação completa e transferência de conhecimento estruturada."
+                : "Your team will be able to operate without us. Complete documentation and structured knowledge transfer."}
+            </p>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-bold text-lg mb-2">
+              {lang === 'ptbr' ? "Comprometimento com Qualidade" : "Commitment to Quality"}
+            </h3>
+            <p class="text-base-content/70 text-sm">
+              {lang === 'ptbr'
+                ? "Não fazemos 'gambiarras'. Code review rigoroso. Testes automatizados como requisito."
+                : "We don't do 'quick hacks'. Rigorous code review. Automated testing as a requirement."}
+            </p>
+          </div>
+        </div>
+
+        <div class="flex gap-4">
+          <div class="flex-shrink-0">
+            <div class="w-12 h-12 rounded-full bg-success/20 flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-bold text-lg mb-2">
+              {lang === 'ptbr' ? "Resultados Mensuráveis" : "Measurable Results"}
+            </h3>
+            <p class="text-base-content/70 text-sm">
+              {lang === 'ptbr'
+                ? "Definimos métricas de sucesso no início. Medimos e reportamos progresso regularmente."
+                : "We define success metrics at the start. We measure and report progress regularly."}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-16">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold mb-4">
+        {lang === 'ptbr' ? "Pronto para Começar?" : "Ready to Start?"}
+      </h2>
+      <p class="text-base-content/70 mb-8 max-w-2xl mx-auto">
+        {lang === 'ptbr'
+          ? "Entre em contato para uma conversa inicial sobre seus desafios e objetivos. Sem compromisso, sem apresentações genéricas—apenas uma discussão técnica honesta."
+          : "Get in touch for an initial conversation about your challenges and goals. No commitment, no generic presentations—just an honest technical discussion."}
+      </p>
+      <a href={`/${lang}/contato`} class="btn btn-primary btn-lg">
+        {lang === 'ptbr' ? "Fale Conosco" : "Contact Us"}
+      </a>
+    </div>
+  </section>
+</BaseLayout>

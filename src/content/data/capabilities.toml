@@ -1,0 +1,206 @@
+# Capabilities - Todas as tecnologias e expertise da Integr8
+# Migrado do hugo.toml original
+
+[[capabilities]]
+name = "Amazon Web Services (AWS)"
+icon = "cloud"
+technologies = [
+  "EKS", "ECS", "Fargate", "Lambda", "Step Functions", "AppSync", "API Gateway",
+  "S3", "RDS", "Aurora", "DynamoDB", "ElastiCache", "Cognito",
+  "EMR", "Glue", "Athena", "MSK", "Kinesis", "SQS", "SNS", "EventBridge",
+  "CloudFormation", "CDK", "IAM", "Secrets Manager", "KMS",
+  "CloudWatch", "X-Ray", "CloudFront", "Route 53", "EC2", "Spot Instances"
+]
+
+[[capabilities]]
+name = "Microsoft Azure"
+icon = "cloud"
+technologies = [
+  "AKS", "ARO (OpenShift)", "Azure Functions", "App Service",
+  "Azure DevOps", "ARM Templates", "Bicep",
+  "Azure SQL", "Cosmos DB", "Blob Storage", "Data Lake",
+  "Azure Monitor", "App Insights", "Log Analytics",
+  "Azure AD", "Entra ID", "Container Registry", "Akamai CDN",
+  "Key Vault", "Front Door", "Application Gateway", "Virtual Networks", "ExpressRoute"
+]
+
+[[capabilities]]
+name = "Google Cloud Platform (GCP)"
+icon = "cloud"
+technologies = [
+  "GKE", "Cloud Run", "Cloud Functions", "App Engine",
+  "Cloud Build", "Cloud Deploy", "Artifact Registry",
+  "BigQuery", "Dataflow", "Pub/Sub", "Cloud SQL", "Spanner", "Bigtable",
+  "Cloud Storage", "Cloud Monitoring", "Cloud Logging", "Cloud Trace",
+  "Anthos", "Secret Manager", "Cloud CDN", "Vertex AI"
+]
+
+[[capabilities]]
+name = "Oracle Cloud Infrastructure (OCI)"
+icon = "cloud"
+technologies = [
+  "OKE", "Container Instances", "OCI Compute", "OCI Functions",
+  "Autonomous Database", "Oracle Database", "Exadata", "MySQL HeatWave",
+  "Object Storage", "Block Volumes", "File Storage",
+  "OCI Logging", "OCI Monitoring", "OCI DevOps",
+  "API Gateway", "Integration Cloud", "Streaming", "Queue"
+]
+
+[[capabilities]]
+name = "Container Orchestration"
+icon = "kubernetes"
+technologies = [
+  "Kubernetes", "Kubestronaut", "CKS", "CKA", "CKAD", "KCNA", "KCSA",
+  "Helm", "Helmfile", "Kustomize", "Jsonnet",
+  "Docker", "Podman", "containerd", "CRI-O", "Buildah", "Kaniko",
+  "Operators", "Kubebuilder", "Operator SDK",
+  "Rancher", "OpenShift", "k3s", "kind", "minikube", "Talos Linux"
+]
+
+[[capabilities]]
+name = "Infrastructure as Code"
+icon = "code"
+technologies = [
+  "Terraform", "OpenTofu", "Terragrunt", "Atlantis", "Spacelift",
+  "Crossplane", "Pulumi", "CloudFormation", "CDK", "CDKTF",
+  "Ansible", "Ansible Tower", "AWX", "Rundeck",
+  "HashiCorp Vault", "Packer", "Cloud-init", "Fabric"
+]
+
+[[capabilities]]
+name = "CI/CD & GitOps"
+icon = "cicd"
+technologies = [
+  "ArgoCD", "Argo Rollouts", "Argo Workflows", "Flux",
+  "GitHub Actions", "GitLab CI", "Tekton", "Jenkins", "Jenkins X",
+  "Harness", "Spinnaker", "Azure DevOps Pipelines",
+  "Bamboo", "Bitbucket Pipelines", "BuildKite", "CircleCI",
+  "Maven", "Gradle", "TFS", "Nexus", "Artifactory"
+]
+
+[[capabilities]]
+name = "Observability & SRE"
+icon = "observability"
+technologies = [
+  "Prometheus", "Alertmanager", "Grafana", "Grafana Loki", "Tempo", "Mimir", "Thanos",
+  "OpenTelemetry", "Jaeger", "Zipkin",
+  "ELK Stack", "Elasticsearch", "Logstash", "Kibana", "Fluentd", "Fluent Bit",
+  "Datadog", "New Relic", "Splunk", "Dynatrace",
+  "DORA Metrics", "SLI/SLO", "PagerDuty", "OpsGenie", "VictorOps"
+]
+
+[[capabilities]]
+name = "DevSecOps & Security"
+icon = "security"
+technologies = [
+  "SonarQube", "SonarCloud", "Snyk", "Dependabot", "OWASP",
+  "Trivy", "Grype", "Clair", "Anchore", "Syft",
+  "OPA", "Gatekeeper", "Kyverno", "Admission Controllers",
+  "Falco", "Sysdig", "Aqua Security",
+  "Keycloak", "Vault", "Cert-Manager", "SPIFFE/SPIRE",
+  "Sigstore", "Cosign", "SBOM", "CodeQL", "Checkov", "tfsec", "Kerberos"
+]
+
+[[capabilities]]
+name = "Data Engineering & AI"
+icon = "data"
+technologies = [
+  "Databricks", "Delta Lake", "Unity Catalog",
+  "Spark", "PySpark", "Scala Spark", "Spark Streaming",
+  "Kafka", "Confluent", "Schema Registry", "KSQL",
+  "Airflow", "Dagster", "Prefect", "dbt",
+  "NiFi", "Flink", "Flume", "Storm",
+  "HDFS", "Cloudera", "HDP", "Hortonworks", "HBase", "Kudu", "Hive",
+  "Data Mesh", "Data Governance", "CDC", "Debezium", "ETL/ELT",
+  "MLflow", "Kubeflow", "Feature Store", "Denodo",
+  "IBM Netezza", "IBM DataStage", "IBM Cognos", "Puredata"
+]
+
+[[capabilities]]
+name = "Databases"
+icon = "database"
+technologies = [
+  "PostgreSQL", "MySQL", "MariaDB", "Oracle", "SQL Server", "DB2", "Sybase",
+  "MongoDB", "Cassandra", "HBase", "Couchbase",
+  "Redis", "Memcached", "KeyDB",
+  "DynamoDB", "Cosmos DB", "Aurora", "Spanner",
+  "Elasticsearch", "OpenSearch", "InfluxDB", "TimescaleDB",
+  "RabbitMQ", "Apache Kafka", "ActiveMQ", "ZeroMQ",
+  "H2 Database", "SQLite"
+]
+
+[[capabilities]]
+name = "Service Mesh & Networking"
+icon = "network"
+technologies = [
+  "Istio", "Linkerd", "Cilium Service Mesh", "Consul Connect",
+  "Envoy Proxy", "NGINX", "HAProxy", "Traefik",
+  "Kong Gateway", "Ambassador", "Gloo Edge", "APISIX",
+  "Network Policies", "Calico", "Cilium CNI", "Weave Net", "Flannel",
+  "Gateway API", "Ingress Controllers", "MetalLB", "Kube-proxy"
+]
+
+[[capabilities]]
+name = "Programming Languages"
+icon = "programming"
+technologies = [
+  "Go", "Python", "Java", "Kotlin", "Scala",
+  "JavaScript", "TypeScript", "ECMAScript",
+  "PHP", "Rust", "C", "C++",
+  "Shell Script", "Bash", "Zsh", "PowerShell",
+  "SQL", "PL/SQL", "T-SQL",
+  "HCL", "YAML", "JSON", "Groovy", "ActionScript"
+]
+
+[[capabilities]]
+name = "Frameworks & Full-Stack"
+icon = "frontend"
+technologies = [
+  "React", "Next.js", "Vue.js", "Vuex", "Nuxt.js",
+  "Angular", "AngularJS", "Material UI",
+  "Spring Boot", "Spring Framework", "Quarkus", "Micronaut",
+  "EJB", "JPA", "Hibernate", "WebSphere", "WildFly", "Tomcat",
+  "Laravel", "Symfony", "Phalcon", "Zend", "CodeIgniter",
+  "Node.js", "Express", "NestJS", "Fastify",
+  "FastAPI", "Flask", "Django",
+  "HTML5", "CSS3", "Sass", "Tailwind CSS", "Bootstrap"
+]
+
+[[capabilities]]
+name = "Testing & Quality"
+icon = "devex"
+technologies = [
+  "JUnit", "TestNG", "Mockito", "Arquillian",
+  "Jest", "Cypress", "Playwright", "Selenium", "Protractor",
+  "Cucumber", "Jasmine", "Karma", "Mocha", "Chai",
+  "PHPUnit", "Codeception", "Behat",
+  "pytest", "Robot Framework",
+  "Swagger", "OpenAPI", "Postman", "Insomnia",
+  "TDD", "BDD", "Integration Testing", "E2E Testing"
+]
+
+[[capabilities]]
+name = "Developer Experience"
+icon = "devex"
+technologies = [
+  "Backstage.io", "Port", "Humanitec", "Cortex",
+  "DORA Metrics", "SPACE Framework", "DevEx Surveys",
+  "Docs-as-Code", "MkDocs", "Docusaurus", "Confluence",
+  "OpenAPI", "GraphQL", "gRPC", "REST APIs", "AsyncAPI",
+  "Gitpod", "Codespaces", "devcontainers",
+  "Jira", "Trello", "Linear", "Notion",
+  "CLI Tools", "Scaffolding", "Golden Paths", "IDP"
+]
+
+[[capabilities]]
+name = "Certifications"
+icon = "certification"
+technologies = [
+  "CNCF Kubestronaut", "CKA", "CKAD", "CKS", "KCNA", "KCSA",
+  "AWS Solutions Architect", "AWS DevOps Engineer", "AWS Data Engineer", "AWS Cloud Practitioner",
+  "Azure Solutions Architect", "Azure DevOps Engineer", "Azure AI Fundamentals", "Azure Data Fundamentals",
+  "GCP Professional Cloud Architect", "GCP Cloud Engineer",
+  "Oracle OCP 10g/11g", "Oracle Autonomous DB",
+  "LPIC-1", "LPIC-OT DevOps", "Zend Certified PHP Engineer",
+  "ITIL v3/v4 Foundation", "Scrum Master", "Product Owner"
+]

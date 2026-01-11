@@ -1,0 +1,57 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  author?: string;
+  canonical?: string;
+  ogType?: string;
+}
+
+const {
+  title = 'Integr8 - Consultoria Técnica Cloud-Native',
+  description = 'Consultoria técnica especializada em DevOps, Cloud, Kubernetes e Platform Engineering',
+  image = '/images/og-default.png',
+  author = 'Integr8',
+  canonical,
+  ogType = 'website',
+} = Astro.props;
+
+const site = 'https://integr8.me';
+const fullUrl = canonical ? `${site}${canonical}` : `${site}${Astro.url.pathname}`;
+const imageUrl = image.startsWith('http') ? image : `${site}${image}`;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content={description} />
+<meta name="author" content={author} />
+<meta name="generator" content={Astro.generator} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content={ogType} />
+<meta property="og:url" content={fullUrl} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={imageUrl} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={fullUrl} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={imageUrl} />
+<meta property="twitter:creator" content="@integr8" />
+
+<!-- Canonical -->
+{canonical && <link rel="canonical" href={fullUrl} />}
+
+<!-- Favicons -->
+<link rel="icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+<!-- Preconnect -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+<!-- Note: CSS is imported via Astro components, not linked directly -->

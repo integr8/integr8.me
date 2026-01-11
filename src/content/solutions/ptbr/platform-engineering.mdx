@@ -1,0 +1,258 @@
+---
+title: "Engenharia de Plataforma (IDP)"
+category: "cloud-platform"
+description: "Construímos Internal Developer Platforms (IDP) que aceleram a entrega de software, reduzem carga cognitiva e padronizam operações em escala enterprise."
+icon: "ServerStackIcon"
+weight: 2
+technologies: ["Backstage.io", "Crossplane", "ArgoCD / Flux", "Kubernetes Operators", "Terraform / OpenTofu", "Kratix", "Port / Humanitec", "Golang / Python"]
+---
+
+import { MaturityStepper, Callout, Timeline, FeatureGrid } from '@components/content';
+
+## O Desafio
+
+Conforme as organizações escalam suas iniciativas de desenvolvimento de software, elas enfrentam uma barreira de complexidade que desacelera toda a equipe de engenharia:
+
+<FeatureGrid 
+  columns={3}
+  features={[
+    {
+      icon: "🧠",
+      title: "Carga Cognitiva",
+      description: "Desenvolvedores forçados a entender infraestrutura, Kubernetes, CI/CD, segurança além do desenvolvimento"
+    },
+    {
+      icon: "🎫",
+      title: "Times Sobrecarregados",
+      description: "Equipes de plataforma presas em modo reativo, lidando com tickets e solicitações ad-hoc"
+    },
+    {
+      icon: "⚙️",
+      title: "Configurações Inconsistentes",
+      description: "Problemas de 'funciona na minha máquina' e deploys imprevisíveis entre ambientes"
+    },
+    {
+      icon: "🐢",
+      title: "Gargalos de Onboarding",
+      description: "Novos desenvolvedores levam semanas ou meses para se tornarem produtivos"
+    },
+    {
+      icon: "👻",
+      title: "Shadow IT",
+      description: "Times criam soluções próprias quando caminhos oficiais são muito lentos ou complexos"
+    },
+    {
+      icon: "💸",
+      title: "Dívida Técnica",
+      description: "Acumulada por falta de padrões e automação desde o início dos projetos"
+    }
+  ]}
+/>
+
+<Callout type="warning" title="Armadilha Comum">
+Muitas organizações tentam resolver isso criando mais documentação ou contratando mais engenheiros de plataforma—mas sem uma verdadeira Internal Developer Platform (IDP), esses esforços não escalam.
+</Callout>
+
+## Nossa Abordagem
+
+### Design de Internal Developer Platform (IDP)
+
+Construímos IDPs que funcionam como um **produto para seus desenvolvedores**, não apenas uma coleção de ferramentas:
+
+**Descoberta & Visão da Plataforma**
+- Pesquisa com desenvolvedores e análise de user journey
+- Identificação de pontos de dor e gargalos de produtividade
+- Definição de visão e roadmap da plataforma
+- Engajamento de stakeholders e estratégia de comunicação
+
+**Capacidades Core da Plataforma**
+- **Catálogo de Serviços**: Registro centralizado de todos os serviços, APIs e dependências
+- **Scaffolding**: Templates golden path para novos projetos e componentes
+- **Self-Service**: Formulários e automação para provisionamento de infraestrutura
+- **Documentação**: Especificações integradas de APIs, runbooks e guias de arquitetura
+
+### Implementação Backstage.io
+
+Somos especialistas na principal plataforma de desenvolvimento open-source:
+
+**Setup & Configuração do Catálogo**
+- Descoberta e ingesta automatizada de serviços
+- Integração com provedores Git (GitHub, GitLab, Bitbucket)
+- Templates de metadados customizados e sistema de ownership
+- Modelagem de relacionamentos e grafos de dependência
+
+**Desenvolvimento de Software Templates**
+- Templates golden path para aplicações, bibliotecas e infraestrutura
+- Scaffolding automatizado com repositórios Git, CI/CD, monitoramento
+- Aplicação de políticas de compliance e segurança no tempo de criação
+- Evolução de templates e mecanismos de atualização
+
+**Desenvolvimento de Plugins**
+- Plugins customizados para ferramentas e fluxos específicos
+- Integração com pipelines CI/CD existentes
+- Dashboards de segurança e compliance
+- Visualizações de métricas de custo e performance
+
+### Plataforma Self-Service
+
+Eliminamos tickets. Desenvolvedores provisionam o que precisam sem esperar:
+
+**Provisão de Infraestrutura**
+- Ambientes efêmeros para feature branches
+- Criação de bancos de dados com políticas de retenção automatizadas
+- Gestão de Kubernetes namespaces e quotas de recursos
+- Setup automatizado de domínios DNS e certificados
+
+**Scaffolding de Aplicações**
+- Geração de projetos seguindo melhores práticas organizacionais
+- Configuração automatizada de pipelines CI/CD
+- Integração com scanners de segurança e frameworks de testes
+- Estrutura de repositório padronizada e configuração de branches
+
+### Golden Paths & Standards
+
+Definimos caminhos de sucesso claros que os desenvolvedores **querem** seguir—onde a coisa certa é também a coisa fácil:
+
+**Standards de Tecnologia**
+- Stacks de linguagem aprovadas com melhores práticas documentadas
+- Seleção de bibliotecas e frameworks com análise de segurança
+- Configurações de gestão de dependências e estratégias de atualização
+
+**Standards Operacionais**
+- Implementação de monitoramento e alertas para todas as aplicações
+- Integração de logging com dashboards centralizados
+- Estratégias de tracing distribuído para arquiteturas de microsserviços
+- Procedimentos de resposta a incidentes e runbooks
+
+### Infraestrutura Gerenciada
+
+Abstraímos a complexidade da nuvem utilizando tecnologias cloud-native:
+
+- **Crossplane** para composição de recursos cloud como CRDs Kubernetes
+- **Kubernetes Operators** customizados para automação de operações
+- **ArgoCD/Flux** para entrega contínua GitOps
+- **Kratix** para plataformas orientadas a promessas
+
+## Resultados de Negócio
+
+<FeatureGrid 
+  columns={4}
+  features={[
+    { icon: "🚀", title: "90%", description: "Redução no tempo de onboarding de novos devs" },
+    { icon: "⚡", title: "10x", description: "Aceleração no ciclo de entrega" },
+    { icon: "📦", title: "100%", description: "Padronização dos microserviços" },
+    { icon: "🎫", title: "80%", description: "Eliminação de tickets de plataforma" }
+  ]}
+/>
+
+## Modelo de Maturidade de Plataforma
+
+<MaturityStepper 
+  levels={[
+    {
+      level: 1,
+      title: "Ad-Hoc",
+      description: "Operações manuais sem padronização",
+      items: [
+        "Provisionamento manual de infraestrutura",
+        "Pipelines CI/CD inconsistentes",
+        "Documentação dispersa ou ausente"
+      ]
+    },
+    {
+      level: 2,
+      title: "Padronizado",
+      description: "Primeiros padrões estabelecidos",
+      items: [
+        "Infraestrutura como Código estabelecida",
+        "Templates de CI/CD compartilhados",
+        "Wiki ou documentação centralizada"
+      ]
+    },
+    {
+      level: 3,
+      title: "Self-Service",
+      description: "Desenvolvedores autônomos",
+      items: [
+        "Portal de desenvolvedor com capacidades self-service",
+        "Catálogo automatizado de serviços",
+        "Golden paths para cenários comuns"
+      ]
+    },
+    {
+      level: 4,
+      title: "Orientado a Produto",
+      description: "Plataforma como produto interno",
+      items: [
+        "Time de plataforma operando como time de produto",
+        "Melhoria contínua baseada em feedback",
+        "Métricas de plataforma e OKRs"
+      ]
+    },
+    {
+      level: 5,
+      title: "Otimizado",
+      description: "Vantagem competitiva",
+      items: [
+        "Abstrações avançadas e experiência cognitiva mínima",
+        "Otimização automatizada e auto-healing",
+        "Plataforma como vantagem competitiva"
+      ]
+    }
+  ]}
+/>
+
+## Como Trabalhamos
+
+<Timeline 
+  items={[
+    {
+      phase: "1",
+      duration: "2-3 semanas",
+      title: "Descoberta",
+      description: "Entendimento profundo do contexto e necessidades",
+      deliverables: [
+        "Pesquisa com desenvolvedores e mapeamento de jornada",
+        "Inventário de toolchain existente",
+        "Identificação de quick wins e escopo MVP"
+      ]
+    },
+    {
+      phase: "2",
+      duration: "4-8 semanas",
+      title: "Fundação",
+      description: "Implementação do core da plataforma",
+      deliverables: [
+        "Deployment de plataforma core (Backstage.io)",
+        "Templates e golden paths iniciais",
+        "Integrações essenciais com ferramentas existentes"
+      ]
+    },
+    {
+      phase: "3",
+      duration: "8-16 semanas",
+      title: "Expansão",
+      description: "Ampliação das capacidades",
+      deliverables: [
+        "Capacidades self-service adicionais",
+        "Desenvolvimento de plugins customizados",
+        "Migração de serviços e onboarding de times"
+      ]
+    },
+    {
+      phase: "4",
+      duration: "Contínua",
+      title: "Evolução",
+      description: "Melhoria contínua da plataforma",
+      deliverables: [
+        "Operações de plataforma como produto",
+        "Coleta de feedback e priorização de features",
+        "Evolução contínua de capacidades"
+      ]
+    }
+  ]}
+/>
+
+<Callout type="success" title="Pronto para transformar sua plataforma?">
+Entre em contato para uma avaliação gratuita de maturidade e descubra como podemos acelerar sua jornada de Platform Engineering.
+</Callout>
