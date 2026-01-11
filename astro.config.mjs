@@ -16,7 +16,11 @@ export default defineConfig({
   i18n: {
     defaultLocale: 'ptbr',
     locales: ['ptbr', 'en'],
-    routing: { prefixDefaultLocale: true },
+    fallbackLocale: 'ptbr',
+    routing: { 
+      prefixDefaultLocale: true,
+      redirectToDefaultLocale: false,
+    },
   },
   
   markdown: {
