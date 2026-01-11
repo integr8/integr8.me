@@ -1,0 +1,43 @@
+{
+  "name": "integr8.me",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "lint": "eslint src --ext .ts,.tsx,.astro",
+    "lint:fix": "eslint src --ext .ts,.tsx,.astro --fix",
+    "format": "prettier --write src",
+    "format:check": "prettier --check src",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "astro": "^4.1.1",
+    "@astrojs/react": "^3.0.9",
+    "@astrojs/tailwind": "^5.0.3",
+    "@astrojs/mdx": "^3.0.1",
+    "@astrojs/sitemap": "^3.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "daisyui": "^4.6.1",
+    "tailwindcss": "^3.3.7",
+    "@tailwindcss/typography": "^0.5.10",
+    "@heroicons/react": "^2.0.18",
+    "@iarna/toml": "^2.2.5",
+    "swiper": "^11.0.5",
+    "@fontsource/inter": "^5.0.14",
+    "@fontsource/jetbrains-mono": "^5.0.14"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "@types/react": "^18.2.37",
+    "eslint": "^8.52.0",
+    "eslint-plugin-astro": "^1.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "prettier": "^3.1.0",
+    "prettier-plugin-astro": "^0.13.0",
+    "prettier-plugin-tailwindcss": "^0.5.0"
+  }
+}
