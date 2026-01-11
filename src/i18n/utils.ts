@@ -4,14 +4,18 @@ const cache: Record<string, Record<string, string>> = {};
 
 export function getTranslations(lang: string) {
   if (!cache[lang]) {
-    cache[lang] = loadTranslations(lang);
+    const result = loadTranslations(lang);
+    cache[lang] = (result || {}) as Record<string, string>;
   }
   return cache[lang];
 }
 
 export function t(key: string, lang: string): string {
   const translations = getTranslations(lang);
-  return key.split('.').reduce((obj, k) => obj?.[k], translations) ?? key;
+  const result = key.split('.').reduce((obj: Record<string, any>, k: string) => {
+    return obj?.[k];
+  }, translations);
+  return typeof result === 'string' ? result : key;
 }
 
 export function useTranslations(lang: string) {

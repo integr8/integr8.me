@@ -30,7 +30,8 @@ export function Header({ lang, translations }: HeaderProps) {
 
   // Helper to get navigation translations
   const getNavLabel = (key: string): string => {
-    return translations?.nav?.[key] || key;
+    const navTranslations = translations && typeof translations === 'object' ? (translations as any).nav : undefined;
+    return (navTranslations && navTranslations[key]) || key;
   };
 
   return (

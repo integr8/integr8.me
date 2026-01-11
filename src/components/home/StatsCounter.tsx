@@ -2,12 +2,21 @@ import React from 'react';
 import { Icon } from '@components/common/Icon';
 import { loadStats } from '@lib/toml';
 
+interface Stat {
+  id: string;
+  icon: string;
+  label: Record<string, string>;
+  value: string | number;
+  suffix: string;
+  description: Record<string, string>;
+}
+
 export interface StatsCounterProps {
   lang: string;
 }
 
 export function StatsCounter({ lang }: StatsCounterProps) {
-  const stats = loadStats();
+  const stats = loadStats() as Stat[];
 
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
