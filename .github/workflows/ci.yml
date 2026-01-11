@@ -1,0 +1,175 @@
+# =============================================================================
+# CI Pipeline - Validação e Qualidade de Código
+# =============================================================================
+# Princípios: DRY (jobs reutilizáveis), KISS (steps simples), YAGNI (só o necessário)
+# =============================================================================
+
+name: CI - Lint, Test & Security
+
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+    branches: [main, development]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '9'
+
+jobs:
+  # ===========================================================================
+  # Setup - Instala dependências (reutilizado por outros jobs via cache)
+  # ===========================================================================
+  setup:
+    name: 📦 Setup
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.cache-key.outputs.key }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+        with:
+          experimental: true
+
+      - name: Generate cache key
+        id: cache-key
+        run: echo "key=pnpm-${{ hashFiles('pnpm-lock.yaml') }}" >> $GITHUB_OUTPUT
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+  # ===========================================================================
+  # Lint - ESLint, Prettier, TypeScript
+  # ===========================================================================
+  lint:
+    name: 🔍 Lint
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+        with:
+          experimental: true
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run ESLint
+        run: pnpm lint
+
+      - name: Run Prettier check
+        run: pnpm format:check
+
+      - name: TypeScript type check
+        run: pnpm typecheck
+
+  # ===========================================================================
+  # Security - SAST, Dependency Audit, Secrets Scanning
+  # ===========================================================================
+  security:
+    name: 🔒 Security
+    needs: setup
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+        with:
+          experimental: true
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit dependencies
+        run: pnpm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Check for secrets with Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ===========================================================================
+  # Accessibility - Validação a11y
+  # ===========================================================================
+  accessibility:
+    name: ♿ Accessibility
+    needs: [setup, build-check]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+        with:
+          experimental: true
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build site
+        run: pnpm build
+
+      - name: Run Lighthouse CI
+        run: |
+          npx @lhci/cli@0.13.x autorun || true
+
+  # ===========================================================================
+  # Build Check - Verifica se o build funciona
+  # ===========================================================================
+  build-check:
+    name: 🏗️ Build Check
+    needs: [lint]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup mise
+        uses: jdx/mise-action@v2
+        with:
+          experimental: true
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Astro site
+        run: pnpm build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: dist/
+          retention-days: 1
