@@ -63,11 +63,8 @@ export function Footer({ lang, solutions = [], showCTA = false }: FooterProps) {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4 lg:gap-12">
           {/* Brand & Description */}
           <div className="lg:col-span-1">
-            <a href={`/${lang}/`} className="mb-4 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-lg font-bold text-white shadow-md">
-                I8
-              </div>
-              <span className="text-xl font-bold text-base-content">Integr8</span>
+            <a href={`/${lang}/`} className="mb-4 inline-block">
+              <img src="/images/logo.png" alt="Integr8" className="h-10 w-auto grayscale" />
             </a>
             <p className="mb-6 text-sm leading-relaxed text-base-content/70">{t.description}</p>
             {/* Social Links */}

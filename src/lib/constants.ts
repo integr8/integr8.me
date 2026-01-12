@@ -1,10 +1,33 @@
-export const SITE_URL = 'https://integr8.me';
-export const AUTHOR = 'Integr8';
+import { loadSiteConfig } from './toml';
+
+interface SiteConfig {
+  site: {
+    name: string;
+    url: string;
+    description: string;
+    author: string;
+  };
+  social: {
+    email: string;
+    linkedin: string;
+    github: string;
+  };
+  seo: {
+    title_template: string;
+    og_image: string;
+    twitter_handle: string;
+  };
+}
+
+const config = loadSiteConfig() as SiteConfig;
+
+export const SITE_URL = config.site.url;
+export const AUTHOR = config.site.author;
 
 export const SOCIAL_LINKS = {
-  email: 'contato@integr8.me',
-  linkedin: 'https://linkedin.com/company/integr8',
-  github: 'https://github.com/integr8',
+  email: config.social.email,
+  linkedin: config.social.linkedin,
+  github: config.social.github,
 };
 
 export const ICON_MAPPING: Record<string, string> = {
