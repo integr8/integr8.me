@@ -2,6 +2,13 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
+## [1.0.1](https://github.com/integr8/integr8.me/compare/v1.0.0...v1.0.1) (2026-01-12)
+
+
+### Bug Fixes
+
+* update social links and improve footer branding ([#4](https://github.com/integr8/integr8.me/issues/4)) ([4673acf](https://github.com/integr8/integr8.me/commit/4673acfd7a16cf6b864d6bb00f103f8afd83f76d))
+
 # 1.0.0 (2026-01-12)
 
 
