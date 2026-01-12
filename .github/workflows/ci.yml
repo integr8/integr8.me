@@ -155,7 +155,7 @@ jobs:
   # ===========================================================================
   accessibility:
     name: ♿ Accessibility
-    needs: [setup, build-check]
+    needs: build-check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -166,11 +166,11 @@ jobs:
         with:
           experimental: true
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build site
-        run: pnpm build
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: dist/
 
       - name: Run Lighthouse CI
         run: |
@@ -181,7 +181,7 @@ jobs:
   # ===========================================================================
   build-check:
     name: 🏗️ Build Check
-    needs: [lint]
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
