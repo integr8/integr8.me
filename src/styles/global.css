@@ -1,9 +1,32 @@
+@import 'tailwindcss';
 @import '@fontsource/inter';
 @import '@fontsource/jetbrains-mono';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@plugin "@tailwindcss/typography";
+@plugin "daisyui";
+
+@source "../**/*.{astro,html,js,jsx,md,mdx,ts,tsx}";
+@source "../../public/**/*.html";
+
+@theme {
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+  --font-family-mono: 'JetBrains Mono', monospace;
+  
+  --color-integr8-blue: #5B8DD9;
+  --color-integr8-blue-dark: #4A7BC7;
+  --color-integr8-blue-light: #7AA3E5;
+  --color-integr8-dark: #2D3748;
+  --color-integr8-darker: #1A202C;
+  --color-integr8-light: #F7FAFC;
+  --color-integr8-muted: #718096;
+  
+  --animate-marquee: marquee 20s linear infinite;
+  
+  @keyframes marquee {
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
+  }
+}
 
 @layer base {
   :root {
