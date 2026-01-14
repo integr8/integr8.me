@@ -2,6 +2,13 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
+# [1.1.0](https://github.com/integr8/integr8.me/compare/v1.0.1...v1.1.0) (2026-01-14)
+
+
+### Features
+
+* Add new components for enhanced content presentation ([eee33cd](https://github.com/integr8/integr8.me/commit/eee33cd55c26412a7340baee0026c0d26593eb16))
+
 ## [1.0.1](https://github.com/integr8/integr8.me/compare/v1.0.0...v1.0.1) (2026-01-12)
 
 
