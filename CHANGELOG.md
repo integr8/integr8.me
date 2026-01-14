@@ -2,6 +2,13 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
+## [1.1.1](https://github.com/integr8/integr8.me/compare/v1.1.0...v1.1.1) (2026-01-14)
+
+
+### Bug Fixes
+
+* update table styles and improve Shiki theme support ([c7c28ff](https://github.com/integr8/integr8.me/commit/c7c28ff292bd5126c1673fbe16218f8577ef6393))
+
 # [1.1.0](https://github.com/integr8/integr8.me/compare/v1.0.1...v1.1.0) (2026-01-14)
 
 
