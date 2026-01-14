@@ -403,16 +403,9 @@
     @apply mb-4 h-auto max-w-full rounded-lg;
   }
 
+  /* Tables - DaisyUI style */
   .prose table {
-    @apply my-4 w-full border-collapse;
-  }
-
-  .prose th {
-    @apply border border-base-300 bg-base-200 px-4 py-2 text-left font-semibold;
-  }
-
-  .prose td {
-    @apply border border-base-300 px-4 py-2;
+    @apply table table-zebra table-sm my-6;
   }
 
   .prose hr {
@@ -474,26 +467,30 @@
   line-height: 1.7;
 }
 
-/* Shiki dual themes - dark mode uses CSS variables */
+/* Shiki dual themes */
+.astro-code,
+.shiki,
+pre.shiki {
+  background-color: var(--shiki-light-bg, #f6f8fa) !important;
+}
+
+.astro-code span,
+.shiki span,
+pre.shiki span {
+  color: var(--shiki-light) !important;
+}
+
+/* Dark mode */
 [data-theme="integr8dark"] .astro-code,
-[data-theme="integr8dark"] .shiki {
+[data-theme="integr8dark"] .shiki,
+[data-theme="integr8dark"] pre.shiki {
   background-color: var(--shiki-dark-bg, #24292e) !important;
 }
 
 [data-theme="integr8dark"] .astro-code span,
-[data-theme="integr8dark"] .shiki span {
-  color: var(--shiki-dark, inherit) !important;
-}
-
-/* Light mode - default */
-[data-theme="integr8"] .astro-code,
-[data-theme="integr8"] .shiki {
-  background-color: var(--shiki-light-bg, #ffffff) !important;
-}
-
-[data-theme="integr8"] .astro-code span,
-[data-theme="integr8"] .shiki span {
-  color: var(--shiki-light, inherit) !important;
+[data-theme="integr8dark"] .shiki span,
+[data-theme="integr8dark"] pre.shiki span {
+  color: var(--shiki-dark) !important;
 }
 
 /* =============================================================================
