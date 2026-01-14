@@ -14,10 +14,20 @@ export function getStaticPaths() {
 const lang = 'ptbr';
 const { t } = useTranslations(lang);
 
-const allSolutions = await getCollection('solutions');
-const solutions = allSolutions.filter((s) => s.id.startsWith(`${lang}/`));
-const cases = await getCollection('cases');
-const posts = await getCollection('blog');
+const allSolutions = await getCollection('solutions').catch(() => []);
+const solutions = allSolutions
+  .filter((s) => s.id && s.id.startsWith(`${lang}/`))
+  .map((s) => ({ ...s, slug: s.id.split('/').pop() || s.id }));
+
+const allCases = await getCollection('cases').catch(() => []);
+const cases = allCases
+  .filter((c) => c.id && c.id.startsWith(`${lang}/`))
+  .map((c) => ({ ...c, slug: c.id.split('/').pop() || c.id }));
+
+const allPosts = await getCollection('blog').catch(() => []);
+const posts = allPosts
+  .filter((p) => p.id && p.id.startsWith(`${lang}/`))
+  .map((p) => ({ ...p, slug: p.id.split('/').pop() || p.id }));
 ---
 
 <BaseLayout title="Integr8 - Consultoria Cloud-Native">
@@ -42,7 +52,7 @@ const posts = await getCollection('blog');
       {
         solutions.slice(0, 6).map((solution) => (
           <a
-            href={`/${lang}/solucoes/${solution.slug.split('/').pop()}`}
+            href={`/${lang}/solucoes/${solution.slug}`}
             class="card border border-base-300 bg-base-200/50 shadow-lg transition-all hover:border-primary/30 hover:shadow-xl"
           >
             <div class="card-body items-center text-center">
@@ -88,7 +98,7 @@ const posts = await getCollection('blog');
       {
         cases.slice(0, 4).map((caseItem) => (
           <a
-            href={`/${lang}/cases/${caseItem.slug.split('/').pop()}`}
+            href={`/${lang}/cases/${caseItem.slug}`}
             class="card bg-base-100 shadow-lg transition-shadow hover:shadow-xl"
           >
             <div class="card-body">
@@ -122,7 +132,7 @@ const posts = await getCollection('blog');
       {
         posts.slice(0, 3).map((post) => (
           <a
-            href={`/${lang}/blog/${post.slug.split('/').pop()}`}
+            href={`/${lang}/blog/${post.slug}`}
             class="card bg-base-100 shadow-lg transition-shadow hover:shadow-xl"
           >
             {post.data.image && (

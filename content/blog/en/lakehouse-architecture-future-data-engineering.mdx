@@ -1,0 +1,293 @@
+---
+title: 'Lakehouse Architecture: The Future of Data Engineering'
+description: 'Discover how Lakehouse architecture combines the best of Data Lakes and Data Warehouses, revolutionizing how we manage analytical data.'
+author: 'Integr8 Team'
+date: 2025-01-09
+category: 'Data Engineering'
+tags: ['lakehouse', 'data-lake', 'data-warehouse', 'delta-lake', 'iceberg', 'databricks', 'spark']
+read_time: 12
+featured: true
+---
+
+import { Callout, FeatureGrid, Steps, PlantUML, SimpleTimeline } from '@components/content';
+
+## The Evolution of Data Architectures
+
+For decades, organizations faced a dilemma: choose between the flexibility of **Data Lakes** or the performance of **Data Warehouses**. The **Lakehouse** architecture emerges as the definitive answer to this trade-off.
+
+## The Problem with Traditional Architectures
+
+<FeatureGrid
+  features={[
+    {
+      icon: '🏢',
+      title: 'Data Warehouse',
+      description: 'Great for BI, but expensive, proprietary, and limited for ML/AI',
+    },
+    {
+      icon: '🌊',
+      title: 'Data Lake',
+      description: 'Flexible and cheap, but no ACID, weak governance and "data swamp"',
+    },
+    {
+      icon: '🔄',
+      title: 'Lambda Architecture',
+      description: 'Duplication of batch + streaming pipelines, operational complexity',
+    },
+  ]}
+  columns={3}
+/>
+
+<Callout type="warning" title="The Cost of Complexity">
+  Traditional architectures force data copying between systems (ETL from Lake to Warehouse), increasing costs, latency, and inconsistency risks.
+</Callout>
+
+## What is Lakehouse?
+
+Lakehouse is a data architecture that combines:
+
+- **Cheap storage** from Data Lakes (object storage)
+- **ACID transactions** from Data Warehouses
+- **Schema enforcement** and evolution
+- **Integrated governance and lineage**
+- **Optimized performance** for BI and ML
+
+### Fundamental Components
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam rectangleBorderColor #5B8DD9
+
+title Lakehouse Architecture Components
+
+rectangle "**BI / ML / Analytics**" as apps #D1FAE5
+
+rectangle "**Query Engine**\\n(Spark, Trino, Presto)" as query #E8F4FD
+
+rectangle "**Table Format**\\n(Delta Lake, Iceberg, Hudi)" as format #FEF3C7
+
+rectangle "**Object Storage**\\n(S3, ADLS, GCS, MinIO)" as storage #E8F4FD
+
+apps -down-> query
+query -down-> format
+format -down-> storage
+
+@enduml
+  `}
+  alt="Lakehouse Architecture Components"
+  caption="Layered architecture: Applications > Query Engine > Table Format > Object Storage"
+/>
+
+## Table Formats: The Heart of Lakehouse
+
+Open table formats are the key innovation enabling Lakehouse:
+
+| Feature | Delta Lake | Apache Iceberg | Apache Hudi |
+|---------|------------|----------------|-------------|
+| **Creator** | Databricks | Netflix | Uber |
+| **ACID** | ✅ | ✅ | ✅ |
+| **Time Travel** | ✅ | ✅ | ✅ |
+| **Schema Evolution** | ✅ | ✅ | ✅ |
+| **Partition Evolution** | Limited | ✅ Native | Limited |
+| **Hidden Partitioning** | ❌ | ✅ | ❌ |
+| **Merge on Read** | ✅ | ✅ | ✅ |
+| **Ecosystem** | Spark-centric | Multi-engine | Spark/Flink |
+
+<Callout type="info" title="Our Recommendation">
+  **Apache Iceberg** is consolidating as the market standard due to its open architecture and multi-engine support. Delta Lake is ideal if you're already in the Databricks ecosystem.
+</Callout>
+
+## Lakehouse Benefits
+
+<Steps
+  steps={[
+    {
+      title: 'Reduced Cost',
+      description: 'Object storage (10-20x cheaper than proprietary DW) + separate compute.',
+    },
+    {
+      title: 'Unified Data',
+      description: 'A single copy of data serves BI, Data Science, ML, and Streaming.',
+    },
+    {
+      title: 'Strong Governance',
+      description: 'Native ACID transactions, time travel, audit logs, and data lineage.',
+    },
+    {
+      title: 'Flexibility',
+      description: 'Structured, semi-structured, and unstructured data in the same place.',
+    },
+    {
+      title: 'Performance',
+      description: 'Optimizations like Z-ordering, compaction, and caching approach traditional DW.',
+    },
+  ]}
+/>
+
+## Implementing a Lakehouse
+
+### Reference Architecture with Iceberg
+
+```python
+# Creating an Iceberg table with PySpark
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .appName("LakehouseExample") \
+    .config("spark.sql.catalog.lakehouse", "org.apache.iceberg.spark.SparkCatalog") \
+    .config("spark.sql.catalog.lakehouse.type", "hadoop") \
+    .config("spark.sql.catalog.lakehouse.warehouse", "s3://my-lakehouse/") \
+    .getOrCreate()
+
+# Create table with hidden partitioning
+spark.sql("""
+    CREATE TABLE lakehouse.events (
+        event_id STRING,
+        user_id STRING,
+        event_type STRING,
+        event_timestamp TIMESTAMP,
+        properties MAP<STRING, STRING>
+    )
+    USING iceberg
+    PARTITIONED BY (days(event_timestamp), event_type)
+""")
+
+# Time Travel - query historical data
+spark.sql("""
+    SELECT * FROM lakehouse.events
+    FOR TIMESTAMP AS OF '2025-01-01 00:00:00'
+""")
+```
+
+### Medallion Architecture
+
+The medallion architecture organizes data in quality layers:
+
+<FeatureGrid
+  features={[
+    {
+      icon: '🥉',
+      title: 'Bronze (Raw)',
+      description: 'Raw data, exactly as it arrived from the source. Append-only.',
+    },
+    {
+      icon: '🥈',
+      title: 'Silver (Curated)',
+      description: 'Clean, deduplicated, typed data. Validations applied.',
+    },
+    {
+      icon: '🥇',
+      title: 'Gold (Business)',
+      description: 'Business aggregations and metrics ready for consumption.',
+    },
+  ]}
+  columns={3}
+/>
+
+## Modern Lakehouse Stack
+
+### For AWS
+
+```yaml
+stack:
+  storage: S3
+  table_format: Iceberg
+  catalog: AWS Glue Data Catalog
+  query_engines:
+    - Amazon Athena (serverless SQL)
+    - Amazon EMR (Spark)
+    - Trino (federation)
+  orchestration: Apache Airflow / Step Functions
+  governance: AWS Lake Formation
+```
+
+### For Azure
+
+```yaml
+stack:
+  storage: ADLS Gen2
+  table_format: Delta Lake
+  catalog: Unity Catalog (Databricks) or Hive Metastore
+  query_engines:
+    - Azure Synapse Serverless
+    - Databricks SQL
+    - Spark
+  orchestration: Azure Data Factory
+  governance: Microsoft Purview
+```
+
+### For GCP
+
+```yaml
+stack:
+  storage: GCS
+  table_format: BigLake (Iceberg)
+  catalog: BigQuery Metastore
+  query_engines:
+    - BigQuery
+    - Dataproc (Spark)
+  orchestration: Cloud Composer
+  governance: Dataplex
+```
+
+## Migrating to Lakehouse
+
+<SimpleTimeline
+  title="Migration Journey"
+  items={[
+    {
+      label: 'Phase 1',
+      title: 'Data Inventory',
+      description: 'Map all sources, volumes, update frequency, and consumers.',
+      status: 'completed',
+      icon: 'document',
+    },
+    {
+      label: 'Phase 2',
+      title: 'Choose Table Format',
+      description: 'Evaluate Iceberg vs Delta vs Hudi based on your existing ecosystem.',
+      status: 'completed',
+      icon: 'beaker',
+    },
+    {
+      label: 'Phase 3',
+      title: 'Define Governance',
+      description: 'Establish access, retention, and quality policies before migrating.',
+      status: 'current',
+      icon: 'shield',
+    },
+    {
+      label: 'Phase 4',
+      title: 'Migrate Incrementally',
+      description: 'Start with new or less critical workloads, expand gradually.',
+      status: 'pending',
+      icon: 'server',
+    },
+    {
+      label: 'Phase 5',
+      title: 'Retire Legacy Systems',
+      description: 'Turn off old DW only after complete validation of the new environment.',
+      status: 'pending',
+      icon: 'check',
+    },
+  ]}
+/>
+
+## Ideal Use Cases
+
+- **BI + ML on the same base**: Analysts and data scientists access the same data
+- **Real-time CDC**: Streaming changes from transactional databases
+- **Compliance and auditing**: Time travel to reproduce historical states
+- **Feature Store**: Feature storage for ML with versioning
+- **Data Mesh**: Autonomous data domains with clear contracts
+
+<Callout type="success" title="Result">
+  Organizations migrating to Lakehouse report **40-60% reduction in data infrastructure costs**, plus significant gains in agility and governance.
+</Callout>
+
+---
+
+*Want to implement a Lakehouse architecture? [Talk to our specialists](/en/contato) in Data Engineering.*

@@ -1,0 +1,416 @@
+---
+title: 'Infrastructure as Code: Terraform vs Crossplane para Plataformas'
+description: 'Compare Terraform e Crossplane para IaC, entenda quando usar cada um, e aprenda a construir abstrações de infraestrutura para sua plataforma.'
+author: 'Equipe Integr8'
+date: 2024-12-28
+category: 'Platform Engineering'
+tags: ['terraform', 'crossplane', 'infrastructure-as-code', 'kubernetes', 'platform-engineering']
+read_time: 13
+featured: false
+---
+
+import { Callout, FeatureGrid, Steps, PlantUML } from '@components/content';
+
+## O Dilema do IaC em Plataformas
+
+Ao construir uma Internal Developer Platform, surge a pergunta: como desenvolvedores devem provisionar infraestrutura? Terraform é o padrão de mercado, mas Crossplane oferece uma abordagem Kubernetes-native que pode ser mais adequada para plataformas.
+
+<FeatureGrid
+  features={[
+    {
+      icon: '🔧',
+      title: 'Terraform',
+      description: 'Ferramenta declarativa com estado centralizado e vasto ecossistema de providers',
+    },
+    {
+      icon: '☸️',
+      title: 'Crossplane',
+      description: 'Control plane Kubernetes que trata infraestrutura como CRDs nativos',
+    },
+  ]}
+  columns={2}
+/>
+
+## Terraform: O Padrão da Indústria
+
+### Arquitetura do Terraform
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam rectangleBorderColor #5B8DD9
+skinparam rectangleBackgroundColor #F7FAFC
+
+title Arquitetura do Terraform
+
+rectangle "**.tf files**" as tf #E8F4FD
+rectangle "**terraform apply**" as apply #D1FAE5
+database "**State**\\n(S3/GCS)" as state #E8F4FD
+
+rectangle "Providers" as providers #F7FAFC {
+  rectangle "AWS" as aws #FEF3C7
+  rectangle "Azure" as azure #FEF3C7
+  rectangle "GCP" as gcp #FEF3C7
+  rectangle "K8s" as k8s #FEF3C7
+  rectangle "GitHub" as github #FEF3C7
+}
+
+tf -right-> apply
+apply -right-> state
+apply -down-> providers
+
+@enduml
+  `}
+  alt="Arquitetura do Terraform"
+  caption="Fluxo Terraform: arquivos .tf são aplicados e estado é armazenado remotamente"
+/>
+
+### Módulos para Abstração
+
+```hcl
+# modules/platform-database/main.tf
+variable "name" {
+  description = "Database name"
+  type        = string
+}
+
+variable "size" {
+  description = "Database size (small, medium, large)"
+  type        = string
+  default     = "small"
+}
+
+variable "engine" {
+  description = "Database engine"
+  type        = string
+  default     = "postgresql"
+}
+
+locals {
+  sizes = {
+    small  = { instance_class = "db.t3.small", storage = 20 }
+    medium = { instance_class = "db.t3.medium", storage = 100 }
+    large  = { instance_class = "db.r5.large", storage = 500 }
+  }
+}
+
+resource "aws_db_instance" "this" {
+  identifier        = var.name
+  engine            = var.engine
+  engine_version    = "15.4"
+  instance_class    = local.sizes[var.size].instance_class
+  allocated_storage = local.sizes[var.size].storage
+
+  db_name  = replace(var.name, "-", "_")
+  username = "admin"
+  password = random_password.db.result
+
+  vpc_security_group_ids = [aws_security_group.db.id]
+  db_subnet_group_name   = aws_db_subnet_group.this.name
+
+  backup_retention_period = 7
+  skip_final_snapshot     = false
+  deletion_protection     = true
+
+  tags = {
+    Name        = var.name
+    ManagedBy   = "terraform"
+    Platform    = "true"
+  }
+}
+
+# Output para uso pela aplicação
+output "connection_string" {
+  value     = "postgresql://${aws_db_instance.this.username}:${random_password.db.result}@${aws_db_instance.this.endpoint}/${aws_db_instance.this.db_name}"
+  sensitive = true
+}
+```
+
+### Terraform com Atlantis para GitOps
+
+```yaml
+# atlantis.yaml
+version: 3
+projects:
+  - name: platform-infra
+    dir: infrastructure/platform
+    workspace: production
+    autoplan:
+      when_modified: ["*.tf", "modules/**/*.tf"]
+      enabled: true
+    apply_requirements: [approved, mergeable]
+
+  - name: team-a-database
+    dir: teams/team-a/database
+    workspace: production
+    autoplan:
+      enabled: true
+    apply_requirements: [approved]
+
+workflows:
+  default:
+    plan:
+      steps:
+        - init
+        - plan:
+            extra_args: ["-lock=false"]
+    apply:
+      steps:
+        - apply
+```
+
+## Crossplane: IaC Kubernetes-Native
+
+### Arquitetura do Crossplane
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam rectangleBorderColor #5B8DD9
+skinparam rectangleBackgroundColor #F7FAFC
+
+title Arquitetura do Crossplane
+
+rectangle "**Kubernetes API Server**" as k8s #E8F4FD
+
+rectangle "Crossplane Controllers" as controllers #D1FAE5 {
+  rectangle "AWS\\nProvider" as aws #F7FAFC
+  rectangle "Azure\\nProvider" as azure #F7FAFC
+  rectangle "GCP\\nProvider" as gcp #F7FAFC
+}
+
+cloud "**Cloud Resources**\\nRDS, S3, VPC, EKS, Lambda" as cloud #FEF3C7
+
+k8s -down-> controllers
+controllers -down-> cloud
+
+@enduml
+  `}
+  alt="Arquitetura do Crossplane"
+  caption="Crossplane usa Kubernetes como control plane para gerenciar recursos cloud"
+/>
+
+### Managed Resources
+
+```yaml
+# RDS Instance como CRD
+apiVersion: database.aws.crossplane.io/v1beta1
+kind: RDSInstance
+metadata:
+  name: my-database
+spec:
+  forProvider:
+    region: us-east-1
+    dbInstanceClass: db.t3.small
+    engine: postgres
+    engineVersion: "15.4"
+    masterUsername: admin
+    allocatedStorage: 20
+    skipFinalSnapshot: false
+  writeConnectionSecretToRef:
+    name: my-database-creds
+    namespace: team-a
+  providerConfigRef:
+    name: aws-provider
+```
+
+### Compositions para Abstração
+
+O poder do Crossplane está nas Compositions - abstrações que expõem interfaces simplificadas:
+
+```yaml
+# CompositeResourceDefinition (XRD) - Define a interface
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: xdatabases.platform.myorg.io
+spec:
+  group: platform.myorg.io
+  names:
+    kind: XDatabase
+    plural: xdatabases
+  versions:
+    - name: v1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              required:
+                - size
+              properties:
+                size:
+                  type: string
+                  enum: [small, medium, large]
+                  description: "Database size"
+                engine:
+                  type: string
+                  enum: [postgresql, mysql]
+                  default: postgresql
+
+---
+# Composition - Implementa a interface
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: database-aws
+  labels:
+    provider: aws
+spec:
+  compositeTypeRef:
+    apiVersion: platform.myorg.io/v1
+    kind: XDatabase
+
+  resources:
+    - name: rds-instance
+      base:
+        apiVersion: database.aws.crossplane.io/v1beta1
+        kind: RDSInstance
+        spec:
+          forProvider:
+            region: us-east-1
+            engine: postgres
+            engineVersion: "15.4"
+            publiclyAccessible: false
+            skipFinalSnapshot: false
+      patches:
+        # Map size para instance class
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.size
+          toFieldPath: spec.forProvider.dbInstanceClass
+          transforms:
+            - type: map
+              map:
+                small: db.t3.small
+                medium: db.t3.medium
+                large: db.r5.large
+
+        - type: FromCompositeFieldPath
+          fromFieldPath: spec.size
+          toFieldPath: spec.forProvider.allocatedStorage
+          transforms:
+            - type: map
+              map:
+                small: 20
+                medium: 100
+                large: 500
+
+    - name: security-group
+      base:
+        apiVersion: ec2.aws.crossplane.io/v1beta1
+        kind: SecurityGroup
+        spec:
+          forProvider:
+            region: us-east-1
+            description: "Database security group"
+            ingress:
+              - fromPort: 5432
+                toPort: 5432
+                protocol: tcp
+                cidrBlocks:
+                  - 10.0.0.0/8
+```
+
+### Uso pelo Desenvolvedor
+
+```yaml
+# Isso é tudo que o dev precisa criar!
+apiVersion: platform.myorg.io/v1
+kind: XDatabase
+metadata:
+  name: orders-db
+  namespace: team-orders
+spec:
+  size: medium
+  engine: postgresql
+```
+
+## Comparativo
+
+| Aspecto | Terraform | Crossplane |
+|---------|-----------|------------|
+| **Modelo** | Pull (CLI) | Push (Controller) |
+| **Estado** | Remote backend | Kubernetes etcd |
+| **Linguagem** | HCL | YAML (CRDs) |
+| **Drift Detection** | Manual (plan) | Contínuo (reconciliation) |
+| **Self-Healing** | Não | Sim |
+| **Multi-Cloud** | Sim | Sim |
+| **GitOps Native** | Via Atlantis | Nativo |
+| **Curva Aprendizado** | Menor | Requer K8s knowledge |
+| **Ecossistema** | Muito maduro | Crescendo |
+
+<Callout type="info" title="Nossa Recomendação">
+  **Terraform** para times que não usam Kubernetes como plataforma central ou precisam de features avançadas. **Crossplane** para plataformas Kubernetes-first que querem self-service verdadeiro via kubectl/GitOps.
+</Callout>
+
+## Hybrid Approach
+
+Muitas organizações usam ambos:
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam rectangleBorderColor #5B8DD9
+skinparam rectangleBackgroundColor #F7FAFC
+
+title Abordagem Híbrida de IaC
+
+rectangle "**Platform Team**" as platform #E8F4FD {
+  rectangle "Terraform" as tf #D1FAE5 {
+    card "VPCs, subnets, networking" as net
+    card "Kubernetes clusters (EKS/GKE/AKS)" as k8s
+    card "IAM, policies, accounts" as iam
+    card "Shared infrastructure" as shared
+  }
+}
+
+rectangle "**Application Teams**" as appteams #E8F4FD {
+  rectangle "Crossplane" as cp #FEF3C7 {
+    card "Databases por aplicação" as db
+    card "Caches (Redis, Memcached)" as cache
+    card "Message queues (SQS, SNS)" as mq
+    card "Storage buckets" as storage
+  }
+}
+
+platform -down-> appteams : Bootstraps
+
+@enduml
+  `}
+  alt="Abordagem Híbrida de IaC"
+  caption="Platform team usa Terraform para fundação, App teams usam Crossplane para self-service"
+/>
+
+<Steps
+  steps={[
+    {
+      title: 'Foundation com Terraform',
+      description: 'Platform team provisiona infra base: VPCs, clusters, IAM.',
+    },
+    {
+      title: 'Crossplane no Cluster',
+      description: 'Instalar Crossplane e providers no cluster Kubernetes.',
+    },
+    {
+      title: 'Criar Compositions',
+      description: 'Definir abstrações que devs podem usar (XDatabase, XCache, etc.).',
+    },
+    {
+      title: 'Self-Service via GitOps',
+      description: 'Devs criam recursos via PRs que são aplicados via ArgoCD/Flux.',
+    },
+  ]}
+/>
+
+---
+
+*Quer construir a estratégia de IaC para sua plataforma? [Fale com nossos especialistas](/ptbr/contato) em Platform Engineering.*

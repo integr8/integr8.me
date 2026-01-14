@@ -8,8 +8,10 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.params;
-const allCases = await getCollection('cases');
-const cases = allCases.filter((c) => c.id.startsWith(`${lang}/`));
+const allCases = await getCollection('cases').catch(() => []);
+const cases = allCases
+  .filter((c) => c.id && c.id.startsWith(`${lang}/`))
+  .map((c) => ({ ...c, slug: c.id.split('/').pop() || c.id }));
 
 const breadcrumbs = [
   { label: lang === 'ptbr' ? 'Início' : 'Home', href: `/${lang}` },
@@ -34,7 +36,7 @@ const breadcrumbs = [
           client={caseItem.data.client}
           industry={caseItem.data.industry}
           technologies={caseItem.data.technologies || []}
-          href={`/${lang}/cases/${caseItem.slug.split('/').pop()}`}
+          href={`/${lang}/cases/${caseItem.slug}`}
           lang={lang as string}
           featured={idx === 0}
           metrics={caseItem.data.metrics || []}

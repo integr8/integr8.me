@@ -1,0 +1,396 @@
+---
+title: 'Supply Chain Security: SBOM, Sigstore, and Pipeline Protection'
+description: 'Understand how to protect your software supply chain with SBOM, artifact signing with Sigstore/Cosign, and CI/CD security best practices.'
+author: 'Integr8 Team'
+date: 2025-01-12
+category: 'DevSecOps'
+tags: ['supply-chain', 'sbom', 'sigstore', 'cosign', 'security', 'devsecops']
+read_time: 12
+featured: true
+---
+
+import { Callout, FeatureGrid, Steps, PlantUML } from '@components/content';
+
+## The Supply Chain Problem
+
+Software supply chain attacks have increased **742% in the last 3 years** (Sonatype). Incidents like SolarWinds, Log4Shell, and npm compromises demonstrate that security can no longer be an afterthought.
+
+<Callout type="warning" title="Alarming Statistic">
+  96% of application vulnerabilities come from third-party dependencies, not the code you write.
+</Callout>
+
+## Supply Chain Security Pillars
+
+<FeatureGrid
+  features={[
+    {
+      icon: '📋',
+      title: 'SBOM',
+      description: 'Software Bill of Materials - inventory of all components',
+    },
+    {
+      icon: '✍️',
+      title: 'Signing',
+      description: 'Cryptographic verification of artifacts with Sigstore/Cosign',
+    },
+    {
+      icon: '🔍',
+      title: 'Scanning',
+      description: 'Continuous vulnerability analysis of dependencies',
+    },
+    {
+      icon: '🔒',
+      title: 'Provenance',
+      description: 'Traceability of where and how artifacts were created',
+    },
+  ]}
+  columns={2}
+/>
+
+## SBOM: Software Bill of Materials
+
+An SBOM is like the ingredient list of a food product - it documents all components of software.
+
+### SBOM Formats
+
+| Format | Origin | Primary Use |
+|--------|--------|-------------|
+| **SPDX** | Linux Foundation | Compliance, licensing |
+| **CycloneDX** | OWASP | Security, vulnerabilities |
+| **SWID** | ISO/IEC | Enterprise, government |
+
+### Generating SBOM with Syft
+
+```bash
+# Install Syft
+curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+
+# Generate SBOM from Docker image
+syft myapp:latest -o spdx-json > sbom.spdx.json
+
+# Generate in CycloneDX format
+syft myapp:latest -o cyclonedx-json > sbom.cdx.json
+
+# Generate from code directory
+syft dir:. -o spdx-json > sbom.spdx.json
+```
+
+### CycloneDX SBOM Example
+
+```json
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2025-01-12T10:00:00Z",
+    "tools": [{ "name": "syft", "version": "0.100.0" }],
+    "component": {
+      "name": "my-application",
+      "version": "1.0.0",
+      "type": "application"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "express",
+      "version": "4.18.2",
+      "purl": "pkg:npm/express@4.18.2",
+      "licenses": [{ "license": { "id": "MIT" } }]
+    },
+    {
+      "type": "library",
+      "name": "lodash",
+      "version": "4.17.21",
+      "purl": "pkg:npm/lodash@4.17.21"
+    }
+  ]
+}
+```
+
+## Signing with Sigstore/Cosign
+
+Sigstore is a Linux Foundation project that makes artifact signing accessible and frictionless.
+
+### How Sigstore Works
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam rectangleBorderColor #5B8DD9
+skinparam rectangleBackgroundColor #F7FAFC
+
+title Sigstore Ecosystem
+
+rectangle "**Sigstore**" as sigstore #E8F4FD {
+  rectangle "Cosign\\n(Sign)" as cosign #D1FAE5
+  rectangle "Fulcio\\n(Certs)" as fulcio #FEF3C7
+  rectangle "Rekor\\n(Log)" as rekor #FEE2E2
+}
+
+rectangle "Signed\\nArtifact" as artifact #D1FAE5
+rectangle "Public\\nRecord" as record #FEE2E2
+
+cosign -right-> fulcio : OIDC Identity\\n(GitHub, Google)
+fulcio -right-> rekor : Transparency Log\\n(Immutable)
+cosign -down-> artifact
+rekor -down-> record
+
+@enduml
+  `}
+  alt="Sigstore Ecosystem"
+  caption="Cosign signs, Fulcio issues certificates, Rekor maintains transparency log"
+/>
+
+### Signing Images with Cosign
+
+```bash
+# Install Cosign
+brew install cosign  # or via releases
+
+# Login to registry
+cosign login ghcr.io
+
+# Sign image (keyless - uses OIDC)
+cosign sign ghcr.io/myorg/myapp:v1.0.0
+
+# Sign with private key
+cosign generate-key-pair
+cosign sign --key cosign.key ghcr.io/myorg/myapp:v1.0.0
+
+# Verify signature
+cosign verify ghcr.io/myorg/myapp:v1.0.0 \
+  --certificate-identity=user@example.com \
+  --certificate-oidc-issuer=https://github.com/login/oauth
+
+# Attach SBOM to image
+cosign attach sbom --sbom sbom.cdx.json ghcr.io/myorg/myapp:v1.0.0
+
+# Sign the attached SBOM
+cosign sign --attachment sbom ghcr.io/myorg/myapp:v1.0.0
+```
+
+### Signing in GitHub Actions
+
+```yaml
+name: Build and Sign
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write  # Required for keyless signing
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Install Syft
+        uses: anchore/sbom-action/download-syft@v0
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+
+      - name: Generate SBOM
+        run: |
+          syft ghcr.io/${{ github.repository }}:${{ github.ref_name }} \
+            -o cyclonedx-json > sbom.cdx.json
+
+      - name: Sign image
+        run: |
+          cosign sign --yes \
+            ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
+
+      - name: Attach and sign SBOM
+        run: |
+          cosign attach sbom --sbom sbom.cdx.json \
+            ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
+          cosign sign --yes --attachment sbom \
+            ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
+```
+
+## SLSA: Supply Chain Levels for Software Artifacts
+
+SLSA (pronounced "salsa") defines maturity levels for supply chain security.
+
+<Steps
+  steps={[
+    {
+      title: 'SLSA Level 1',
+      description: 'Documented build process, basic provenance generation.',
+    },
+    {
+      title: 'SLSA Level 2',
+      description: 'Signed provenance, authenticated build service.',
+    },
+    {
+      title: 'SLSA Level 3',
+      description: 'Isolated build, non-falsifiable provenance.',
+    },
+    {
+      title: 'SLSA Level 4',
+      description: 'Hermetic build, two-person review.',
+    },
+  ]}
+/>
+
+### Generating SLSA Provenance
+
+```yaml
+# GitHub Actions with SLSA provenance
+name: SLSA Build
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - id: build
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+
+  provenance:
+    needs: build
+    permissions:
+      actions: read
+      id-token: write
+      packages: write
+
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.9.0
+    with:
+      image: ghcr.io/${{ github.repository }}
+      digest: ${{ needs.build.outputs.digest }}
+      registry-username: ${{ github.actor }}
+    secrets:
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
+```
+
+## Vulnerability Scanning
+
+### Trivy for Container Scanning
+
+```bash
+# Image scan
+trivy image myapp:latest
+
+# Scan with SBOM
+trivy sbom sbom.cdx.json
+
+# Filesystem scan
+trivy fs .
+
+# IaC scan (Terraform, Kubernetes)
+trivy config ./terraform/
+
+# CI integration - fail on critical vulnerabilities
+trivy image --exit-code 1 --severity CRITICAL myapp:latest
+```
+
+### Grype for SBOM Analysis
+
+```bash
+# Install Grype
+curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+
+# Analyze SBOM
+grype sbom:sbom.cdx.json
+
+# JSON output for processing
+grype sbom:sbom.cdx.json -o json > vulnerabilities.json
+```
+
+## Policy Enforcement with OPA/Gatekeeper
+
+```yaml
+# Kyverno policy to require signed images
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-signed-images
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: verify-signature
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      verifyImages:
+        - imageReferences:
+            - "ghcr.io/myorg/*"
+          attestors:
+            - entries:
+                - keyless:
+                    subject: "https://github.com/myorg/*"
+                    issuer: "https://token.actions.githubusercontent.com"
+                    rekor:
+                      url: https://rekor.sigstore.dev
+```
+
+## Complete Secure Pipeline
+
+<FeatureGrid
+  features={[
+    {
+      icon: '1️⃣',
+      title: 'Pre-Commit',
+      description: 'Secrets scanning, linting, local dependency check',
+    },
+    {
+      icon: '2️⃣',
+      title: 'CI Build',
+      description: 'SAST, SCA, container scan, generate SBOM',
+    },
+    {
+      icon: '3️⃣',
+      title: 'Sign & Attest',
+      description: 'Sign artifacts, generate SLSA provenance',
+    },
+    {
+      icon: '4️⃣',
+      title: 'Deploy Gate',
+      description: 'Verify signatures, policies, admission control',
+    },
+  ]}
+  columns={4}
+/>
+
+<Callout type="success" title="Compliance">
+  Organizations that implement SBOM and artifact signing are prepared for regulations like Executive Order 14028 (USA) and similar requirements in other countries.
+</Callout>
+
+---
+
+*Want to implement supply chain security in your organization? [Talk to our specialists](/en/contato) in DevSecOps.*

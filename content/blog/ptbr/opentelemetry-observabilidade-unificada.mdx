@@ -1,0 +1,453 @@
+---
+title: 'OpenTelemetry: O Padrão para Observabilidade Unificada'
+description: 'Guia completo de OpenTelemetry para instrumentação de aplicações. Aprenda a coletar métricas, traces e logs de forma padronizada e vendor-agnostic.'
+author: 'Equipe Integr8'
+date: 2025-01-02
+category: 'Observability'
+tags: ['opentelemetry', 'observability', 'metrics', 'tracing', 'logging', 'prometheus', 'jaeger']
+read_time: 14
+featured: true
+---
+
+import { Callout, FeatureGrid, Steps, PlantUML } from '@components/content';
+
+## O Problema da Observabilidade Fragmentada
+
+Organizações frequentemente têm:
+- Prometheus para métricas
+- Jaeger ou Zipkin para traces
+- Elastic ou Loki para logs
+- Instrumentação diferente para cada linguagem e framework
+
+O resultado? Dados desconectados, vendor lock-in, e dificuldade em correlacionar problemas.
+
+<Callout type="info" title="OpenTelemetry">
+  OpenTelemetry é um projeto CNCF que unifica a coleta de métricas, traces e logs em um único padrão vendor-agnostic.
+</Callout>
+
+## Os Três Pilares da Observabilidade
+
+<FeatureGrid
+  features={[
+    {
+      icon: '📊',
+      title: 'Métricas',
+      description: 'Dados numéricos agregados: counters, gauges, histograms',
+    },
+    {
+      icon: '🔍',
+      title: 'Traces',
+      description: 'Jornada de uma requisição através de múltiplos serviços',
+    },
+    {
+      icon: '📝',
+      title: 'Logs',
+      description: 'Eventos discretos com contexto e timestamp',
+    },
+  ]}
+  columns={3}
+/>
+
+## Arquitetura do OpenTelemetry
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam componentBackgroundColor #E8F4FD
+skinparam componentBorderColor #5B8DD9
+skinparam rectangleBorderColor #5B8DD9
+
+title Arquitetura OpenTelemetry
+
+rectangle "Applications" as apps {
+  component "App A\\n(SDK)" as appA
+  component "App B\\n(SDK)" as appB
+  component "App C\\n(Agent)" as appC
+  component "App D\\n(SDK)" as appD
+}
+
+rectangle "OTel Collector" as collector #D1FAE5 {
+  component "Receivers" as recv
+  component "Processors" as proc
+  component "Exporters" as exp
+
+  recv -right-> proc
+  proc -right-> exp
+}
+
+database "Prometheus\\n(Métricas)" as prom #E8F4FD
+database "Jaeger\\n(Traces)" as jaeger #FEF3C7
+database "Loki\\n(Logs)" as loki #FEE2E2
+
+appA -down-> collector : OTLP
+appB -down-> collector : OTLP
+appC -down-> collector : OTLP
+appD -down-> collector : OTLP
+
+exp -down-> prom
+exp -down-> jaeger
+exp -down-> loki
+
+@enduml
+  `}
+  alt="Arquitetura OpenTelemetry"
+  caption="Aplicações enviam telemetria via OTLP para o Collector que distribui para backends"
+/>
+
+## Instrumentação com SDK
+
+### Python
+
+```python
+# requirements.txt
+# opentelemetry-api
+# opentelemetry-sdk
+# opentelemetry-exporter-otlp
+# opentelemetry-instrumentation-flask
+# opentelemetry-instrumentation-requests
+
+from opentelemetry import trace, metrics
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+from opentelemetry.sdk.resources import Resource
+
+# Configurar resource (metadata do serviço)
+resource = Resource.create({
+    "service.name": "my-python-service",
+    "service.version": "1.0.0",
+    "deployment.environment": "production"
+})
+
+# Configurar Tracing
+trace_provider = TracerProvider(resource=resource)
+trace_provider.add_span_processor(
+    BatchSpanProcessor(
+        OTLPSpanExporter(endpoint="http://otel-collector:4317")
+    )
+)
+trace.set_tracer_provider(trace_provider)
+
+# Configurar Metrics
+metric_reader = PeriodicExportingMetricReader(
+    OTLPMetricExporter(endpoint="http://otel-collector:4317"),
+    export_interval_millis=60000
+)
+metrics_provider = MeterProvider(resource=resource, metric_readers=[metric_reader])
+metrics.set_meter_provider(metrics_provider)
+
+# Criar instrumentos
+tracer = trace.get_tracer(__name__)
+meter = metrics.get_meter(__name__)
+
+# Métricas customizadas
+request_counter = meter.create_counter(
+    name="http_requests_total",
+    description="Total HTTP requests",
+    unit="1"
+)
+
+request_duration = meter.create_histogram(
+    name="http_request_duration_seconds",
+    description="HTTP request duration",
+    unit="s"
+)
+
+# Usar em código
+@tracer.start_as_current_span("process_order")
+def process_order(order_id: str):
+    span = trace.get_current_span()
+    span.set_attribute("order.id", order_id)
+
+    request_counter.add(1, {"method": "POST", "endpoint": "/orders"})
+
+    with tracer.start_as_current_span("validate_order"):
+        validate_order(order_id)
+
+    with tracer.start_as_current_span("save_order"):
+        save_order(order_id)
+```
+
+### Node.js / TypeScript
+
+```typescript
+// tracing.ts
+import { NodeSDK } from '@opentelemetry/sdk-node';
+import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
+import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-grpc';
+import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
+import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
+import { Resource } from '@opentelemetry/resources';
+import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+
+const resource = new Resource({
+  [SemanticResourceAttributes.SERVICE_NAME]: 'my-node-service',
+  [SemanticResourceAttributes.SERVICE_VERSION]: '1.0.0',
+  [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: 'production',
+});
+
+const sdk = new NodeSDK({
+  resource,
+  traceExporter: new OTLPTraceExporter({
+    url: 'http://otel-collector:4317',
+  }),
+  metricReader: new PeriodicExportingMetricReader({
+    exporter: new OTLPMetricExporter({
+      url: 'http://otel-collector:4317',
+    }),
+    exportIntervalMillis: 60000,
+  }),
+  instrumentations: [
+    getNodeAutoInstrumentations({
+      '@opentelemetry/instrumentation-fs': { enabled: false },
+    }),
+  ],
+});
+
+sdk.start();
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  sdk.shutdown().finally(() => process.exit(0));
+});
+```
+
+```typescript
+// app.ts - usando instrumentação manual
+import { trace, metrics, SpanStatusCode } from '@opentelemetry/api';
+
+const tracer = trace.getTracer('my-service');
+const meter = metrics.getMeter('my-service');
+
+const requestCounter = meter.createCounter('http_requests_total');
+const requestDuration = meter.createHistogram('http_request_duration_seconds');
+
+async function handleRequest(req: Request): Promise<Response> {
+  const startTime = Date.now();
+
+  return tracer.startActiveSpan('handleRequest', async (span) => {
+    try {
+      span.setAttribute('http.method', req.method);
+      span.setAttribute('http.url', req.url);
+
+      const result = await processRequest(req);
+
+      span.setStatus({ code: SpanStatusCode.OK });
+      return result;
+    } catch (error) {
+      span.setStatus({ code: SpanStatusCode.ERROR, message: error.message });
+      span.recordException(error);
+      throw error;
+    } finally {
+      const duration = (Date.now() - startTime) / 1000;
+      requestCounter.add(1, { method: req.method, status: '200' });
+      requestDuration.record(duration, { method: req.method });
+      span.end();
+    }
+  });
+}
+```
+
+## OpenTelemetry Collector
+
+O Collector é o componente central que recebe, processa e exporta telemetria.
+
+### Configuração do Collector
+
+```yaml
+# otel-collector-config.yaml
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+  # Receber métricas do Prometheus
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'kubernetes-pods'
+          kubernetes_sd_configs:
+            - role: pod
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+              action: keep
+              regex: true
+
+processors:
+  # Adicionar metadata
+  resource:
+    attributes:
+      - key: environment
+        value: production
+        action: upsert
+
+  # Batch para melhor performance
+  batch:
+    timeout: 10s
+    send_batch_size: 1000
+
+  # Filtrar dados sensíveis
+  attributes:
+    actions:
+      - key: http.request.header.authorization
+        action: delete
+
+  # Sampling para reduzir volume
+  probabilistic_sampler:
+    sampling_percentage: 10
+
+  # Memory limiter para evitar OOM
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 1000
+    spike_limit_mib: 200
+
+exporters:
+  # Exportar traces para Jaeger
+  otlp/jaeger:
+    endpoint: jaeger:4317
+    tls:
+      insecure: true
+
+  # Exportar métricas para Prometheus
+  prometheus:
+    endpoint: 0.0.0.0:8889
+    namespace: otel
+
+  # Exportar logs para Loki
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push
+
+  # Debug (desenvolvimento)
+  debug:
+    verbosity: detailed
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, batch, attributes]
+      exporters: [otlp/jaeger]
+
+    metrics:
+      receivers: [otlp, prometheus]
+      processors: [memory_limiter, batch, resource]
+      exporters: [prometheus]
+
+    logs:
+      receivers: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [loki]
+
+  telemetry:
+    logs:
+      level: info
+    metrics:
+      address: 0.0.0.0:8888
+```
+
+### Deploy no Kubernetes
+
+```yaml
+# otel-collector-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-collector
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: otel-collector
+  template:
+    metadata:
+      labels:
+        app: otel-collector
+    spec:
+      containers:
+        - name: collector
+          image: otel/opentelemetry-collector-contrib:latest
+          args:
+            - --config=/etc/otel/config.yaml
+          ports:
+            - containerPort: 4317  # OTLP gRPC
+            - containerPort: 4318  # OTLP HTTP
+            - containerPort: 8889  # Prometheus metrics
+          resources:
+            requests:
+              cpu: 200m
+              memory: 400Mi
+            limits:
+              cpu: 1000m
+              memory: 2Gi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/otel
+      volumes:
+        - name: config
+          configMap:
+            name: otel-collector-config
+```
+
+## Correlação entre Sinais
+
+O poder do OpenTelemetry está em correlacionar métricas, traces e logs:
+
+```python
+import logging
+from opentelemetry import trace
+from opentelemetry.instrumentation.logging import LoggingInstrumentor
+
+# Habilitar correlação automática
+LoggingInstrumentor().instrument(set_logging_format=True)
+
+logger = logging.getLogger(__name__)
+
+def process_order(order_id: str):
+    # Log automaticamente inclui trace_id e span_id
+    logger.info(f"Processing order {order_id}")
+    # Output: 2025-01-02 10:00:00 INFO [trace_id=abc123 span_id=def456] Processing order 12345
+```
+
+<Callout type="success" title="Benefício">
+  Com trace_id nos logs, você pode clicar em um erro no Grafana e ir direto para o trace no Jaeger, vendo toda a jornada da requisição.
+</Callout>
+
+## Boas Práticas
+
+<Steps
+  steps={[
+    {
+      title: 'Use Auto-Instrumentation',
+      description: 'Comece com instrumentação automática para HTTP, DB, etc. Adicione manual depois.',
+    },
+    {
+      title: 'Defina Resources',
+      description: 'Sempre configure service.name, service.version, environment.',
+    },
+    {
+      title: 'Sampling Inteligente',
+      description: 'Em produção, use sampling baseado em erros ou latência.',
+    },
+    {
+      title: 'Collector como Gateway',
+      description: 'Nunca envie diretamente para backends. Collector centraliza e processa.',
+    },
+    {
+      title: 'Semantic Conventions',
+      description: 'Siga as convenções semânticas para atributos padronizados.',
+    },
+  ]}
+/>
+
+---
+
+*Quer implementar observabilidade unificada com OpenTelemetry? [Fale com nossos especialistas](/ptbr/contato) em Observability.*

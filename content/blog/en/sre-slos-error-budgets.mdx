@@ -1,0 +1,394 @@
+---
+title: 'SRE in Practice: SLOs, Error Budgets, and Incident Management'
+description: 'Learn how to implement Site Reliability Engineering practices, define effective SLOs, manage error budgets, and respond to incidents.'
+author: 'Integr8 Team'
+date: 2025-01-01
+category: 'Observability'
+tags: ['sre', 'slo', 'error-budget', 'incident-management', 'reliability', 'on-call']
+read_time: 13
+featured: false
+---
+
+import { Callout, FeatureGrid, Steps, PlantUML } from '@components/content';
+
+## What is SRE?
+
+Site Reliability Engineering (SRE) is a software engineering discipline applied to operations. Created by Google, it combines software development with systems administration to create highly reliable and scalable systems.
+
+<Callout type="info" title="Fundamental Principle">
+  "SRE is what happens when you ask a software engineer to design an operations function." - Ben Treynor, VP of Engineering @ Google
+</Callout>
+
+## Reliability Hierarchy
+
+<FeatureGrid
+  features={[
+    {
+      icon: '📊',
+      title: 'Monitoring',
+      description: 'Know what is happening in the system in real-time',
+    },
+    {
+      icon: '🚨',
+      title: 'Alerting',
+      description: 'Be notified when something is wrong',
+    },
+    {
+      icon: '🔥',
+      title: 'Incident Response',
+      description: 'Respond and mitigate problems quickly',
+    },
+    {
+      icon: '📋',
+      title: 'Postmortem',
+      description: 'Learn from failures and prevent recurrence',
+    },
+  ]}
+  columns={4}
+/>
+
+## SLIs, SLOs, and SLAs
+
+### Definitions
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam defaultFontSize 12
+skinparam rectangleBorderColor #5B8DD9
+skinparam rectangleBackgroundColor #F7FAFC
+
+rectangle "**SLI** (Service Level Indicator)" as sli #E8F4FD {
+  card "\\"What we measure\\"" as sli_desc
+  card "Example: p99 request latency" as sli_ex
+}
+
+rectangle "**SLO** (Service Level Objective)" as slo #E8F4FD {
+  card "\\"Our internal target\\"" as slo_desc
+  card "Example: p99 < 200ms for 99.9% of requests" as slo_ex
+}
+
+rectangle "**SLA** (Service Level Agreement)" as sla #E8F4FD {
+  card "\\"Our external commitment\\"" as sla_desc
+  card "Example: 99.5% uptime with penalties" as sla_ex
+}
+
+sli -[hidden]down-> slo
+slo -[hidden]down-> sla
+
+note bottom of sla
+  **SLO > SLA**
+  (always have safety margin)
+end note
+@enduml
+  `}
+  alt="SLI, SLO, and SLA Hierarchy"
+  caption="SLI measures, SLO defines internal target, SLA is external commitment"
+/>
+
+### Common Types of SLIs
+
+<Steps
+  steps={[
+    {
+      title: 'Availability',
+      description: 'Percentage of successful requests (2xx/3xx vs 5xx)',
+    },
+    {
+      title: 'Latency',
+      description: 'Response time (p50, p95, p99)',
+    },
+    {
+      title: 'Throughput',
+      description: 'Requests per second processed',
+    },
+    {
+      title: 'Error Rate',
+      description: 'End-user error rate',
+    },
+    {
+      title: 'Freshness',
+      description: 'How recent the data is (for data systems)',
+    },
+  ]}
+/>
+
+### Defining Effective SLOs
+
+```yaml
+# Example SLO specification
+slo:
+  name: "Main API"
+  description: "SLO for the production API"
+
+  indicators:
+    - name: availability
+      type: ratio
+      good_events: 'http_requests_total{status=~"2..|3.."}'
+      total_events: 'http_requests_total'
+
+    - name: latency
+      type: threshold
+      metric: 'http_request_duration_seconds'
+      threshold: 0.2  # 200ms
+      percentile: 99
+
+  objectives:
+    - indicator: availability
+      target: 99.9
+      window: 30d
+
+    - indicator: latency
+      target: 99.0
+      window: 30d
+
+  error_budget:
+    calculation: "100% - SLO target"
+    # 99.9% availability = 0.1% error budget
+    # In 30 days = ~43 minutes of allowed downtime
+```
+
+## Error Budgets
+
+Error Budget is the amount of "error" allowed before violating the SLO. It's a tool to balance reliability and innovation speed.
+
+### Error Budget Calculation
+
+```
+Error Budget = 100% - SLO Target
+
+Example for 99.9% availability SLO in 30 days:
+- Error Budget = 0.1%
+- Minutes in month = 30 * 24 * 60 = 43,200 minutes
+- Budget in minutes = 43,200 * 0.001 = 43.2 minutes
+
+If consumed 20 minutes with incidents:
+- Remaining budget = 43.2 - 20 = 23.2 minutes
+- Budget consumed = 46%
+```
+
+### Error Budget Policies
+
+```yaml
+error_budget_policy:
+  # When budget is healthy (< 50% consumed)
+  healthy:
+    actions:
+      - "Prioritize features and innovation"
+      - "Experimentation allowed"
+      - "Normal deployments"
+
+  # When budget is in warning (50-80% consumed)
+  warning:
+    actions:
+      - "Reduce deployment frequency"
+      - "Prioritize bug fixes"
+      - "Increase change reviews"
+
+  # When budget is critical (> 80% consumed)
+  critical:
+    actions:
+      - "Feature freeze"
+      - "Bug fixes only"
+      - "Everyone focuses on reliability"
+
+  # When budget is exhausted
+  exhausted:
+    actions:
+      - "Total deployment freeze"
+      - "Mandatory postmortem"
+      - "Executive action required"
+```
+
+<Callout type="success" title="Benefit">
+  Error budgets transform the tension between "move fast" and "be reliable" into a data-driven decision.
+</Callout>
+
+## Incident Management
+
+### Incident Severities
+
+| Severity | Impact | Response | Example |
+|----------|--------|----------|---------|
+| **SEV1** | Service completely down | Immediate, all-hands | Main API not responding |
+| **SEV2** | Significant degradation | < 15 min | Latency 10x above normal |
+| **SEV3** | Limited impact | < 1 hour | Secondary feature broken |
+| **SEV4** | Minimal | Business hours | Cosmetic bug in production |
+
+### Response Process
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam activityBackgroundColor #E8F4FD
+skinparam activityBorderColor #5B8DD9
+
+title Incident Response Flow
+
+start
+
+:1. **Detection**;
+note right
+  Alert triggered (automatic)
+  or report (manual)
+end note
+
+:2. **Triage**;
+note right
+  Classify severity
+  Page responders
+end note
+
+:3. **Roles Assignment**;
+note right
+  **IC**: coordinates
+  **Comms Lead**: stakeholders
+  **Ops Lead**: mitigation
+end note
+
+:4. **Mitigation**;
+note right
+  Focus on restoring service
+  not root cause
+end note
+
+:5. **Resolution**;
+note right
+  Service restored
+  Intensified monitoring
+end note
+
+:6. **Postmortem**;
+note right
+  Root cause analysis
+  Action items
+end note
+
+stop
+
+@enduml
+  `}
+  alt="Incident Response Flow"
+  caption="Incident response process from Detection to Postmortem"
+/>
+
+### Postmortem Template
+
+```markdown
+# Postmortem: [Incident Title]
+
+## Summary
+- **Date**: 2025-01-02
+- **Duration**: 45 minutes
+- **Impact**: 15% of users affected
+- **Severity**: SEV2
+
+## Timeline
+- 14:00 - Deploy of version 2.3.1
+- 14:15 - Latency alerts triggered
+- 14:20 - IC declared, investigation started
+- 14:35 - Root cause identified (N+1 query)
+- 14:45 - Rollback executed
+- 14:50 - Service normalized
+
+## Root Cause
+N+1 query introduced in new feature caused
+database overload.
+
+## What worked
+- Alerts detected the problem in 15 minutes
+- Rollback was executed in less than 10 minutes
+- Clear communication during the incident
+
+## What didn't work
+- Load tests didn't cover the scenario
+- DB dashboard wasn't visible to the team
+
+## Action Items
+| Item | Owner | Deadline |
+|------|-------|----------|
+| Add load test for N+1 | @dev | 2025-01-09 |
+| Include DB dashboard in runbook | @sre | 2025-01-05 |
+| Query review in code review | @lead | Immediate |
+
+## Lessons Learned
+- Load tests should simulate real usage patterns
+- Dashboards should be easily accessible during incidents
+```
+
+## On-Call and Alerting
+
+### Alert Best Practices
+
+<FeatureGrid
+  features={[
+    {
+      icon: '🎯',
+      title: 'Actionable',
+      description: 'Every alert should have a clear associated action',
+    },
+    {
+      icon: '⏰',
+      title: 'Urgent',
+      description: 'Only alert if immediate human action is needed',
+    },
+    {
+      icon: '📊',
+      title: 'SLO-Based',
+      description: 'Alert when error budget is being consumed',
+    },
+    {
+      icon: '🔇',
+      title: 'No Noise',
+      description: 'Eliminate alerts that don\'t result in action',
+    },
+  ]}
+  columns={4}
+/>
+
+### Burn Rate Alerts
+
+```yaml
+# Alerts based on burn rate (error budget consumption)
+groups:
+  - name: slo-alerts
+    rules:
+      # Alert if burning budget 14x faster than normal
+      # (would consume all budget in ~2 days)
+      - alert: SLOErrorBudgetBurnHigh
+        expr: |
+          (
+            sum(rate(http_requests_total{status=~"5.."}[1h]))
+            /
+            sum(rate(http_requests_total[1h]))
+          ) > (14 * 0.001)  # 14x the budget rate of 0.1%
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error budget burn rate"
+
+      # Alert if burning 3x faster (would consume in ~10 days)
+      - alert: SLOErrorBudgetBurnMedium
+        expr: |
+          (
+            sum(rate(http_requests_total{status=~"5.."}[6h]))
+            /
+            sum(rate(http_requests_total[6h]))
+          ) > (3 * 0.001)
+        for: 30m
+        labels:
+          severity: warning
+```
+
+<Callout type="warning" title="Avoid Alert Fatigue">
+  If the team ignores alerts because there are too many false positives, you have a serious problem. Each ignored alert is a risk.
+</Callout>
+
+---
+
+*Want to implement SRE practices in your organization? [Talk to our specialists](/en/contato) for personalized consulting.*

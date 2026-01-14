@@ -1,9 +1,147 @@
+@import "tailwindcss";
 @import '@fontsource/inter';
 @import '@fontsource/jetbrains-mono';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@plugin "@tailwindcss/typography";
+@plugin "daisyui";
+
+/* =============================================================================
+ * DaisyUI 5 Custom Themes
+ * ============================================================================= */
+
+/* Light Theme - Integr8 */
+@plugin "daisyui/theme" {
+  name: "integr8";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  /* Primary - Integr8 Blue #5B8DD9 */
+  --color-primary: oklch(62% 0.14 245);
+  --color-primary-content: oklch(100% 0 0);
+
+  /* Secondary - Light Blue #7AA3E5 */
+  --color-secondary: oklch(70% 0.12 245);
+  --color-secondary-content: oklch(100% 0 0);
+
+  /* Accent - Green #38A169 */
+  --color-accent: oklch(60% 0.16 150);
+  --color-accent-content: oklch(100% 0 0);
+
+  /* Neutral - Dark Gray #2D3748 */
+  --color-neutral: oklch(30% 0.02 250);
+  --color-neutral-content: oklch(98% 0.01 250);
+
+  /* Base colors */
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: oklch(97% 0.01 250);
+  --color-base-300: oklch(92% 0.01 250);
+  --color-base-content: oklch(25% 0.02 250);
+
+  /* Status colors */
+  --color-info: oklch(58% 0.16 245);
+  --color-info-content: oklch(100% 0 0);
+  --color-success: oklch(60% 0.16 150);
+  --color-success-content: oklch(100% 0 0);
+  --color-warning: oklch(65% 0.18 50);
+  --color-warning-content: oklch(100% 0 0);
+  --color-error: oklch(55% 0.22 25);
+  --color-error-content: oklch(100% 0 0);
+
+  /* Design tokens */
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+/* Dark Theme - Integr8 Dark */
+@plugin "daisyui/theme" {
+  name: "integr8dark";
+  default: false;
+  prefersdark: true;
+  color-scheme: dark;
+
+  /* Primary - Lighter Blue #7AA3E5 for dark bg */
+  --color-primary: oklch(70% 0.12 245);
+  --color-primary-content: oklch(100% 0 0);
+
+  /* Secondary - Integr8 Blue #5B8DD9 */
+  --color-secondary: oklch(62% 0.14 245);
+  --color-secondary-content: oklch(100% 0 0);
+
+  /* Accent - Brighter Green #48BB78 */
+  --color-accent: oklch(67% 0.16 150);
+  --color-accent-content: oklch(100% 0 0);
+
+  /* Neutral - Light for dark mode #F7FAFC */
+  --color-neutral: oklch(97% 0.01 250);
+  --color-neutral-content: oklch(20% 0.02 250);
+
+  /* Base colors - Dark */
+  --color-base-100: oklch(20% 0.02 250);
+  --color-base-200: oklch(25% 0.02 250);
+  --color-base-300: oklch(32% 0.02 250);
+  --color-base-content: oklch(97% 0.01 250);
+
+  /* Status colors - Brighter for dark mode */
+  --color-info: oklch(72% 0.12 245);
+  --color-info-content: oklch(100% 0 0);
+  --color-success: oklch(67% 0.16 150);
+  --color-success-content: oklch(100% 0 0);
+  --color-warning: oklch(72% 0.16 50);
+  --color-warning-content: oklch(100% 0 0);
+  --color-error: oklch(70% 0.16 25);
+  --color-error-content: oklch(100% 0 0);
+
+  /* Design tokens */
+  --radius-selector: 0.5rem;
+  --radius-field: 0.5rem;
+  --radius-box: 0.75rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+/* =============================================================================
+ * Theme Customization
+ * ============================================================================= */
+
+@theme {
+  /* Font Families */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Monaco, Consolas, 'Liberation Mono', monospace;
+
+  /* Integr8 Colors */
+  --color-integr8-blue: #5B8DD9;
+  --color-integr8-blue-dark: #4A7BC7;
+  --color-integr8-blue-light: #7AA3E5;
+  --color-integr8-dark: #2D3748;
+  --color-integr8-darker: #1A202C;
+  --color-integr8-light: #F7FAFC;
+  --color-integr8-muted: #718096;
+
+  /* Custom Animations */
+  --animate-marquee: marquee 20s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-float-delayed: float-delayed 8s ease-in-out infinite 1s;
+  --animate-pulse-slow: pulse-slow 4s ease-in-out infinite;
+  --animate-fade-in-down: fade-in-down 0.6s ease-out forwards;
+  --animate-fade-in-up: fade-in-up 0.6s ease-out forwards;
+  --animate-fade-in: fade-in 0.6s ease-out forwards;
+  --animate-slide-in-right: slide-in-right 0.5s ease-out forwards;
+  --animate-scale-in: scale-in 0.4s ease-out forwards;
+}
+
+/* =============================================================================
+ * Base Styles
+ * ============================================================================= */
 
 @layer base {
   :root {
@@ -24,7 +162,174 @@
   main {
     flex: 1;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
+
+/* =============================================================================
+ * Custom Keyframes
+ * ============================================================================= */
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(2deg);
+  }
+}
+
+@keyframes float-delayed {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-30px) rotate(-2deg);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes progress {
+  from { width: 0%; }
+}
+
+/* =============================================================================
+ * Animation Classes
+ * ============================================================================= */
+
+@utility animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+@utility animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@utility animate-float-delayed {
+  animation: float-delayed 8s ease-in-out infinite;
+  animation-delay: 1s;
+}
+
+@utility animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+@utility animate-fade-in-down {
+  animation: fade-in-down 0.6s ease-out forwards;
+}
+
+@utility animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+@utility animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+@utility animate-slide-in-right {
+  animation: slide-in-right 0.5s ease-out forwards;
+}
+
+@utility animate-scale-in {
+  animation: scale-in 0.4s ease-out forwards;
+}
+
+@utility animate-progress {
+  animation: progress 1s ease-out forwards;
+}
+
+/* Animation Delays */
+@utility animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+@utility animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+@utility animation-delay-600 {
+  animation-delay: 600ms;
+}
+
+@utility animation-delay-800 {
+  animation-delay: 800ms;
+}
+
+/* =============================================================================
+ * Components
+ * ============================================================================= */
 
 @layer components {
   .sr-only {
@@ -45,20 +350,6 @@
 
   .btn-ghost:focus-visible {
     @apply outline-none ring-2 ring-primary ring-offset-2;
-  }
-
-  .smooth-transition {
-    transition-property: all;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 300ms;
-  }
-
-  .hover-lift {
-    @apply transition duration-300 ease-in-out hover:-translate-y-1 hover:shadow-lg;
-  }
-
-  .text-shadow {
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   /* Prose styles */
@@ -86,16 +377,14 @@
     @apply text-primary underline transition-colors hover:opacity-80;
   }
 
-  .prose code {
-    @apply rounded bg-base-200 px-2 py-1 font-mono text-sm text-base-content;
+  /* Inline code - not inside pre */
+  .prose :not(pre) > code {
+    @apply rounded bg-base-200 px-1.5 py-0.5 font-mono text-sm text-base-content;
   }
 
-  .prose pre {
-    @apply mb-4 overflow-x-auto rounded-lg bg-base-300 p-4;
-  }
-
-  .prose pre code {
-    @apply bg-transparent px-0 py-0;
+  .prose :not(pre) > code::before,
+  .prose :not(pre) > code::after {
+    content: none;
   }
 
   .prose blockquote {
@@ -129,219 +418,181 @@
   .prose hr {
     @apply my-8 border-base-300;
   }
+
 }
 
-@layer utilities {
-  /* Animations */
-  @keyframes float {
-    0%,
-    100% {
-      transform: translateY(0) rotate(0deg);
-    }
-    50% {
-      transform: translateY(-20px) rotate(2deg);
-    }
-  }
+/* =============================================================================
+ * Syntax Highlighting - Editor Window Style with Traffic Lights
+ * ============================================================================= */
 
-  @keyframes float-delayed {
-    0%,
-    100% {
-      transform: translateY(0) rotate(0deg);
-    }
-    50% {
-      transform: translateY(-30px) rotate(-2deg);
-    }
-  }
+/* Code block wrapper - creates window-like appearance */
+.prose .astro-code,
+.prose pre.shiki {
+  @apply rounded-lg border border-base-300 text-sm overflow-hidden shadow-lg;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 0;
+  position: relative;
+  font-family: 'JetBrains Mono', 'Fira Code', Monaco, Consolas, monospace;
+}
 
-  @keyframes pulse-slow {
-    0%,
-    100% {
-      opacity: 0.3;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.5;
-      transform: scale(1.1);
-    }
-  }
+/* Window header bar with traffic lights */
+.prose .astro-code::before,
+.prose pre.shiki::before {
+  content: '';
+  display: block;
+  height: 2.5rem;
+  background: var(--color-base-300);
+  border-bottom: 1px solid var(--color-base-300);
+  position: relative;
+}
 
-  @keyframes fade-in-down {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+/* Traffic lights */
+.prose .astro-code::after,
+.prose pre.shiki::after {
+  content: '';
+  position: absolute;
+  top: 0.875rem;
+  left: 1rem;
+  width: 0.75rem;
+  height: 0.75rem;
+  background: #ff5f57;
+  border-radius: 50%;
+  box-shadow:
+    1.25rem 0 0 #febc2e,
+    2.5rem 0 0 #28c840;
+}
 
-  @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+/* Code content padding */
+.prose .astro-code code,
+.prose pre.shiki code {
+  display: block;
+  padding: 1rem;
+  background: transparent;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.7;
+}
 
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
+/* Shiki dual themes - dark mode uses CSS variables */
+[data-theme="integr8dark"] .astro-code,
+[data-theme="integr8dark"] .shiki {
+  background-color: var(--shiki-dark-bg, #24292e) !important;
+}
 
-  @keyframes slide-in-right {
-    from {
-      opacity: 0;
-      transform: translateX(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
+[data-theme="integr8dark"] .astro-code span,
+[data-theme="integr8dark"] .shiki span {
+  color: var(--shiki-dark, inherit) !important;
+}
 
-  @keyframes scale-in {
-    from {
-      opacity: 0;
-      transform: scale(0.9);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
+/* Light mode - default */
+[data-theme="integr8"] .astro-code,
+[data-theme="integr8"] .shiki {
+  background-color: var(--shiki-light-bg, #ffffff) !important;
+}
 
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
+[data-theme="integr8"] .astro-code span,
+[data-theme="integr8"] .shiki span {
+  color: var(--shiki-light, inherit) !important;
+}
 
-  .animate-float-delayed {
-    animation: float-delayed 8s ease-in-out infinite;
-    animation-delay: 1s;
-  }
+/* =============================================================================
+ * Utilities
+ * ============================================================================= */
 
-  .animate-pulse-slow {
-    animation: pulse-slow 4s ease-in-out infinite;
-  }
+@utility smooth-transition {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
 
-  .animate-fade-in-down {
-    animation: fade-in-down 0.6s ease-out forwards;
-  }
+@utility hover-lift {
+  @apply transition duration-300 ease-in-out;
+}
 
-  .animate-fade-in-up {
-    animation: fade-in-up 0.6s ease-out forwards;
-  }
+.hover-lift:hover {
+  @apply -translate-y-1 shadow-lg;
+}
 
-  .animate-fade-in {
-    animation: fade-in 0.6s ease-out forwards;
-  }
+@utility text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-  .animate-slide-in-right {
-    animation: slide-in-right 0.5s ease-out forwards;
-  }
+@utility hover-card {
+  @apply transition-all duration-300 ease-out;
+}
 
-  .animate-scale-in {
-    animation: scale-in 0.4s ease-out forwards;
-  }
+.hover-card:hover {
+  @apply -translate-y-1 shadow-xl;
+}
 
-  .animation-delay-200 {
-    animation-delay: 200ms;
-  }
+@utility hover-glow {
+  @apply transition-shadow duration-300;
+}
 
-  .animation-delay-400 {
-    animation-delay: 400ms;
-  }
+.hover-glow:hover {
+  box-shadow: 0 0 30px oklch(62% 0.14 245 / 0.2);
+}
 
-  .animation-delay-600 {
-    animation-delay: 600ms;
-  }
+@utility glass-effect {
+  @apply bg-base-100/80 backdrop-blur-sm;
+}
 
-  .animation-delay-800 {
-    animation-delay: 800ms;
-  }
+@utility text-gradient {
+  @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
+}
 
-  /* Hover effects */
-  .hover-card {
-    @apply transition-all duration-300 ease-out;
-  }
+@utility card-hover-border {
+  @apply border border-transparent transition-colors duration-300;
+}
 
-  .hover-card:hover {
-    @apply -translate-y-1 shadow-xl;
-  }
+.card-hover-border:hover {
+  border-color: oklch(62% 0.14 245 / 0.3);
+}
 
-  .hover-glow:hover {
-    box-shadow: 0 0 30px rgba(var(--primary), 0.2);
-  }
+/* Stagger children animations */
+.stagger-children > * {
+  opacity: 0;
+  animation: fade-in-up 0.5s ease-out forwards;
+}
 
-  /* Glass effect */
-  .glass-effect {
-    @apply bg-base-100/80 backdrop-blur-sm;
-  }
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 100ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 200ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 400ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 500ms; }
 
-  /* Gradient text */
-  .text-gradient {
-    @apply bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent;
-  }
+/* =============================================================================
+ * Navigation Dropdown - Hover only on trigger, not on content area
+ * ============================================================================= */
 
-  /* Card variants */
-  .card-hover-border {
-    @apply border border-transparent transition-colors duration-300;
-  }
+.nav-dropdown {
+  position: relative;
+}
 
-  .card-hover-border:hover {
-    @apply border-primary/30;
-  }
+.nav-dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  padding-top: 0.5rem; /* Padding instead of margin to keep hover area connected */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+  pointer-events: none;
+}
 
-  /* Progress bar animation */
-  @keyframes progress {
-    from {
-      width: 0%;
-    }
-  }
+/* The actual visible menu box */
+.nav-dropdown-content > * {
+  background: inherit;
+}
 
-  .animate-progress {
-    animation: progress 1s ease-out forwards;
-  }
-
-  /* Stagger children animations */
-  .stagger-children > * {
-    opacity: 0;
-    animation: fade-in-up 0.5s ease-out forwards;
-  }
-
-  .stagger-children > *:nth-child(1) {
-    animation-delay: 0ms;
-  }
-  .stagger-children > *:nth-child(2) {
-    animation-delay: 100ms;
-  }
-  .stagger-children > *:nth-child(3) {
-    animation-delay: 200ms;
-  }
-  .stagger-children > *:nth-child(4) {
-    animation-delay: 300ms;
-  }
-  .stagger-children > *:nth-child(5) {
-    animation-delay: 400ms;
-  }
-  .stagger-children > *:nth-child(6) {
-    animation-delay: 500ms;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-  }
+/* Show dropdown when trigger is hovered */
+.nav-dropdown-trigger:hover + .nav-dropdown-content,
+.nav-dropdown-content:hover {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }

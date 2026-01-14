@@ -1,0 +1,349 @@
+---
+title: 'Service Mesh: Istio vs Linkerd for Microservices in Kubernetes'
+description: 'Compare Istio and Linkerd, understand when to use service mesh, and learn to implement observability, security, and traffic management.'
+author: 'Integr8 Team'
+date: 2025-01-03
+category: 'Kubernetes'
+tags: ['service-mesh', 'istio', 'linkerd', 'kubernetes', 'microservices', 'security']
+read_time: 13
+featured: false
+---
+
+import { Callout, FeatureGrid, Steps, PlantUML } from '@components/content';
+
+## What is Service Mesh?
+
+Service Mesh is a dedicated infrastructure layer for managing service-to-service communication. Instead of implementing network logic in each service, the mesh moves it to a sidecar proxy.
+
+<FeatureGrid
+  features={[
+    {
+      icon: '🔍',
+      title: 'Observability',
+      description: 'Metrics, traces, and logs from all communication automatically',
+    },
+    {
+      icon: '🔒',
+      title: 'Security',
+      description: 'Automatic mTLS, access policies, encryption',
+    },
+    {
+      icon: '🔄',
+      title: 'Traffic Management',
+      description: 'Canary deploys, A/B testing, circuit breakers, retries',
+    },
+    {
+      icon: '🎛️',
+      title: 'Resilience',
+      description: 'Rate limiting, timeouts, advanced load balancing',
+    },
+  ]}
+  columns={2}
+/>
+
+## Service Mesh Architecture
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam rectangleBorderColor #5B8DD9
+skinparam rectangleBackgroundColor #F7FAFC
+
+title Service Mesh Architecture
+
+rectangle "**Control Plane**" as cp #E8F4FD {
+  rectangle "Config\\nServer" as config #F7FAFC
+  rectangle "Policy\\nEngine" as policy #F7FAFC
+  rectangle "Telemetry\\nCollector" as telemetry #F7FAFC
+}
+
+rectangle "**Data Plane**" as dp {
+  rectangle "Service A" as svcA #E8F4FD {
+    rectangle "Proxy\\n(Sidecar)" as proxyA #D1FAE5
+    rectangle "App" as appA #F7FAFC
+  }
+
+  rectangle "Service B" as svcB #E8F4FD {
+    rectangle "Proxy\\n(Sidecar)" as proxyB #D1FAE5
+    rectangle "App" as appB #F7FAFC
+  }
+}
+
+cp -down-> dp : Configuration
+
+proxyA <-right-> proxyB : **mTLS**
+
+@enduml
+  `}
+  alt="Service Mesh Architecture"
+  caption="Control Plane manages configuration, Data Plane proxies handle traffic"
+/>
+
+## Istio: The Most Complete
+
+Istio is the most feature-rich service mesh, used by large companies in production.
+
+### Istio Installation
+
+```bash
+# Install istioctl
+curl -L https://istio.io/downloadIstio | sh -
+export PATH="$PATH:$PWD/istio-*/bin"
+
+# Install Istio with demo profile (for testing)
+istioctl install --set profile=demo -y
+
+# For production, use default profile or customize
+istioctl install --set profile=default \
+  --set values.global.proxy.resources.requests.cpu=100m \
+  --set values.global.proxy.resources.requests.memory=128Mi
+
+# Enable automatic sidecar injection
+kubectl label namespace default istio-injection=enabled
+```
+
+### Traffic Management with Istio
+
+```yaml
+# VirtualService - advanced routing
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: myapp
+spec:
+  hosts:
+    - myapp
+  http:
+    # Canary: 90% v1, 10% v2
+    - match:
+        - headers:
+            x-canary:
+              exact: "true"
+      route:
+        - destination:
+            host: myapp
+            subset: v2
+    - route:
+        - destination:
+            host: myapp
+            subset: v1
+          weight: 90
+        - destination:
+            host: myapp
+            subset: v2
+          weight: 10
+
+---
+# DestinationRule - defines subsets and policies
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: myapp
+spec:
+  host: myapp
+  trafficPolicy:
+    connectionPool:
+      http:
+        http1MaxPendingRequests: 100
+        http2MaxRequests: 1000
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+    - name: v2
+      labels:
+        version: v2
+```
+
+### Security with mTLS
+
+```yaml
+# PeerAuthentication - enable mTLS
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: istio-system
+spec:
+  mtls:
+    mode: STRICT  # All communications must use mTLS
+
+---
+# AuthorizationPolicy - access control
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-frontend
+  namespace: production
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  rules:
+    - from:
+        - source:
+            principals: ["cluster.local/ns/production/sa/frontend"]
+      to:
+        - operation:
+            methods: ["GET", "POST"]
+            paths: ["/api/*"]
+```
+
+## Linkerd: Simplicity and Performance
+
+Linkerd is lighter and simpler, focused on doing the essentials well.
+
+### Linkerd Installation
+
+```bash
+# Install CLI
+curl --proto '=https' -sSfL https://run.linkerd.io/install | sh
+export PATH="$PATH:$HOME/.linkerd2/bin"
+
+# Check prerequisites
+linkerd check --pre
+
+# Install CRDs and control plane
+linkerd install --crds | kubectl apply -f -
+linkerd install | kubectl apply -f -
+
+# Verify installation
+linkerd check
+
+# Inject sidecar in namespace
+kubectl get deploy -n myapp -o yaml | linkerd inject - | kubectl apply -f -
+
+# OR enable auto-injection
+kubectl annotate namespace myapp linkerd.io/inject=enabled
+```
+
+### Traffic Split in Linkerd
+
+```yaml
+# TrafficSplit for canary
+apiVersion: split.smi-spec.io/v1alpha1
+kind: TrafficSplit
+metadata:
+  name: myapp-split
+  namespace: production
+spec:
+  service: myapp
+  backends:
+    - service: myapp-v1
+      weight: 90
+    - service: myapp-v2
+      weight: 10
+```
+
+### Service Profiles for Retries and Timeouts
+
+```yaml
+apiVersion: linkerd.io/v1alpha2
+kind: ServiceProfile
+metadata:
+  name: myapp.production.svc.cluster.local
+  namespace: production
+spec:
+  routes:
+    - name: GET /api/users
+      condition:
+        method: GET
+        pathRegex: /api/users
+      responseClasses:
+        - condition:
+            status:
+              min: 500
+              max: 599
+          isFailure: true
+      timeout: 5s
+      retryBudget:
+        retryRatio: 0.2
+        minRetriesPerSecond: 10
+        ttl: 10s
+```
+
+## Comparison: Istio vs Linkerd
+
+| Aspect | Istio | Linkerd |
+|--------|-------|---------|
+| **Complexity** | High | Low |
+| **Resources** | ~100MB per sidecar | ~10MB per sidecar |
+| **Latency overhead** | ~3ms | ~1ms |
+| **Features** | Very complete | Essentials |
+| **Learning Curve** | Steep | Gentle |
+| **Extensibility** | WASM filters | Limited |
+| **Multi-cluster** | ✅ Native | ✅ Native |
+| **CNCF** | Graduated | Graduated |
+
+<Callout type="info" title="Our Recommendation">
+  **Linkerd** for most cases: simpler, lighter, better performance. **Istio** when you need advanced features like WASM extensibility, complex traffic mirroring, or already have team expertise.
+</Callout>
+
+## When to Use Service Mesh?
+
+<Steps
+  steps={[
+    {
+      title: 'Many Microservices',
+      description: 'Starting from 10-15 services, the benefit begins to outweigh the complexity.',
+    },
+    {
+      title: 'Security Requirements',
+      description: 'Mandatory mTLS, zero-trust networking, compliance.',
+    },
+    {
+      title: 'Unified Observability',
+      description: 'Need consistent metrics and traces across all services.',
+    },
+    {
+      title: 'Advanced Traffic Management',
+      description: 'Canary, A/B testing, fault injection, traffic mirroring.',
+    },
+  ]}
+/>
+
+## When NOT to Use Service Mesh?
+
+<Callout type="warning" title="Avoid Service Mesh If">
+  - You have few services (< 5)
+  - Performance is critical and every ms matters
+  - Team lacks Kubernetes expertise
+  - Requirements can be met with simpler solutions (Ingress + traditional observability stack)
+</Callout>
+
+## Observability with Service Mesh
+
+Both Istio and Linkerd provide rich metrics automatically:
+
+```yaml
+# Prometheus scrape config for Linkerd
+- job_name: 'linkerd'
+  kubernetes_sd_configs:
+    - role: pod
+  relabel_configs:
+    - source_labels: [__meta_kubernetes_pod_annotation_linkerd_io_proxy_deployment]
+      action: keep
+      regex: .*
+
+# Grafana dashboards are provided out-of-the-box
+# Linkerd: linkerd viz install | kubectl apply -f -
+# Istio: kubectl apply -f samples/addons/grafana.yaml
+```
+
+### Key Service Mesh Metrics
+
+- **Request Rate**: Requests per second per service
+- **Error Rate**: Percentage of errors (5xx)
+- **Latency**: p50, p95, p99 for each route
+- **Success Rate**: End-to-end success rate
+- **TCP Connections**: Active connections
+
+---
+
+*Want to implement service mesh in your architecture? [Talk to our specialists](/en/contato) in Kubernetes and microservices.*

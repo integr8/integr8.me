@@ -18,21 +18,27 @@ export interface Props {
 const { title, description, image, canonical, ogType } = Astro.props;
 
 // Extract lang from URL
-const pathSegments = Astro.url.pathname.split('/').filter(Boolean);
+const pathname = Astro.url?.pathname || '/';
+const pathSegments = pathname.split('/').filter(Boolean);
 const lang = ['ptbr', 'en'].includes(pathSegments[0]) ? pathSegments[0] : 'ptbr';
 
 // Load translations for the current language
 const translations = getTranslations(lang);
 
 // Load solutions for footer
-const allSolutions = await getCollection('solutions');
+const allSolutions = await getCollection('solutions').catch(() => []);
 const langFolder = lang === 'en' ? 'en' : 'ptbr';
 const solutions = allSolutions
-  .filter((s) => s.id.startsWith(langFolder + '/'))
-  .map((s) => ({
-    slug: s.id.replace(langFolder + '/', '').replace('.mdx', ''),
-    title: s.data.title,
-  }))
+  .filter((s) => s.id && s.id.startsWith(langFolder + '/'))
+  .map((s) => {
+    // With glob loader, id is like "ptbr/cloud-architecture" (no .mdx extension)
+    const slug = s.id?.split('/').pop() || s.id || '';
+    return {
+      slug,
+      title: s.data?.title || '',
+    };
+  })
+  .filter((s) => s.slug && s.title)
   .sort((a, b) => a.title.localeCompare(b.title));
 ---
 

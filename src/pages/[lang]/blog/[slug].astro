@@ -1,7 +1,8 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { Badge } from '@components/common/Badge';
+import MDXImageWrapper from '@components/content/MDXImageWrapper.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -36,7 +37,7 @@ interface Props {
 const { lang } = Astro.params;
 const { post } = Astro.props;
 
-const { Content } = await post.render();
+const { Content } = await render(post);
 ---
 
 <BaseLayout title={`${post.data.title} - Blog Integr8`} description={post.data.description}>
@@ -96,7 +97,7 @@ const { Content } = await post.render();
 
     <!-- Content -->
     <article class="prose prose-lg max-w-none">
-      <Content />
+      <Content components={{ img: MDXImageWrapper }} />
     </article>
 
     <!-- Back link -->

@@ -8,7 +8,10 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.params;
-const posts = await getCollection('blog', ({ slug }) => slug.startsWith(`${lang}/`));
+const allPosts = await getCollection('blog').catch(() => []);
+const posts = allPosts
+  .filter((p) => p.id && p.id.startsWith(`${lang}/`))
+  .map((p) => ({ ...p, slug: p.id.split('/').pop() || p.id }));
 
 const breadcrumbs = [
   { label: lang === 'ptbr' ? 'Início' : 'Home', href: `/${lang}` },
@@ -35,7 +38,7 @@ const breadcrumbs = [
           readTime={post.data.read_time}
           author={post.data.author}
           date={post.data.date}
-          href={`/${lang}/blog/${post.slug.split('/').pop()}`}
+          href={`/${lang}/blog/${post.slug}`}
           lang={lang as string}
         />
       ))

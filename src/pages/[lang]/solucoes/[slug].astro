@@ -1,6 +1,7 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import SolutionLayout from '@layouts/SolutionLayout.astro';
+import MDXImageWrapper from '@components/content/MDXImageWrapper.astro';
 
 export async function getStaticPaths() {
   const solutions = await getCollection('solutions');
@@ -36,7 +37,7 @@ interface Props {
 const { lang } = Astro.params;
 const { solution } = Astro.props;
 
-const { Content } = await solution.render();
+const { Content } = await render(solution);
 ---
 
 <SolutionLayout
@@ -47,5 +48,5 @@ const { Content } = await solution.render();
   icon={solution.data.icon}
   lang={lang}
 >
-  <Content />
+  <Content components={{ img: MDXImageWrapper }} />
 </SolutionLayout>

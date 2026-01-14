@@ -1,8 +1,9 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '@layouts/BaseLayout.astro';
 import { Badge } from '@components/common/Badge';
 import { Icon } from '@components/common/Icon';
+import MDXImageWrapper from '@components/content/MDXImageWrapper.astro';
 
 export async function getStaticPaths() {
   const cases = await getCollection('cases');
@@ -37,7 +38,7 @@ interface Props {
 const { lang } = Astro.params;
 const { caseItem } = Astro.props;
 
-const { Content } = await caseItem.render();
+const { Content } = await render(caseItem);
 ---
 
 <BaseLayout title={`${caseItem.data.title} - Cases Integr8`} description={caseItem.data.challenge}>
@@ -135,7 +136,7 @@ const { Content } = await caseItem.render();
 
     <!-- Content -->
     <article class="prose prose-lg max-w-none">
-      <Content />
+      <Content components={{ img: MDXImageWrapper }} />
     </article>
 
     <!-- Back link -->

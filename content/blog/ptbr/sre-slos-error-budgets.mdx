@@ -1,0 +1,394 @@
+---
+title: 'SRE na Prática: SLOs, Error Budgets e Incident Management'
+description: 'Aprenda a implementar práticas de Site Reliability Engineering, definir SLOs efetivos, gerenciar error budgets e responder a incidentes.'
+author: 'Equipe Integr8'
+date: 2025-01-01
+category: 'Observability'
+tags: ['sre', 'slo', 'error-budget', 'incident-management', 'reliability', 'on-call']
+read_time: 13
+featured: false
+---
+
+import { Callout, FeatureGrid, Steps, PlantUML } from '@components/content';
+
+## O que é SRE?
+
+Site Reliability Engineering (SRE) é uma disciplina de engenharia de software aplicada a operações. Criada pelo Google, combina desenvolvimento de software com administração de sistemas para criar sistemas altamente confiáveis e escaláveis.
+
+<Callout type="info" title="Princípio Fundamental">
+  "SRE é o que acontece quando você pede a um engenheiro de software para projetar uma operação." - Ben Treynor, VP of Engineering @ Google
+</Callout>
+
+## Hierarquia de Confiabilidade
+
+<FeatureGrid
+  features={[
+    {
+      icon: '📊',
+      title: 'Monitoring',
+      description: 'Saber o que está acontecendo no sistema em tempo real',
+    },
+    {
+      icon: '🚨',
+      title: 'Alerting',
+      description: 'Ser notificado quando algo está errado',
+    },
+    {
+      icon: '🔥',
+      title: 'Incident Response',
+      description: 'Responder e mitigar problemas rapidamente',
+    },
+    {
+      icon: '📋',
+      title: 'Postmortem',
+      description: 'Aprender com falhas e prevenir recorrência',
+    },
+  ]}
+  columns={4}
+/>
+
+## SLIs, SLOs e SLAs
+
+### Definições
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam defaultFontSize 12
+skinparam rectangleBorderColor #5B8DD9
+skinparam rectangleBackgroundColor #F7FAFC
+
+rectangle "**SLI** (Service Level Indicator)" as sli #E8F4FD {
+  card "\\"O que medimos\\"" as sli_desc
+  card "Exemplo: Latência p99 das requests" as sli_ex
+}
+
+rectangle "**SLO** (Service Level Objective)" as slo #E8F4FD {
+  card "\\"Nosso objetivo interno\\"" as slo_desc
+  card "Exemplo: p99 < 200ms em 99.9% das requests" as slo_ex
+}
+
+rectangle "**SLA** (Service Level Agreement)" as sla #E8F4FD {
+  card "\\"Nosso compromisso externo\\"" as sla_desc
+  card "Exemplo: Uptime 99.5% com penalidades" as sla_ex
+}
+
+sli -[hidden]down-> slo
+slo -[hidden]down-> sla
+
+note bottom of sla
+  **SLO > SLA**
+  (sempre ter margem de segurança)
+end note
+@enduml
+  `}
+  alt="Hierarquia SLI, SLO e SLA"
+  caption="SLI mede, SLO define objetivo interno, SLA é o compromisso externo"
+/>
+
+### Tipos Comuns de SLIs
+
+<Steps
+  steps={[
+    {
+      title: 'Availability',
+      description: 'Percentual de requests bem-sucedidas (2xx/3xx vs 5xx)',
+    },
+    {
+      title: 'Latency',
+      description: 'Tempo de resposta (p50, p95, p99)',
+    },
+    {
+      title: 'Throughput',
+      description: 'Requests por segundo processadas',
+    },
+    {
+      title: 'Error Rate',
+      description: 'Taxa de erros do usuário final',
+    },
+    {
+      title: 'Freshness',
+      description: 'Quão recentes são os dados (para sistemas de dados)',
+    },
+  ]}
+/>
+
+### Definindo SLOs Efetivos
+
+```yaml
+# Exemplo de especificação de SLO
+slo:
+  name: "API Principal"
+  description: "SLO para a API de produção"
+
+  indicators:
+    - name: availability
+      type: ratio
+      good_events: 'http_requests_total{status=~"2..|3.."}'
+      total_events: 'http_requests_total'
+
+    - name: latency
+      type: threshold
+      metric: 'http_request_duration_seconds'
+      threshold: 0.2  # 200ms
+      percentile: 99
+
+  objectives:
+    - indicator: availability
+      target: 99.9
+      window: 30d
+
+    - indicator: latency
+      target: 99.0
+      window: 30d
+
+  error_budget:
+    calculation: "100% - SLO target"
+    # 99.9% availability = 0.1% error budget
+    # Em 30 dias = ~43 minutos de downtime permitido
+```
+
+## Error Budgets
+
+Error Budget é a quantidade de "erro" permitida antes de violar o SLO. É uma ferramenta para balancear confiabilidade e velocidade de inovação.
+
+### Cálculo do Error Budget
+
+```
+Error Budget = 100% - SLO Target
+
+Exemplo para SLO de 99.9% availability em 30 dias:
+- Error Budget = 0.1%
+- Minutos no mês = 30 * 24 * 60 = 43,200 minutos
+- Budget em minutos = 43,200 * 0.001 = 43.2 minutos
+
+Se consumiu 20 minutos com incidentes:
+- Budget restante = 43.2 - 20 = 23.2 minutos
+- Budget consumido = 46%
+```
+
+### Políticas de Error Budget
+
+```yaml
+error_budget_policy:
+  # Quando budget está saudável (< 50% consumido)
+  healthy:
+    actions:
+      - "Priorizar features e inovação"
+      - "Experimentação permitida"
+      - "Deployments normais"
+
+  # Quando budget está em alerta (50-80% consumido)
+  warning:
+    actions:
+      - "Reduzir frequência de deploys"
+      - "Priorizar correção de bugs"
+      - "Aumentar review de changes"
+
+  # Quando budget está crítico (> 80% consumido)
+  critical:
+    actions:
+      - "Freeze de features"
+      - "Apenas bug fixes"
+      - "Todos focam em confiabilidade"
+
+  # Quando budget estourou
+  exhausted:
+    actions:
+      - "Freeze total de deploys"
+      - "Postmortem obrigatório"
+      - "Ação executiva necessária"
+```
+
+<Callout type="success" title="Benefício">
+  Error budgets transformam a tensão entre "mover rápido" e "ser confiável" em uma decisão baseada em dados.
+</Callout>
+
+## Incident Management
+
+### Severidades de Incidente
+
+| Severity | Impacto | Resposta | Exemplo |
+|----------|---------|----------|---------|
+| **SEV1** | Serviço completamente down | Imediata, all-hands | API principal não responde |
+| **SEV2** | Degradação significativa | < 15 min | Latência 10x acima do normal |
+| **SEV3** | Impacto limitado | < 1 hora | Feature secundária quebrada |
+| **SEV4** | Mínimo | Horário comercial | Bug cosmético em produção |
+
+### Processo de Resposta
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam activityBackgroundColor #E8F4FD
+skinparam activityBorderColor #5B8DD9
+
+title Incident Response Flow
+
+start
+
+:1. **Detection**;
+note right
+  Alert disparado (automático)
+  ou reporte (manual)
+end note
+
+:2. **Triage**;
+note right
+  Classificar severidade
+  Acionar responders
+end note
+
+:3. **Roles Assignment**;
+note right
+  **IC**: coordena
+  **Comms Lead**: stakeholders
+  **Ops Lead**: mitigação
+end note
+
+:4. **Mitigation**;
+note right
+  Foco em restaurar serviço
+  não root cause
+end note
+
+:5. **Resolution**;
+note right
+  Serviço restaurado
+  Monitoramento intensificado
+end note
+
+:6. **Postmortem**;
+note right
+  Análise de causa raiz
+  Action items
+end note
+
+stop
+
+@enduml
+  `}
+  alt="Fluxo de Resposta a Incidentes"
+  caption="Processo de resposta a incidentes do Detection ao Postmortem"
+/>
+
+### Template de Postmortem
+
+```markdown
+# Postmortem: [Título do Incidente]
+
+## Resumo
+- **Data**: 2025-01-02
+- **Duração**: 45 minutos
+- **Impacto**: 15% dos usuários afetados
+- **Severidade**: SEV2
+
+## Timeline
+- 14:00 - Deploy da versão 2.3.1
+- 14:15 - Alertas de latência disparados
+- 14:20 - IC declarado, investigação iniciada
+- 14:35 - Root cause identificada (query N+1)
+- 14:45 - Rollback executado
+- 14:50 - Serviço normalizado
+
+## Root Cause
+Query N+1 introduzida em nova feature causou
+sobrecarga no banco de dados.
+
+## O que funcionou
+- Alertas detectaram o problema em 15 minutos
+- Rollback foi executado em menos de 10 minutos
+- Comunicação clara durante o incidente
+
+## O que não funcionou
+- Testes de carga não cobriram o cenário
+- Dashboard de DB não era visível para o time
+
+## Action Items
+| Item | Owner | Prazo |
+|------|-------|-------|
+| Adicionar teste de carga para N+1 | @dev | 2025-01-09 |
+| Incluir dashboard DB no runbook | @sre | 2025-01-05 |
+| Review de queries em code review | @lead | Imediato |
+
+## Lições Aprendidas
+- Testes de carga devem simular padrões reais de uso
+- Dashboards devem ser facilmente acessíveis durante incidentes
+```
+
+## On-Call e Alerting
+
+### Boas Práticas de Alertas
+
+<FeatureGrid
+  features={[
+    {
+      icon: '🎯',
+      title: 'Actionable',
+      description: 'Todo alerta deve ter uma ação clara associada',
+    },
+    {
+      icon: '⏰',
+      title: 'Urgente',
+      description: 'Só alertar se precisa de ação humana imediata',
+    },
+    {
+      icon: '📊',
+      title: 'Baseado em SLO',
+      description: 'Alertar quando error budget está sendo consumido',
+    },
+    {
+      icon: '🔇',
+      title: 'Sem ruído',
+      description: 'Eliminar alertas que não resultam em ação',
+    },
+  ]}
+  columns={4}
+/>
+
+### Burn Rate Alerts
+
+```yaml
+# Alertas baseados em burn rate (consumo de error budget)
+groups:
+  - name: slo-alerts
+    rules:
+      # Alert se queimando budget 14x mais rápido que o normal
+      # (consumiria todo budget em ~2 dias)
+      - alert: SLOErrorBudgetBurnHigh
+        expr: |
+          (
+            sum(rate(http_requests_total{status=~"5.."}[1h]))
+            /
+            sum(rate(http_requests_total[1h]))
+          ) > (14 * 0.001)  # 14x o budget rate de 0.1%
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error budget burn rate"
+
+      # Alert se queimando 3x mais rápido (consumiria em ~10 dias)
+      - alert: SLOErrorBudgetBurnMedium
+        expr: |
+          (
+            sum(rate(http_requests_total{status=~"5.."}[6h]))
+            /
+            sum(rate(http_requests_total[6h]))
+          ) > (3 * 0.001)
+        for: 30m
+        labels:
+          severity: warning
+```
+
+<Callout type="warning" title="Evite Alert Fatigue">
+  Se o time ignora alertas porque há muitos falsos positivos, você tem um problema sério. Cada alerta ignorado é um risco.
+</Callout>
+
+---
+
+*Quer implementar práticas de SRE na sua organização? [Fale com nossos especialistas](/ptbr/contato) para uma consultoria personalizada.*

@@ -1,0 +1,293 @@
+---
+title: 'Lakehouse Architecture: O Futuro do Data Engineering'
+description: 'Descubra como a arquitetura Lakehouse combina o melhor de Data Lakes e Data Warehouses, revolucionando a forma como gerenciamos dados analíticos.'
+author: 'Equipe Integr8'
+date: 2025-01-09
+category: 'Data Engineering'
+tags: ['lakehouse', 'data-lake', 'data-warehouse', 'delta-lake', 'iceberg', 'databricks', 'spark']
+read_time: 12
+featured: true
+---
+
+import { Callout, FeatureGrid, Steps, PlantUML, SimpleTimeline } from '@components/content';
+
+## A Evolução das Arquiteturas de Dados
+
+Por décadas, as organizações enfrentaram um dilema: escolher entre a flexibilidade dos **Data Lakes** ou a performance dos **Data Warehouses**. A arquitetura **Lakehouse** surge como a resposta definitiva para esse trade-off.
+
+## O Problema das Arquiteturas Tradicionais
+
+<FeatureGrid
+  features={[
+    {
+      icon: '🏢',
+      title: 'Data Warehouse',
+      description: 'Ótimo para BI, mas caro, proprietário e limitado para ML/AI',
+    },
+    {
+      icon: '🌊',
+      title: 'Data Lake',
+      description: 'Flexível e barato, mas sem ACID, governance fraco e "data swamp"',
+    },
+    {
+      icon: '🔄',
+      title: 'Lambda Architecture',
+      description: 'Duplicação de pipelines batch + streaming, complexidade operacional',
+    },
+  ]}
+  columns={3}
+/>
+
+<Callout type="warning" title="O Custo da Complexidade">
+  Arquiteturas tradicionais forçam a cópia de dados entre sistemas (ETL do Lake para o Warehouse), aumentando custos, latência e riscos de inconsistência.
+</Callout>
+
+## O que é Lakehouse?
+
+Lakehouse é uma arquitetura de dados que combina:
+
+- **Armazenamento barato** de Data Lakes (object storage)
+- **Transações ACID** de Data Warehouses
+- **Schema enforcement** e evolução
+- **Governance e lineage** integrados
+- **Performance otimizada** para BI e ML
+
+### Componentes Fundamentais
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam rectangleBorderColor #5B8DD9
+
+title Componentes da Arquitetura Lakehouse
+
+rectangle "**BI / ML / Analytics**" as apps #D1FAE5
+
+rectangle "**Query Engine**\\n(Spark, Trino, Presto)" as query #E8F4FD
+
+rectangle "**Table Format**\\n(Delta Lake, Iceberg, Hudi)" as format #FEF3C7
+
+rectangle "**Object Storage**\\n(S3, ADLS, GCS, MinIO)" as storage #E8F4FD
+
+apps -down-> query
+query -down-> format
+format -down-> storage
+
+@enduml
+  `}
+  alt="Componentes Lakehouse"
+  caption="Arquitetura em camadas: Applications > Query Engine > Table Format > Object Storage"
+/>
+
+## Table Formats: O Coração do Lakehouse
+
+Os formatos de tabela abertos são a inovação chave que viabiliza o Lakehouse:
+
+| Feature | Delta Lake | Apache Iceberg | Apache Hudi |
+|---------|------------|----------------|-------------|
+| **Criador** | Databricks | Netflix | Uber |
+| **ACID** | ✅ | ✅ | ✅ |
+| **Time Travel** | ✅ | ✅ | ✅ |
+| **Schema Evolution** | ✅ | ✅ | ✅ |
+| **Partition Evolution** | Limitado | ✅ Nativo | Limitado |
+| **Hidden Partitioning** | ❌ | ✅ | ❌ |
+| **Merge on Read** | ✅ | ✅ | ✅ |
+| **Ecossistema** | Spark-centric | Multi-engine | Spark/Flink |
+
+<Callout type="info" title="Nossa Recomendação">
+  **Apache Iceberg** está se consolidando como o padrão de mercado devido à sua arquitetura aberta e suporte multi-engine. Delta Lake é ideal se você já está no ecossistema Databricks.
+</Callout>
+
+## Benefícios do Lakehouse
+
+<Steps
+  steps={[
+    {
+      title: 'Custo Reduzido',
+      description: 'Armazenamento em object storage (10-20x mais barato que DW proprietário) + compute separado.',
+    },
+    {
+      title: 'Dados Unificados',
+      description: 'Uma única cópia dos dados serve BI, Data Science, ML e Streaming.',
+    },
+    {
+      title: 'Governança Forte',
+      description: 'ACID transactions, time travel, audit logs e data lineage nativos.',
+    },
+    {
+      title: 'Flexibilidade',
+      description: 'Dados estruturados, semi-estruturados e não-estruturados no mesmo lugar.',
+    },
+    {
+      title: 'Performance',
+      description: 'Otimizações como Z-ordering, compaction e caching aproximam de DW tradicionais.',
+    },
+  ]}
+/>
+
+## Implementando um Lakehouse
+
+### Arquitetura de Referência com Iceberg
+
+```python
+# Criando uma tabela Iceberg com PySpark
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .appName("LakehouseExample") \
+    .config("spark.sql.catalog.lakehouse", "org.apache.iceberg.spark.SparkCatalog") \
+    .config("spark.sql.catalog.lakehouse.type", "hadoop") \
+    .config("spark.sql.catalog.lakehouse.warehouse", "s3://my-lakehouse/") \
+    .getOrCreate()
+
+# Criar tabela com particionamento oculto
+spark.sql("""
+    CREATE TABLE lakehouse.events (
+        event_id STRING,
+        user_id STRING,
+        event_type STRING,
+        event_timestamp TIMESTAMP,
+        properties MAP<STRING, STRING>
+    )
+    USING iceberg
+    PARTITIONED BY (days(event_timestamp), event_type)
+""")
+
+# Time Travel - consultar dados históricos
+spark.sql("""
+    SELECT * FROM lakehouse.events
+    FOR TIMESTAMP AS OF '2025-01-01 00:00:00'
+""")
+```
+
+### Medalion Architecture
+
+A arquitetura de medalhões organiza dados em camadas de qualidade:
+
+<FeatureGrid
+  features={[
+    {
+      icon: '🥉',
+      title: 'Bronze (Raw)',
+      description: 'Dados brutos, exatamente como chegaram da fonte. Append-only.',
+    },
+    {
+      icon: '🥈',
+      title: 'Silver (Curated)',
+      description: 'Dados limpos, deduplicados, tipados. Validações aplicadas.',
+    },
+    {
+      icon: '🥇',
+      title: 'Gold (Business)',
+      description: 'Agregações e métricas de negócio prontas para consumo.',
+    },
+  ]}
+  columns={3}
+/>
+
+## Stack Lakehouse Moderna
+
+### Para AWS
+
+```yaml
+stack:
+  storage: S3
+  table_format: Iceberg
+  catalog: AWS Glue Data Catalog
+  query_engines:
+    - Amazon Athena (serverless SQL)
+    - Amazon EMR (Spark)
+    - Trino (federação)
+  orchestration: Apache Airflow / Step Functions
+  governance: AWS Lake Formation
+```
+
+### Para Azure
+
+```yaml
+stack:
+  storage: ADLS Gen2
+  table_format: Delta Lake
+  catalog: Unity Catalog (Databricks) ou Hive Metastore
+  query_engines:
+    - Azure Synapse Serverless
+    - Databricks SQL
+    - Spark
+  orchestration: Azure Data Factory
+  governance: Microsoft Purview
+```
+
+### Para GCP
+
+```yaml
+stack:
+  storage: GCS
+  table_format: BigLake (Iceberg)
+  catalog: BigQuery Metastore
+  query_engines:
+    - BigQuery
+    - Dataproc (Spark)
+  orchestration: Cloud Composer
+  governance: Dataplex
+```
+
+## Migrando para Lakehouse
+
+<SimpleTimeline
+  title="Jornada de Migração"
+  items={[
+    {
+      label: 'Fase 1',
+      title: 'Inventário de Dados',
+      description: 'Mapeie todas as fontes, volumes, frequência de atualização e consumidores.',
+      status: 'completed',
+      icon: 'document',
+    },
+    {
+      label: 'Fase 2',
+      title: 'Escolha o Table Format',
+      description: 'Avalie Iceberg vs Delta vs Hudi baseado no seu ecossistema existente.',
+      status: 'completed',
+      icon: 'beaker',
+    },
+    {
+      label: 'Fase 3',
+      title: 'Defina Governança',
+      description: 'Estabeleça políticas de acesso, retenção e qualidade antes de migrar.',
+      status: 'current',
+      icon: 'shield',
+    },
+    {
+      label: 'Fase 4',
+      title: 'Migre Incrementalmente',
+      description: 'Comece por workloads novos ou menos críticos, expanda gradualmente.',
+      status: 'pending',
+      icon: 'server',
+    },
+    {
+      label: 'Fase 5',
+      title: 'Retire Sistemas Legados',
+      description: 'Desligue DW antigos apenas após validação completa do novo ambiente.',
+      status: 'pending',
+      icon: 'check',
+    },
+  ]}
+/>
+
+## Casos de Uso Ideais
+
+- **BI + ML na mesma base**: Analistas e cientistas de dados acessam os mesmos dados
+- **CDC em tempo real**: Streaming de mudanças de bancos transacionais
+- **Compliance e auditoria**: Time travel para reproduzir estados históricos
+- **Feature Store**: Armazenamento de features para ML com versionamento
+- **Data Mesh**: Domínios de dados autônomos com contratos claros
+
+<Callout type="success" title="Resultado">
+  Organizações que migram para Lakehouse reportam **redução de 40-60% em custos** de infraestrutura de dados, além de ganhos significativos em agilidade e governança.
+</Callout>
+
+---
+
+*Quer implementar uma arquitetura Lakehouse? [Fale com nossos especialistas](/ptbr/contato) em Data Engineering.*

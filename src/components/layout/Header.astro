@@ -26,8 +26,13 @@ const ctaItem = nav.find((item) => item.is_cta);
 const mainItems = nav.filter((item) => !item.is_cta);
 
 // Buscar soluções para o dropdown
-const allSolutions = await getCollection('solutions');
-const solutions = allSolutions.filter((s) => s.id.startsWith(`${lang}/`));
+const allSolutions = await getCollection('solutions').catch(() => []);
+const solutions = allSolutions
+  .filter((s) => s.id && s.id.startsWith(`${lang}/`))
+  .map((s) => ({
+    ...s,
+    slug: s.id.split('/').pop() || s.id,
+  }));
 
 const getNavLabel = (key: string): string => {
   return translations?.nav?.[key] || key;
@@ -77,29 +82,28 @@ const isActive = (itemHref: string | undefined): boolean => {
       {
         mainItems.map((item) =>
           item.key === 'solutions' ? (
-            <li class="dropdown dropdown-hover">
-              <a
-                href={`/${lang}${item.href}`}
+            <li class="nav-dropdown">
+              <div
                 tabindex="0"
                 role="button"
                 class:list={[
-                  'rounded-btn px-4',
-                  isActive(item.href) &&
-                    'bg-primary text-primary-content hover:bg-primary hover:text-primary-content',
+                  'nav-dropdown-trigger rounded-btn px-4 flex items-center gap-1 cursor-pointer',
+                  isActive(item.href)
+                    ? 'bg-primary text-primary-content'
+                    : 'hover:bg-base-200',
                 ]}
               >
                 <Icon name={item.icon} className="h-4 w-4" client:load />
                 {getNavLabel(item.key)}
                 <Icon name="ChevronDownIcon" className="h-3 w-3" client:load />
-              </a>
+              </div>
               <ul
-                tabindex="0"
-                class="menu dropdown-content z-[1] grid w-[500px] grid-cols-2 gap-1 rounded-box border border-base-300 bg-base-200 p-4 shadow-lg"
+                class="nav-dropdown-content menu z-50 grid w-[560px] grid-cols-2 gap-1 rounded-box border border-base-300 bg-base-100 p-4 shadow-xl"
               >
                 {solutions.map((solution) => (
                   <li>
                     <a
-                      href={`/${lang}/solucoes/${solution.slug.split('/').pop()}`}
+                      href={`/${lang}/solucoes/${solution.slug}`}
                       class="flex items-center gap-2 hover:bg-base-300"
                     >
                       <Icon

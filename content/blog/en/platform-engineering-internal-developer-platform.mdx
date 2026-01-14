@@ -1,0 +1,470 @@
+---
+title: 'Platform Engineering: Building an Internal Developer Platform'
+description: 'Complete guide to building an Internal Developer Platform (IDP), from strategy to implementation with golden paths and self-service.'
+author: 'Integr8 Team'
+date: 2024-12-30
+category: 'Platform Engineering'
+tags: ['platform-engineering', 'idp', 'developer-platform', 'devops', 'self-service']
+read_time: 14
+featured: true
+---
+
+import { Callout, FeatureGrid, Steps, PlantUML } from '@components/content';
+
+## What is Platform Engineering?
+
+Platform Engineering is the discipline of designing and building toolchains and workflows that enable self-service capabilities for developers. The goal is to reduce cognitive load and increase productivity.
+
+<Callout type="info" title="Gartner Prediction">
+  "By 2026, 80% of software engineering organizations will have platform teams as internal providers of reusable services, components, and tools." - Gartner, 2023
+</Callout>
+
+## Platform vs DevOps
+
+<FeatureGrid
+  features={[
+    {
+      icon: '🔄',
+      title: 'DevOps',
+      description: 'Culture and practices for Dev and Ops collaboration',
+    },
+    {
+      icon: '🏗️',
+      title: 'Platform Engineering',
+      description: 'Build platforms that materialize DevOps practices',
+    },
+  ]}
+  columns={2}
+/>
+
+Platform Engineering doesn't replace DevOps - it **implements** DevOps through a platform.
+
+## Anatomy of an IDP
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam rectangleBorderColor #5B8DD9
+skinparam rectangleBackgroundColor #F7FAFC
+
+title Internal Developer Platform Architecture
+
+rectangle "**Developer Portal (UI)**\\n(Backstage, Port, Cortex)" as portal #D1FAE5
+
+rectangle "**Platform Orchestration Layer**\\n(Templates, Workflows, Automation)" as orchestration #E8F4FD
+
+rectangle "**Integration Layer (APIs)**" as integration #F7FAFC
+
+rectangle "Git" as git #FEF3C7
+rectangle "CI/CD" as cicd #FEF3C7
+rectangle "Cloud" as cloud #FEF3C7
+rectangle "Observability" as obs #FEF3C7
+
+portal -down-> orchestration
+orchestration -down-> integration
+integration -down-> git
+integration -down-> cicd
+integration -down-> cloud
+integration -down-> obs
+
+@enduml
+  `}
+  alt="IDP Architecture"
+  caption="Layered architecture: Portal > Orchestration > Integration > Services"
+/>
+
+## Fundamental Principles
+
+<Steps
+  steps={[
+    {
+      title: 'Platform as a Product',
+      description: 'Treat the platform as a product, with users, roadmap, and success metrics.',
+    },
+    {
+      title: 'Self-Service',
+      description: 'Developers should be able to do 90% of operations without tickets.',
+    },
+    {
+      title: 'Golden Paths',
+      description: 'Offer optimized paths, but don\'t force them. Flexibility when needed.',
+    },
+    {
+      title: 'Feedback Loop',
+      description: 'Collect feedback constantly and iterate. The platform evolves with users.',
+    },
+  ]}
+/>
+
+## Building Golden Paths
+
+Golden Paths are the pre-defined "happy" paths by the platform that cover most use cases.
+
+### Example: Golden Path for Microservice
+
+```yaml
+# Golden Path Template
+name: "microservice-python"
+description: "Python microservice with FastAPI, Docker, CI/CD, and Observability"
+
+includes:
+  # Code structure
+  - source_code:
+      language: python
+      framework: fastapi
+      structure:
+        - src/
+        - tests/
+        - Dockerfile
+        - pyproject.toml
+
+  # CI/CD
+  - pipeline:
+      type: github-actions
+      stages:
+        - lint
+        - test
+        - build
+        - deploy
+
+  # Infrastructure
+  - infrastructure:
+      kubernetes:
+        - deployment.yaml
+        - service.yaml
+        - hpa.yaml
+      terraform:
+        - rds.tf  # if needs database
+        - s3.tf   # if needs storage
+
+  # Observability
+  - observability:
+      metrics: prometheus
+      tracing: opentelemetry
+      logging: structured-json
+      dashboards: grafana
+
+  # Security
+  - security:
+      scanning: trivy
+      secrets: external-secrets
+      policies: kyverno
+
+guardrails:
+  - "Images must come from approved registries"
+  - "Secrets cannot be in code"
+  - "All endpoints must have authentication"
+```
+
+### Implementing with Backstage
+
+```yaml
+# backstage-template.yaml
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: python-microservice
+  title: Python Microservice
+  description: Create a production-ready Python microservice
+spec:
+  owner: platform-team
+  type: service
+
+  parameters:
+    - title: Service Details
+      required:
+        - name
+        - owner
+      properties:
+        name:
+          title: Service Name
+          type: string
+          pattern: '^[a-z][a-z0-9-]*$'
+        owner:
+          title: Owner Team
+          type: string
+          ui:field: OwnerPicker
+        description:
+          title: Description
+          type: string
+
+    - title: Technical Options
+      properties:
+        database:
+          title: Database
+          type: string
+          enum: [none, postgresql, mysql, mongodb]
+          default: postgresql
+        caching:
+          title: Caching
+          type: string
+          enum: [none, redis, memcached]
+          default: none
+        messaging:
+          title: Messaging
+          type: string
+          enum: [none, kafka, sqs, rabbitmq]
+          default: none
+
+  steps:
+    # Generate code from template
+    - id: fetch-base
+      name: Fetch Base
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+          owner: ${{ parameters.owner }}
+          database: ${{ parameters.database }}
+
+    # Create repository
+    - id: publish
+      name: Publish to GitHub
+      action: publish:github
+      input:
+        repoUrl: github.com?owner=myorg&repo=${{ parameters.name }}
+        defaultBranch: main
+        protectDefaultBranch: true
+
+    # Provision infrastructure
+    - id: terraform
+      name: Provision Infrastructure
+      action: terraform:apply
+      input:
+        workspace: ${{ parameters.name }}
+        vars:
+          service_name: ${{ parameters.name }}
+          database_type: ${{ parameters.database }}
+
+    # Register in catalog
+    - id: register
+      name: Register in Catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in Backstage
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}
+```
+
+## Platform Layers
+
+### 1. Infrastructure Layer
+
+```hcl
+# modules/platform-foundation/main.tf
+module "kubernetes" {
+  source = "./modules/kubernetes"
+
+  cluster_name = var.cluster_name
+  node_pools = {
+    general = {
+      instance_type = "m5.large"
+      min_size      = 3
+      max_size      = 10
+    }
+    compute = {
+      instance_type = "c5.2xlarge"
+      min_size      = 0
+      max_size      = 20
+      taints        = ["workload=compute:NoSchedule"]
+    }
+  }
+}
+
+module "networking" {
+  source = "./modules/networking"
+
+  vpc_cidr        = "10.0.0.0/16"
+  enable_nat      = true
+  enable_vpn      = true
+}
+
+module "observability" {
+  source = "./modules/observability"
+
+  prometheus_retention = "30d"
+  loki_retention       = "7d"
+  enable_jaeger        = true
+}
+
+module "security" {
+  source = "./modules/security"
+
+  enable_vault        = true
+  enable_cert_manager = true
+  enable_kyverno      = true
+}
+```
+
+### 2. Platform Services Layer
+
+```yaml
+# platform-services/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  # GitOps
+  - argocd/
+
+  # Observability
+  - prometheus/
+  - grafana/
+  - loki/
+  - jaeger/
+
+  # Security
+  - vault/
+  - external-secrets/
+  - cert-manager/
+  - kyverno/
+
+  # Networking
+  - ingress-nginx/
+  - external-dns/
+
+  # Developer Tools
+  - backstage/
+```
+
+### 3. Application Layer (Self-Service)
+
+```yaml
+# Developer creates only this:
+apiVersion: platform.myorg.io/v1
+kind: Application
+metadata:
+  name: my-service
+  namespace: team-a
+spec:
+  type: microservice
+  language: python
+
+  # Required infrastructure
+  resources:
+    database:
+      type: postgresql
+      size: small
+    cache:
+      type: redis
+      size: small
+
+  # Exposure
+  ingress:
+    host: my-service.myorg.com
+    tls: true
+
+  # Scaling
+  scaling:
+    min: 2
+    max: 10
+    metrics:
+      - type: cpu
+        target: 70
+
+  # The platform takes care of the rest!
+```
+
+## Success Metrics
+
+<FeatureGrid
+  features={[
+    {
+      icon: '⏱️',
+      title: 'Time to Production',
+      description: 'Time from commit to production. Goal: < 15 minutes.',
+    },
+    {
+      icon: '🚀',
+      title: 'Developer Onboarding',
+      description: 'Time for new dev to make first deploy. Goal: < 1 day.',
+    },
+    {
+      icon: '📊',
+      title: 'Self-Service Rate',
+      description: 'Percentage of operations without tickets. Goal: > 90%.',
+    },
+    {
+      icon: '😊',
+      title: 'Developer NPS',
+      description: 'Developer satisfaction with the platform. Goal: > 50.',
+    },
+  ]}
+  columns={4}
+/>
+
+## Governance and Guardrails
+
+```yaml
+# Kyverno policy to ensure standards
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: platform-guardrails
+spec:
+  validationFailureAction: Enforce
+  rules:
+    # Require mandatory labels
+    - name: require-labels
+      match:
+        any:
+          - resources:
+              kinds:
+                - Deployment
+      validate:
+        message: "Labels owner and team are required"
+        pattern:
+          metadata:
+            labels:
+              owner: "?*"
+              team: "?*"
+
+    # Require resource limits
+    - name: require-limits
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "Containers must have CPU and memory limits"
+        pattern:
+          spec:
+            containers:
+              - resources:
+                  limits:
+                    memory: "?*"
+                    cpu: "?*"
+
+    # Only approved registries
+    - name: restrict-registries
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "Images must come from approved registries"
+        pattern:
+          spec:
+            containers:
+              - image: "ghcr.io/myorg/* | ecr.aws/myorg/*"
+```
+
+<Callout type="success" title="Philosophy">
+  Guardrails are not to block developers, they are to **guide them** down the right path automatically.
+</Callout>
+
+---
+
+*Want to build an Internal Developer Platform? [Talk to our specialists](/en/contato) in Platform Engineering.*

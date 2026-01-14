@@ -1,0 +1,285 @@
+---
+title: 'Apache Iceberg: O Formato de Tabela que Está Transformando o Big Data'
+description: 'Conheça o Apache Iceberg, o formato de tabela aberto que está se tornando padrão para Data Lakehouses, com suporte a ACID, time travel e muito mais.'
+author: 'Equipe Integr8'
+date: 2025-01-07
+category: 'Data Engineering'
+tags: ['iceberg', 'data-lake', 'spark', 'trino', 'parquet', 'big-data', 'lakehouse']
+read_time: 10
+featured: false
+---
+
+import { Callout, FeatureGrid, Steps, PlantUML } from '@components/content';
+
+## O que é Apache Iceberg?
+
+Apache Iceberg é um formato de tabela aberto e de alto desempenho para datasets analíticos massivos. Criado pela Netflix e doado à Apache Foundation, o Iceberg resolve problemas fundamentais de Data Lakes tradicionais.
+
+<Callout type="info" title="Adoção em Larga Escala">
+  Iceberg é usado em produção por Netflix, Apple, LinkedIn, Airbnb, Expedia e centenas de outras empresas processando petabytes de dados diariamente.
+</Callout>
+
+## Por que Iceberg?
+
+<FeatureGrid
+  features={[
+    {
+      icon: '⚡',
+      title: 'Transações ACID',
+      description: 'Commits atômicos, isolamento de leitura/escrita, consistência garantida',
+    },
+    {
+      icon: '⏱️',
+      title: 'Time Travel',
+      description: 'Consulte qualquer versão histórica dos dados instantaneamente',
+    },
+    {
+      icon: '🔄',
+      title: 'Schema Evolution',
+      description: 'Adicione, remova ou renomeie colunas sem reescrever dados',
+    },
+    {
+      icon: '📊',
+      title: 'Hidden Partitioning',
+      description: 'Particionamento transparente sem colunas extras nas queries',
+    },
+    {
+      icon: '🔧',
+      title: 'Multi-Engine',
+      description: 'Funciona com Spark, Trino, Flink, Dremio, Athena e mais',
+    },
+    {
+      icon: '📈',
+      title: 'Escalabilidade',
+      description: 'Suporta tabelas com milhões de arquivos sem degradação',
+    },
+  ]}
+  columns={3}
+/>
+
+## Arquitetura do Iceberg
+
+O Iceberg organiza metadados em uma estrutura hierárquica:
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam rectangleBorderColor #5B8DD9
+
+title Arquitetura Apache Iceberg
+
+rectangle "**Catalog**\\n(Hive, Glue, REST)" as catalog #D1FAE5
+
+rectangle "**Metadata File** (JSON)\\n- current-snapshot-id\\n- schemas\\n- partition-specs" as metadata #E8F4FD
+
+rectangle "**Snapshot** (Manifest List)\\n- snapshot-id\\n- manifest-list path" as snapshot #E8F4FD
+
+rectangle "**Manifest Files** (Avro)\\n- file paths\\n- partition values\\n- column statistics" as manifest #FEF3C7
+
+rectangle "**Data Files**\\n(Parquet/ORC/Avro)" as data #D1FAE5
+
+catalog -down-> metadata
+metadata -down-> snapshot
+snapshot -down-> manifest
+manifest -down-> data
+
+@enduml
+  `}
+  alt="Arquitetura Apache Iceberg"
+  caption="Estrutura hierárquica de metadados do Catalog até os Data Files"
+/>
+
+## Features Essenciais
+
+### 1. Time Travel
+
+```sql
+-- Consultar dados de um snapshot específico
+SELECT * FROM my_table FOR VERSION AS OF 12345678901234;
+
+-- Consultar dados de um timestamp específico
+SELECT * FROM my_table FOR TIMESTAMP AS OF '2025-01-01 10:00:00';
+
+-- Ver histórico de snapshots
+SELECT * FROM my_table.history;
+
+-- Rollback para versão anterior
+CALL system.rollback_to_snapshot('my_table', 12345678901234);
+```
+
+### 2. Schema Evolution
+
+```sql
+-- Adicionar coluna (sem reescrever dados!)
+ALTER TABLE my_table ADD COLUMN new_column STRING;
+
+-- Renomear coluna
+ALTER TABLE my_table RENAME COLUMN old_name TO new_name;
+
+-- Alterar tipo (quando compatível)
+ALTER TABLE my_table ALTER COLUMN my_col TYPE BIGINT;
+
+-- Reordenar colunas
+ALTER TABLE my_table ALTER COLUMN col_a AFTER col_b;
+```
+
+### 3. Partition Evolution
+
+Uma das features mais poderosas do Iceberg:
+
+```sql
+-- Criar tabela com particionamento por dia
+CREATE TABLE events (
+    event_id STRING,
+    event_timestamp TIMESTAMP,
+    user_id STRING,
+    event_type STRING
+) USING iceberg
+PARTITIONED BY (days(event_timestamp));
+
+-- Evoluir para particionamento por hora (sem migração!)
+ALTER TABLE events ADD PARTITION FIELD hours(event_timestamp);
+
+-- Queries funcionam transparentemente em ambos os esquemas
+SELECT * FROM events
+WHERE event_timestamp BETWEEN '2025-01-01' AND '2025-01-02';
+```
+
+<Callout type="success" title="Hidden Partitioning">
+  Usuários não precisam saber como a tabela está particionada. O Iceberg automaticamente filtra partições baseado nos predicados da query.
+</Callout>
+
+### 4. Merge-on-Read (Row-Level Deletes)
+
+```sql
+-- Delete eficiente sem reescrever arquivos inteiros
+DELETE FROM my_table WHERE user_id = 'user123';
+
+-- Upsert com MERGE
+MERGE INTO target_table t
+USING source_table s
+ON t.id = s.id
+WHEN MATCHED THEN UPDATE SET *
+WHEN NOT MATCHED THEN INSERT *;
+```
+
+## Otimizações de Performance
+
+### Compaction
+
+```sql
+-- Compactar arquivos pequenos em arquivos maiores
+CALL system.rewrite_data_files(
+    table => 'my_table',
+    options => map('target-file-size-bytes', '134217728')
+);
+```
+
+### Z-Ordering (Clustering)
+
+```sql
+-- Ordenar dados para melhorar data skipping
+CALL system.rewrite_data_files(
+    table => 'my_table',
+    strategy => 'sort',
+    sort_order => 'user_id ASC NULLS LAST, event_timestamp DESC'
+);
+```
+
+### Expire Snapshots
+
+```sql
+-- Limpar snapshots antigos para economizar storage
+CALL system.expire_snapshots(
+    table => 'my_table',
+    older_than => TIMESTAMP '2024-12-01 00:00:00',
+    retain_last => 5
+);
+```
+
+## Integrações com Query Engines
+
+### Apache Spark
+
+```python
+# Configuração do SparkSession com Iceberg
+spark = SparkSession.builder \
+    .config("spark.sql.extensions", "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions") \
+    .config("spark.sql.catalog.my_catalog", "org.apache.iceberg.spark.SparkCatalog") \
+    .config("spark.sql.catalog.my_catalog.type", "hadoop") \
+    .config("spark.sql.catalog.my_catalog.warehouse", "s3://my-bucket/warehouse") \
+    .getOrCreate()
+
+# Query usando o catalog
+df = spark.table("my_catalog.db.my_table")
+```
+
+### Trino
+
+```sql
+-- Configurar connector no Trino
+-- catalog/iceberg.properties:
+-- connector.name=iceberg
+-- hive.metastore.uri=thrift://metastore:9083
+-- iceberg.catalog.type=hive_metastore
+
+SELECT * FROM iceberg.my_schema.my_table;
+```
+
+### Amazon Athena
+
+```sql
+-- Athena suporta Iceberg nativamente
+CREATE TABLE my_iceberg_table (
+    id STRING,
+    name STRING,
+    created_at TIMESTAMP
+)
+LOCATION 's3://my-bucket/tables/my_table/'
+TBLPROPERTIES ('table_type' = 'ICEBERG');
+```
+
+## Comparativo: Iceberg vs Delta Lake vs Hudi
+
+| Aspecto | Iceberg | Delta Lake | Hudi |
+|---------|---------|------------|------|
+| **ACID** | ✅ | ✅ | ✅ |
+| **Multi-engine** | ✅ Excelente | ⚠️ Spark-centric | ⚠️ Limitado |
+| **Partition Evolution** | ✅ Nativo | ❌ | ❌ |
+| **Hidden Partitioning** | ✅ | ❌ | ❌ |
+| **Row-level deletes** | ✅ Eficiente | ✅ | ✅ |
+| **Streaming** | ✅ | ✅ | ✅ Melhor |
+| **Community** | Apache | Databricks | Apache |
+
+## Quando Usar Iceberg
+
+<Steps
+  steps={[
+    {
+      title: 'Multi-Engine Analytics',
+      description: 'Quando você precisa consultar dados com Spark, Trino, Athena e outros engines.',
+    },
+    {
+      title: 'Schema Evolution Frequente',
+      description: 'Tabelas que evoluem constantemente sem downtime ou migrações.',
+    },
+    {
+      title: 'Compliance e Auditoria',
+      description: 'Requisitos de reproduzir dados históricos para auditoria ou debugging.',
+    },
+    {
+      title: 'Grandes Tabelas Particionadas',
+      description: 'Datasets massivos onde partition evolution é necessário.',
+    },
+  ]}
+/>
+
+<Callout type="warning" title="Considerações">
+  Se você está 100% no ecossistema Databricks, Delta Lake pode ser mais simples. Para streaming-first, Apache Hudi pode ser melhor. Iceberg brilha em cenários multi-engine e governança.
+</Callout>
+
+---
+
+*Quer implementar Apache Iceberg no seu Data Lake? [Entre em contato](/ptbr/contato) com nossos especialistas.*

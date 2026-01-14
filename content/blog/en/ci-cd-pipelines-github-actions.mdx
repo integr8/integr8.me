@@ -1,0 +1,494 @@
+---
+title: 'Modern CI/CD with GitHub Actions: From Basic to Advanced'
+description: 'Complete GitHub Actions guide for CI/CD, including matrix builds, reusable workflows, cache, secrets, and Kubernetes integration.'
+author: 'Integr8 Team'
+date: 2025-01-05
+category: 'DevOps'
+tags: ['github-actions', 'ci-cd', 'devops', 'automation', 'continuous-integration']
+read_time: 14
+featured: false
+---
+
+import { Callout, FeatureGrid, Steps } from '@components/content';
+
+## Why GitHub Actions?
+
+GitHub Actions has become the dominant CI/CD platform by combining:
+
+<FeatureGrid
+  features={[
+    {
+      icon: '🔗',
+      title: 'Native Integration',
+      description: 'Deeply integrated with GitHub repositories, PRs, and Issues',
+    },
+    {
+      icon: '💰',
+      title: 'Cost-Effective',
+      description: '2000 minutes/month free, self-hosted runners at no cost',
+    },
+    {
+      icon: '🛒',
+      title: 'Marketplace',
+      description: 'Thousands of ready-to-use community actions',
+    },
+    {
+      icon: '⚡',
+      title: 'Flexibility',
+      description: 'Matrix builds, reusable workflows, composite actions',
+    },
+  ]}
+  columns={2}
+/>
+
+## Anatomy of a Workflow
+
+```yaml
+# .github/workflows/ci.yaml
+name: CI Pipeline
+
+# Triggers - when to execute
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:  # Manual trigger
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+# Global environment variables
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+# Jobs - work units
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run tests
+        run: npm test
+
+  build:
+    needs: test  # Dependency
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        run: npm run build
+```
+
+## Essential Optimizations
+
+### 1. Dependency Caching
+
+```yaml
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Cache for Node.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'  # Automatic cache
+
+      # OR manual cache for more control
+      - name: Cache node modules
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - run: npm ci
+```
+
+### 2. Matrix Builds
+
+```yaml
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false  # Continue even if one fails
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [18, 20, 22]
+        exclude:
+          - os: windows-latest
+            node-version: 18
+        include:
+          - os: ubuntu-latest
+            node-version: 20
+            coverage: true
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - run: npm ci
+      - run: npm test
+
+      - name: Upload coverage
+        if: matrix.coverage
+        uses: codecov/codecov-action@v4
+```
+
+<Callout type="info" title="Efficient Matrix">
+  With 3 OS x 3 Node versions = 9 parallel jobs. Use `fail-fast: false` to see all results, not stop on the first error.
+</Callout>
+
+### 3. Reusable Workflows
+
+```yaml
+# .github/workflows/reusable-build.yaml
+name: Reusable Build
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      node-version:
+        required: false
+        type: string
+        default: '20'
+    secrets:
+      NPM_TOKEN:
+        required: true
+    outputs:
+      image-tag:
+        description: "The built image tag"
+        value: ${{ jobs.build.outputs.tag }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.meta.outputs.tags }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+      - run: npm ci
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - id: meta
+        run: echo "tags=${{ github.sha }}" >> $GITHUB_OUTPUT
+```
+
+```yaml
+# .github/workflows/deploy.yaml - Calling the reusable
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    uses: ./.github/workflows/reusable-build.yaml
+    with:
+      environment: production
+    secrets:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Deploying ${{ needs.build.outputs.image-tag }}"
+```
+
+## Complete Production Pipeline
+
+```yaml
+name: Production Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # ============================================
+  # Lint and Tests
+  # ============================================
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test
+        env:
+          DATABASE_URL: postgresql://postgres:test@localhost:5432/testdb
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+
+  # ============================================
+  # Security Scanning
+  # ============================================
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # ============================================
+  # Build and Push Docker
+  # ============================================
+  build:
+    needs: [lint, test, security]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image-tag: ${{ steps.meta.outputs.tags }}
+      image-digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix=
+            type=semver,pattern={{version}}
+
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: true
+          sbom: true
+
+  # ============================================
+  # Deploy to Staging (PRs)
+  # ============================================
+  deploy-staging:
+    if: github.event_name == 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: staging
+      url: https://staging.example.com
+    steps:
+      - name: Deploy to staging
+        run: |
+          echo "Deploying ${{ needs.build.outputs.image-tag }} to staging"
+          # kubectl set image deployment/app app=${{ needs.build.outputs.image-tag }}
+
+  # ============================================
+  # Deploy to Production
+  # ============================================
+  deploy-production:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://example.com
+    steps:
+      - name: Deploy to production
+        run: |
+          echo "Deploying ${{ needs.build.outputs.image-tag }} to production"
+```
+
+## Composite Actions
+
+Create your own reusable actions:
+
+```yaml
+# .github/actions/setup-project/action.yaml
+name: 'Setup Project'
+description: 'Setup Node.js and install dependencies'
+
+inputs:
+  node-version:
+    description: 'Node.js version'
+    required: false
+    default: '20'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      shell: bash
+      run: npm ci
+
+    - name: Cache Playwright
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+```
+
+```yaml
+# Usage in workflow
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-project
+        with:
+          node-version: '20'
+      - run: npm test
+```
+
+## Environments and Secrets
+
+<Steps
+  steps={[
+    {
+      title: 'Configure Environments',
+      description: 'Settings > Environments > New environment. Configure protection rules.',
+    },
+    {
+      title: 'Required Reviewers',
+      description: 'Require manual approval before deploying to production.',
+    },
+    {
+      title: 'Deployment Branches',
+      description: 'Limit which branches can deploy to each environment.',
+    },
+    {
+      title: 'Environment Secrets',
+      description: 'Environment-specific secrets (different AWS keys for staging/prod).',
+    },
+  ]}
+/>
+
+<Callout type="success" title="Security">
+  Use `environment:` in jobs to apply protections. Never expose secrets in logs - GitHub masks them automatically, but be careful with `base64` or concatenation.
+</Callout>
+
+## Kubernetes Integration
+
+```yaml
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Authenticate to cluster (AWS EKS)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Update kubeconfig
+        run: aws eks update-kubeconfig --name my-cluster
+
+      # Deploy with Helm
+      - name: Deploy with Helm
+        run: |
+          helm upgrade --install my-app ./helm/my-app \
+            --namespace production \
+            --set image.tag=${{ github.sha }} \
+            --wait --timeout 5m
+
+      # OR with kubectl
+      - name: Deploy with kubectl
+        run: |
+          kubectl set image deployment/my-app \
+            app=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            -n production
+          kubectl rollout status deployment/my-app -n production
+```
+
+---
+
+*Need help structuring your CI/CD pipelines? [Contact us](/en/contato) for specialized consulting.*

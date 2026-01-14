@@ -68,30 +68,36 @@ const contactUrl = `/${lang}/contato`;
 <style is:global>
   /* Solution content specific styles */
   .solution-content h2 {
-    @apply flex items-center gap-3;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
   }
 
   .solution-content h2::before {
     content: '';
-    @apply h-8 w-1 rounded-full bg-gradient-to-b from-primary to-secondary;
+    height: 2rem;
+    width: 0.25rem;
+    border-radius: 9999px;
+    background: linear-gradient(to bottom, oklch(var(--p)), oklch(var(--s)));
   }
 
   /* Remove prose margins for custom components */
   .solution-content .my-8,
   .solution-content .my-12 {
-    @apply !my-8;
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
   }
 
   /* Better spacing for feature grids inside prose */
   .solution-content > .prose > div[class*='grid'],
   .solution-content > .prose > div[class*='my-'] {
-    @apply !max-w-none;
+    max-width: none !important;
   }
 
   /* Ensure cards and grids break out of prose max-width */
   .solution-content .prose > .grid,
   .solution-content .prose > div:not(.prose) {
-    @apply !max-w-none;
+    max-width: none !important;
   }
 
   /* Smooth scroll behavior */
@@ -101,20 +107,22 @@ const contactUrl = `/${lang}/contato`;
 
   /* Better table styling */
   .solution-content table {
-    @apply w-full;
+    width: 100%;
   }
 
   .solution-content thead tr {
-    @apply border-b-0;
+    border-bottom-width: 0;
   }
 
   .solution-content tbody tr:hover {
-    @apply bg-base-200/30;
+    background-color: oklch(var(--b2) / 0.3);
   }
 
   /* Section dividers */
   .solution-content hr {
-    @apply my-16 border-base-200;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    border-color: oklch(var(--b2));
   }
 
   /* Callout improvements */
@@ -122,6 +130,8 @@ const contactUrl = `/${lang}/contato`;
   .solution-content [class*='bg-success'],
   .solution-content [class*='bg-warning'],
   .solution-content [class*='bg-error'] {
-    @apply !my-8 !rounded-2xl;
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
+    border-radius: 1rem !important;
   }
 </style>

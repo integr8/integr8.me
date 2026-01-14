@@ -1,0 +1,542 @@
+---
+title: 'API Design: REST vs GraphQL vs gRPC - When to Use Each'
+description: 'Compare REST, GraphQL, and gRPC for API design, understand the trade-offs of each approach, and learn to choose the best option for your use case.'
+author: 'Integr8 Team'
+date: 2024-12-24
+category: 'Software Engineering'
+tags: ['api', 'rest', 'graphql', 'grpc', 'api-design', 'microservices']
+read_time: 12
+featured: false
+---
+
+import { Callout, FeatureGrid, Steps, PlantUML } from '@components/content';
+
+## The Current API Landscape
+
+APIs are the backbone of modern systems. The choice of API style impacts performance, developer experience, and maintainability. There is no "best" option - there's the right option for each context.
+
+<FeatureGrid
+  features={[
+    {
+      icon: '🌐',
+      title: 'REST',
+      description: 'Industry standard, stateless, resources and HTTP verbs',
+    },
+    {
+      icon: '📊',
+      title: 'GraphQL',
+      description: 'Flexible query language, fetch exactly what you need',
+    },
+    {
+      icon: '⚡',
+      title: 'gRPC',
+      description: 'Protocol Buffers, high performance, bidirectional streaming',
+    },
+  ]}
+  columns={3}
+/>
+
+## REST: The Classic
+
+REST (Representational State Transfer) is the most adopted style for web APIs.
+
+### REST Principles
+
+<Steps
+  steps={[
+    {
+      title: 'Resources',
+      description: 'Everything is a resource identified by URL: /users/123, /orders/456',
+    },
+    {
+      title: 'HTTP Verbs',
+      description: 'GET (read), POST (create), PUT (update), DELETE (remove)',
+    },
+    {
+      title: 'Stateless',
+      description: 'Each request contains all necessary information',
+    },
+    {
+      title: 'HATEOAS',
+      description: 'Responses include links to related actions',
+    },
+  ]}
+/>
+
+### Well-Designed REST API
+
+```yaml
+# OpenAPI Specification
+openapi: 3.0.0
+info:
+  title: Orders API
+  version: 1.0.0
+
+paths:
+  /orders:
+    get:
+      summary: List orders
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [pending, paid, shipped]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
+                  pagination:
+                    $ref: '#/components/schemas/Pagination'
+                  _links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                      next:
+                        type: string
+
+    post:
+      summary: Create order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+      responses:
+        '201':
+          description: Created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: URL of the new resource
+
+  /orders/{orderId}:
+    get:
+      summary: Get order by ID
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Not found
+```
+
+### REST API Versioning
+
+```typescript
+// URL versioning (most common)
+// GET /v1/orders
+// GET /v2/orders
+
+// Header versioning
+// GET /orders
+// Accept: application/vnd.myapi.v2+json
+
+// Query param versioning
+// GET /orders?version=2
+```
+
+<Callout type="info" title="When to use REST">
+  - Public APIs that need to be easy to understand
+  - Simple CRUD without special needs
+  - Caching is important (native HTTP caching)
+  - Team already masters HTTP and REST
+</Callout>
+
+## GraphQL: Total Flexibility
+
+GraphQL allows the client to specify exactly what data it needs.
+
+### Schema Definition
+
+```graphql
+# schema.graphql
+type Query {
+  order(id: ID!): Order
+  orders(filter: OrderFilter, pagination: PaginationInput): OrderConnection!
+  user(id: ID!): User
+}
+
+type Mutation {
+  createOrder(input: CreateOrderInput!): CreateOrderPayload!
+  updateOrderStatus(orderId: ID!, status: OrderStatus!): Order!
+  cancelOrder(orderId: ID!): Order!
+}
+
+type Subscription {
+  orderStatusChanged(orderId: ID!): Order!
+}
+
+type Order {
+  id: ID!
+  status: OrderStatus!
+  customer: User!
+  items: [OrderItem!]!
+  totalAmount: Float!
+  createdAt: DateTime!
+  shippingAddress: Address
+}
+
+type OrderItem {
+  id: ID!
+  product: Product!
+  quantity: Int!
+  unitPrice: Float!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  orders(first: Int, after: String): OrderConnection!
+}
+
+input CreateOrderInput {
+  customerId: ID!
+  items: [OrderItemInput!]!
+  shippingAddressId: ID!
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+```
+
+### Flexible Queries
+
+```graphql
+# The client asks for exactly what it needs
+
+# Simple query
+query GetOrderSummary($orderId: ID!) {
+  order(id: $orderId) {
+    id
+    status
+    totalAmount
+  }
+}
+
+# Query with relationships
+query GetOrderDetails($orderId: ID!) {
+  order(id: $orderId) {
+    id
+    status
+    totalAmount
+    createdAt
+    customer {
+      name
+      email
+    }
+    items {
+      quantity
+      unitPrice
+      product {
+        name
+        imageUrl
+      }
+    }
+    shippingAddress {
+      street
+      city
+      country
+    }
+  }
+}
+
+# Multiple queries in one request
+query Dashboard {
+  recentOrders: orders(filter: { status: PENDING }, pagination: { first: 5 }) {
+    edges {
+      node {
+        id
+        totalAmount
+      }
+    }
+  }
+  topCustomers: users(orderBy: TOTAL_SPENT_DESC, first: 10) {
+    name
+    totalSpent
+  }
+}
+```
+
+### Resolvers
+
+```typescript
+// resolvers.ts
+const resolvers = {
+  Query: {
+    order: async (_, { id }, { dataSources }) => {
+      return dataSources.ordersAPI.getOrder(id);
+    },
+    orders: async (_, { filter, pagination }, { dataSources }) => {
+      return dataSources.ordersAPI.getOrders(filter, pagination);
+    },
+  },
+
+  Mutation: {
+    createOrder: async (_, { input }, { dataSources, user }) => {
+      const order = await dataSources.ordersAPI.createOrder(input);
+      return { order, success: true };
+    },
+  },
+
+  Order: {
+    // Field resolver - fetches customer only if requested
+    customer: async (order, _, { dataSources }) => {
+      return dataSources.usersAPI.getUser(order.customerId);
+    },
+    items: async (order, _, { dataSources }) => {
+      return dataSources.ordersAPI.getOrderItems(order.id);
+    },
+  },
+
+  Subscription: {
+    orderStatusChanged: {
+      subscribe: (_, { orderId }, { pubsub }) => {
+        return pubsub.asyncIterator([`ORDER_STATUS_${orderId}`]);
+      },
+    },
+  },
+};
+```
+
+<Callout type="warning" title="GraphQL Considerations">
+  - **N+1 queries**: Use DataLoader for batching
+  - **Complex queries**: Implement query complexity analysis
+  - **Caching**: More difficult than REST (use persisted queries)
+  - **File uploads**: Not native, requires extensions
+</Callout>
+
+## gRPC: High Performance
+
+gRPC uses Protocol Buffers for efficient serialization and supports streaming.
+
+### Protocol Buffers
+
+```protobuf
+// orders.proto
+syntax = "proto3";
+
+package orders;
+
+service OrderService {
+  // Unary RPC
+  rpc GetOrder(GetOrderRequest) returns (Order);
+  rpc CreateOrder(CreateOrderRequest) returns (Order);
+
+  // Server streaming
+  rpc ListOrders(ListOrdersRequest) returns (stream Order);
+
+  // Client streaming
+  rpc BatchCreateOrders(stream CreateOrderRequest) returns (BatchCreateResponse);
+
+  // Bidirectional streaming
+  rpc OrderUpdates(stream OrderUpdateRequest) returns (stream Order);
+}
+
+message Order {
+  string id = 1;
+  string customer_id = 2;
+  OrderStatus status = 3;
+  repeated OrderItem items = 4;
+  double total_amount = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+message OrderItem {
+  string product_id = 1;
+  int32 quantity = 2;
+  double unit_price = 3;
+}
+
+enum OrderStatus {
+  ORDER_STATUS_UNSPECIFIED = 0;
+  ORDER_STATUS_PENDING = 1;
+  ORDER_STATUS_PAID = 2;
+  ORDER_STATUS_SHIPPED = 3;
+  ORDER_STATUS_DELIVERED = 4;
+}
+
+message GetOrderRequest {
+  string order_id = 1;
+}
+
+message ListOrdersRequest {
+  string customer_id = 1;
+  OrderStatus status = 2;
+  int32 page_size = 3;
+  string page_token = 4;
+}
+
+message CreateOrderRequest {
+  string customer_id = 1;
+  repeated OrderItem items = 2;
+  string shipping_address_id = 3;
+}
+```
+
+### Server Implementation (Node.js)
+
+```typescript
+// server.ts
+import * as grpc from '@grpc/grpc-js';
+import { OrderServiceService } from './generated/orders_grpc_pb';
+
+const orderService: grpc.UntypedServiceImplementation = {
+  getOrder: async (call, callback) => {
+    const orderId = call.request.getOrderId();
+    const order = await orderRepository.findById(orderId);
+
+    if (!order) {
+      callback({
+        code: grpc.status.NOT_FOUND,
+        message: `Order ${orderId} not found`,
+      });
+      return;
+    }
+
+    callback(null, orderToProto(order));
+  },
+
+  listOrders: async (call) => {
+    const customerId = call.request.getCustomerId();
+    const orders = await orderRepository.findByCustomer(customerId);
+
+    for (const order of orders) {
+      call.write(orderToProto(order));
+    }
+    call.end();
+  },
+
+  orderUpdates: (call) => {
+    call.on('data', async (request) => {
+      const order = await orderRepository.update(
+        request.getOrderId(),
+        request.getStatus()
+      );
+      call.write(orderToProto(order));
+    });
+
+    call.on('end', () => {
+      call.end();
+    });
+  },
+};
+
+const server = new grpc.Server();
+server.addService(OrderServiceService, orderService);
+server.bindAsync(
+  '0.0.0.0:50051',
+  grpc.ServerCredentials.createInsecure(),
+  () => server.start()
+);
+```
+
+<Callout type="success" title="When to use gRPC">
+  - Communication between microservices (service-to-service)
+  - When performance is critical
+  - Data streaming (real-time updates)
+  - Polyglot environments (support for many languages)
+</Callout>
+
+## Comparison
+
+| Aspect | REST | GraphQL | gRPC |
+|--------|------|---------|------|
+| **Format** | JSON | JSON | Protobuf (binary) |
+| **Performance** | Good | Medium | Excellent |
+| **Caching** | Native (HTTP) | Complex | Manual |
+| **Streaming** | Limited | Subscriptions | Native |
+| **Type Safety** | Via OpenAPI | Native (schema) | Native (proto) |
+| **Browser Support** | ✅ Native | ✅ Native | ⚠️ grpc-web |
+| **Learning Curve** | Low | Medium | Medium-High |
+| **Tooling** | Mature | Good | Good |
+
+## Hybrid Strategy
+
+Many organizations use multiple styles:
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam rectangleBorderColor #5B8DD9
+skinparam rectangleBackgroundColor #F7FAFC
+
+title Hybrid API Strategy
+
+rectangle "**Frontend (Web/Mobile)**" as frontend #E8F4FD
+
+rectangle "**API Gateway / BFF**\\n(REST or GraphQL)" as gateway #D1FAE5
+
+rectangle "Service A" as svcA #E8F4FD
+rectangle "Service B" as svcB #E8F4FD
+rectangle "Service C" as svcC #E8F4FD
+
+frontend -down-> gateway : REST / GraphQL
+
+gateway -down-> svcA
+gateway -down-> svcB
+gateway -down-> svcC
+
+svcA <-right-> svcB : gRPC
+svcB <-right-> svcC : gRPC
+
+@enduml
+  `}
+  alt="Hybrid API Strategy"
+  caption="GraphQL/REST for frontend, gRPC between microservices"
+/>
+
+<Steps
+  steps={[
+    {
+      title: 'GraphQL for Frontend',
+      description: 'Flexibility for different screens and devices.',
+    },
+    {
+      title: 'gRPC between Services',
+      description: 'Maximum performance in internal communication.',
+    },
+    {
+      title: 'REST for Public APIs',
+      description: 'Ease of adoption by partners and external developers.',
+    },
+  ]}
+/>
+
+---
+
+*Want to define the API strategy for your architecture? [Talk to our specialists](/en/contato) in Software Engineering.*

@@ -1,0 +1,396 @@
+---
+title: 'Supply Chain Security: SBOM, Sigstore e Proteção do Pipeline'
+description: 'Entenda como proteger sua supply chain de software com SBOM, assinatura de artefatos com Sigstore/Cosign, e boas práticas de segurança em CI/CD.'
+author: 'Equipe Integr8'
+date: 2025-01-12
+category: 'DevSecOps'
+tags: ['supply-chain', 'sbom', 'sigstore', 'cosign', 'security', 'devsecops']
+read_time: 12
+featured: true
+---
+
+import { Callout, FeatureGrid, Steps, PlantUML } from '@components/content';
+
+## O Problema da Supply Chain
+
+Ataques à supply chain de software aumentaram **742% nos últimos 3 anos** (Sonatype). Incidentes como SolarWinds, Log4Shell e compromissos do npm demonstram que a segurança não pode mais ser uma reflexão tardia.
+
+<Callout type="warning" title="Estatística Alarmante">
+  96% das vulnerabilidades em aplicações vêm de dependências de terceiros, não do código que você escreve.
+</Callout>
+
+## Pilares da Supply Chain Security
+
+<FeatureGrid
+  features={[
+    {
+      icon: '📋',
+      title: 'SBOM',
+      description: 'Software Bill of Materials - inventário de todos os componentes',
+    },
+    {
+      icon: '✍️',
+      title: 'Assinatura',
+      description: 'Verificação criptográfica de artefatos com Sigstore/Cosign',
+    },
+    {
+      icon: '🔍',
+      title: 'Scanning',
+      description: 'Análise contínua de vulnerabilidades em dependências',
+    },
+    {
+      icon: '🔒',
+      title: 'Provenance',
+      description: 'Rastreabilidade de onde e como artefatos foram criados',
+    },
+  ]}
+  columns={2}
+/>
+
+## SBOM: Software Bill of Materials
+
+Um SBOM é como a lista de ingredientes de um produto alimentício - documenta todos os componentes de um software.
+
+### Formatos de SBOM
+
+| Formato | Origem | Uso Principal |
+|---------|--------|---------------|
+| **SPDX** | Linux Foundation | Compliance, licenciamento |
+| **CycloneDX** | OWASP | Segurança, vulnerabilidades |
+| **SWID** | ISO/IEC | Enterprise, governo |
+
+### Gerando SBOM com Syft
+
+```bash
+# Instalar Syft
+curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
+
+# Gerar SBOM de uma imagem Docker
+syft myapp:latest -o spdx-json > sbom.spdx.json
+
+# Gerar em formato CycloneDX
+syft myapp:latest -o cyclonedx-json > sbom.cdx.json
+
+# Gerar de um diretório de código
+syft dir:. -o spdx-json > sbom.spdx.json
+```
+
+### Exemplo de SBOM CycloneDX
+
+```json
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2025-01-12T10:00:00Z",
+    "tools": [{ "name": "syft", "version": "0.100.0" }],
+    "component": {
+      "name": "my-application",
+      "version": "1.0.0",
+      "type": "application"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "express",
+      "version": "4.18.2",
+      "purl": "pkg:npm/express@4.18.2",
+      "licenses": [{ "license": { "id": "MIT" } }]
+    },
+    {
+      "type": "library",
+      "name": "lodash",
+      "version": "4.17.21",
+      "purl": "pkg:npm/lodash@4.17.21"
+    }
+  ]
+}
+```
+
+## Assinatura com Sigstore/Cosign
+
+Sigstore é um projeto da Linux Foundation que torna a assinatura de artefatos acessível e sem fricção.
+
+### Como Funciona o Sigstore
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam rectangleBorderColor #5B8DD9
+skinparam rectangleBackgroundColor #F7FAFC
+
+title Ecossistema Sigstore
+
+rectangle "**Sigstore**" as sigstore #E8F4FD {
+  rectangle "Cosign\\n(Sign)" as cosign #D1FAE5
+  rectangle "Fulcio\\n(Certs)" as fulcio #FEF3C7
+  rectangle "Rekor\\n(Log)" as rekor #FEE2E2
+}
+
+rectangle "Artefato\\nAssinado" as artifact #D1FAE5
+rectangle "Registro\\nPúblico" as record #FEE2E2
+
+cosign -right-> fulcio : OIDC Identity\\n(GitHub, Google)
+fulcio -right-> rekor : Transparency Log\\n(Imutável)
+cosign -down-> artifact
+rekor -down-> record
+
+@enduml
+  `}
+  alt="Ecossistema Sigstore"
+  caption="Cosign assina, Fulcio emite certificados, Rekor mantém log de transparência"
+/>
+
+### Assinando Imagens com Cosign
+
+```bash
+# Instalar Cosign
+brew install cosign  # ou via releases
+
+# Login no registry
+cosign login ghcr.io
+
+# Assinar imagem (keyless - usa OIDC)
+cosign sign ghcr.io/myorg/myapp:v1.0.0
+
+# Assinar com chave privada
+cosign generate-key-pair
+cosign sign --key cosign.key ghcr.io/myorg/myapp:v1.0.0
+
+# Verificar assinatura
+cosign verify ghcr.io/myorg/myapp:v1.0.0 \
+  --certificate-identity=user@example.com \
+  --certificate-oidc-issuer=https://github.com/login/oauth
+
+# Anexar SBOM à imagem
+cosign attach sbom --sbom sbom.cdx.json ghcr.io/myorg/myapp:v1.0.0
+
+# Assinar o SBOM anexado
+cosign sign --attachment sbom ghcr.io/myorg/myapp:v1.0.0
+```
+
+### Assinatura em GitHub Actions
+
+```yaml
+name: Build and Sign
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write  # Necessário para keyless signing
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@v3
+
+      - name: Install Syft
+        uses: anchore/sbom-action/download-syft@v0
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+
+      - name: Generate SBOM
+        run: |
+          syft ghcr.io/${{ github.repository }}:${{ github.ref_name }} \
+            -o cyclonedx-json > sbom.cdx.json
+
+      - name: Sign image
+        run: |
+          cosign sign --yes \
+            ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
+
+      - name: Attach and sign SBOM
+        run: |
+          cosign attach sbom --sbom sbom.cdx.json \
+            ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
+          cosign sign --yes --attachment sbom \
+            ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
+```
+
+## SLSA: Supply Chain Levels for Software Artifacts
+
+SLSA (pronuncia-se "salsa") define níveis de maturidade para supply chain security.
+
+<Steps
+  steps={[
+    {
+      title: 'SLSA Level 1',
+      description: 'Build process documentado, geração de provenance básica.',
+    },
+    {
+      title: 'SLSA Level 2',
+      description: 'Provenance assinado, build service autenticado.',
+    },
+    {
+      title: 'SLSA Level 3',
+      description: 'Build isolado, provenance não-falsificável.',
+    },
+    {
+      title: 'SLSA Level 4',
+      description: 'Build hermético, revisão de duas pessoas.',
+    },
+  ]}
+/>
+
+### Gerando Provenance SLSA
+
+```yaml
+# GitHub Actions com SLSA provenance
+name: SLSA Build
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - id: build
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+
+  provenance:
+    needs: build
+    permissions:
+      actions: read
+      id-token: write
+      packages: write
+
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v1.9.0
+    with:
+      image: ghcr.io/${{ github.repository }}
+      digest: ${{ needs.build.outputs.digest }}
+      registry-username: ${{ github.actor }}
+    secrets:
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
+```
+
+## Scanning de Vulnerabilidades
+
+### Trivy para Container Scanning
+
+```bash
+# Scan de imagem
+trivy image myapp:latest
+
+# Scan com SBOM
+trivy sbom sbom.cdx.json
+
+# Scan de filesystem
+trivy fs .
+
+# Scan de IaC (Terraform, Kubernetes)
+trivy config ./terraform/
+
+# Integração com CI - falhar em vulnerabilidades críticas
+trivy image --exit-code 1 --severity CRITICAL myapp:latest
+```
+
+### Grype para Análise de SBOM
+
+```bash
+# Instalar Grype
+curl -sSfL https://raw.githubusercontent.com/anchore/grype/main/install.sh | sh -s -- -b /usr/local/bin
+
+# Analisar SBOM
+grype sbom:sbom.cdx.json
+
+# Output em JSON para processamento
+grype sbom:sbom.cdx.json -o json > vulnerabilities.json
+```
+
+## Policy Enforcement com OPA/Gatekeeper
+
+```yaml
+# Kyverno policy para exigir imagens assinadas
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-signed-images
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: verify-signature
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      verifyImages:
+        - imageReferences:
+            - "ghcr.io/myorg/*"
+          attestors:
+            - entries:
+                - keyless:
+                    subject: "https://github.com/myorg/*"
+                    issuer: "https://token.actions.githubusercontent.com"
+                    rekor:
+                      url: https://rekor.sigstore.dev
+```
+
+## Pipeline Seguro Completo
+
+<FeatureGrid
+  features={[
+    {
+      icon: '1️⃣',
+      title: 'Pre-Commit',
+      description: 'Secrets scanning, linting, dependency check local',
+    },
+    {
+      icon: '2️⃣',
+      title: 'CI Build',
+      description: 'SAST, SCA, container scan, gerar SBOM',
+    },
+    {
+      icon: '3️⃣',
+      title: 'Sign & Attest',
+      description: 'Assinar artefatos, gerar provenance SLSA',
+    },
+    {
+      icon: '4️⃣',
+      title: 'Deploy Gate',
+      description: 'Verificar assinaturas, policies, admission control',
+    },
+  ]}
+  columns={4}
+/>
+
+<Callout type="success" title="Compliance">
+  Organizações que implementam SBOM e assinatura de artefatos estão preparadas para regulamentações como a Executive Order 14028 (EUA) e requisitos similares em outros países.
+</Callout>
+
+---
+
+*Quer implementar supply chain security na sua organização? [Fale com nossos especialistas](/ptbr/contato) em DevSecOps.*

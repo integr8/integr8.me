@@ -1,0 +1,492 @@
+---
+title: 'Arquitetura de Microserviços Event-Driven: Padrões e Práticas'
+description: 'Guia completo sobre arquitetura event-driven para microserviços, incluindo Event Sourcing, CQRS, Saga Pattern, e quando usar cada abordagem.'
+author: 'Equipe Integr8'
+date: 2024-12-26
+category: 'Software Engineering'
+tags: ['microservices', 'event-driven', 'event-sourcing', 'cqrs', 'saga', 'kafka']
+read_time: 15
+featured: true
+---
+
+import { Callout, FeatureGrid, Steps, PlantUML } from '@components/content';
+
+## Por que Event-Driven?
+
+Em arquiteturas de microserviços, a comunicação síncrona (REST/gRPC) cria acoplamento temporal: se um serviço está indisponível, toda a cadeia falha. Arquiteturas event-driven resolvem isso através de comunicação assíncrona baseada em eventos.
+
+<FeatureGrid
+  features={[
+    {
+      icon: '🔓',
+      title: 'Loose Coupling',
+      description: 'Serviços não precisam conhecer uns aos outros diretamente',
+    },
+    {
+      icon: '📈',
+      title: 'Escalabilidade',
+      description: 'Consumidores podem ser escalados independentemente',
+    },
+    {
+      icon: '🔄',
+      title: 'Resiliência',
+      description: 'Falhas são isoladas, eventos podem ser reprocessados',
+    },
+    {
+      icon: '⏱️',
+      title: 'Temporalidade',
+      description: 'Histórico completo de eventos para auditoria e replay',
+    },
+  ]}
+  columns={2}
+/>
+
+## Padrões Fundamentais
+
+### 1. Event Notification
+
+O padrão mais simples: publicar eventos para notificar outros serviços de mudanças.
+
+```typescript
+// Serviço de Orders publica evento
+interface OrderCreatedEvent {
+  eventType: 'OrderCreated';
+  timestamp: Date;
+  data: {
+    orderId: string;
+    customerId: string;
+    items: Array<{ productId: string; quantity: number }>;
+    totalAmount: number;
+  };
+}
+
+// Producer
+async function createOrder(order: Order): Promise<void> {
+  // Persiste a ordem
+  await orderRepository.save(order);
+
+  // Publica evento
+  await eventBus.publish('orders', {
+    eventType: 'OrderCreated',
+    timestamp: new Date(),
+    data: {
+      orderId: order.id,
+      customerId: order.customerId,
+      items: order.items,
+      totalAmount: order.totalAmount,
+    },
+  });
+}
+
+// Consumer (Serviço de Inventory)
+eventBus.subscribe('orders', async (event: OrderCreatedEvent) => {
+  if (event.eventType === 'OrderCreated') {
+    for (const item of event.data.items) {
+      await inventoryService.reserveStock(item.productId, item.quantity);
+    }
+  }
+});
+```
+
+### 2. Event-Carried State Transfer
+
+Eventos carregam dados suficientes para que consumidores não precisem buscar mais informações.
+
+```typescript
+// ❌ Evento pobre - força consumer a buscar dados
+interface OrderCreatedPoor {
+  orderId: string;  // Consumer precisa chamar API de Orders
+}
+
+// ✅ Evento rico - contém tudo que consumers precisam
+interface OrderCreatedRich {
+  eventType: 'OrderCreated';
+  timestamp: Date;
+  data: {
+    orderId: string;
+    customerId: string;
+    customerEmail: string;  // Para serviço de notificação
+    customerName: string;
+    shippingAddress: Address;  // Para serviço de shipping
+    items: Array<{
+      productId: string;
+      productName: string;
+      quantity: number;
+      unitPrice: number;
+    }>;
+    totalAmount: number;
+    paymentMethod: string;
+  };
+}
+```
+
+<Callout type="info" title="Trade-off">
+  Eventos ricos reduzem chamadas entre serviços, mas aumentam o tamanho das mensagens e podem expor mais dados do que necessário.
+</Callout>
+
+### 3. Event Sourcing
+
+Em vez de armazenar apenas o estado atual, armazena todos os eventos que levaram àquele estado.
+
+```typescript
+// Event Store para Conta Bancária
+interface AccountEvent {
+  eventId: string;
+  accountId: string;
+  eventType: string;
+  timestamp: Date;
+  data: unknown;
+}
+
+interface AccountOpened {
+  eventType: 'AccountOpened';
+  data: { initialBalance: number; ownerName: string };
+}
+
+interface MoneyDeposited {
+  eventType: 'MoneyDeposited';
+  data: { amount: number; description: string };
+}
+
+interface MoneyWithdrawn {
+  eventType: 'MoneyWithdrawn';
+  data: { amount: number; description: string };
+}
+
+// Reconstruir estado a partir de eventos
+function rebuildAccount(events: AccountEvent[]): Account {
+  return events.reduce((account, event) => {
+    switch (event.eventType) {
+      case 'AccountOpened':
+        return {
+          id: event.accountId,
+          balance: event.data.initialBalance,
+          ownerName: event.data.ownerName,
+          isOpen: true,
+        };
+      case 'MoneyDeposited':
+        return { ...account, balance: account.balance + event.data.amount };
+      case 'MoneyWithdrawn':
+        return { ...account, balance: account.balance - event.data.amount };
+      case 'AccountClosed':
+        return { ...account, isOpen: false };
+      default:
+        return account;
+    }
+  }, {} as Account);
+}
+
+// Persistir novo evento
+async function deposit(accountId: string, amount: number): Promise<void> {
+  const events = await eventStore.getEvents(accountId);
+  const account = rebuildAccount(events);
+
+  if (!account.isOpen) {
+    throw new Error('Account is closed');
+  }
+
+  await eventStore.append(accountId, {
+    eventType: 'MoneyDeposited',
+    data: { amount, description: 'Deposit' },
+  });
+}
+```
+
+### 4. CQRS (Command Query Responsibility Segregation)
+
+Separa o modelo de escrita (commands) do modelo de leitura (queries).
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam rectangleBorderColor #5B8DD9
+skinparam componentBackgroundColor #E8F4FD
+skinparam componentBorderColor #5B8DD9
+
+title CQRS - Command Query Responsibility Segregation
+
+rectangle "Write Side" as write #E8F4FD {
+  component "Commands" as cmd
+  component "Domain\\nModel" as domain
+  database "Event\\nStore" as eventstore #FEF3C7
+
+  cmd -down-> domain
+  domain -down-> eventstore
+}
+
+rectangle "Read Side" as read #D1FAE5 {
+  component "Queries" as query
+  component "Read\\nModel" as readmodel
+  database "Projection\\n(Denorm.)" as projection #FEF3C7
+
+  query -down-> readmodel
+  readmodel -down-> projection
+}
+
+eventstore -right-> projection : Events
+
+@enduml
+  `}
+  alt="Arquitetura CQRS"
+  caption="Write Side persiste eventos, Read Side consome eventos e projeta para leitura otimizada"
+/>
+
+```typescript
+// Write Side - Domain Model rico
+class Order {
+  private events: DomainEvent[] = [];
+
+  static create(customerId: string, items: OrderItem[]): Order {
+    const order = new Order();
+    order.apply(new OrderCreated(customerId, items));
+    return order;
+  }
+
+  addItem(productId: string, quantity: number): void {
+    this.apply(new ItemAdded(this.id, productId, quantity));
+  }
+
+  private apply(event: DomainEvent): void {
+    this.events.push(event);
+    this.when(event);
+  }
+
+  private when(event: DomainEvent): void {
+    // Atualiza estado interno
+  }
+}
+
+// Read Side - Projection otimizada para queries
+interface OrderReadModel {
+  orderId: string;
+  customerName: string;
+  customerEmail: string;
+  status: string;
+  totalAmount: number;
+  itemCount: number;
+  createdAt: Date;
+  // Dados denormalizados para evitar joins
+}
+
+class OrderProjection {
+  async handle(event: DomainEvent): Promise<void> {
+    switch (event.type) {
+      case 'OrderCreated':
+        await this.db.insert('orders_read', {
+          orderId: event.orderId,
+          customerName: event.customerName,
+          status: 'created',
+          // ...
+        });
+        break;
+      case 'OrderShipped':
+        await this.db.update('orders_read', {
+          orderId: event.orderId,
+          status: 'shipped',
+          shippedAt: event.timestamp,
+        });
+        break;
+    }
+  }
+}
+```
+
+## Saga Pattern para Transações Distribuídas
+
+Quando uma operação envolve múltiplos serviços, use Sagas para coordenar.
+
+### Choreography-based Saga
+
+<PlantUML
+  code={`
+@startuml
+skinparam dpi 300
+
+skinparam participantBorderColor #5B8DD9
+skinparam participantBackgroundColor #E8F4FD
+skinparam sequenceArrowColor #5B8DD9
+skinparam sequenceLifeLineBorderColor #5B8DD9
+
+title Choreography-based Saga
+
+participant "Order\\nService" as order #E8F4FD
+participant "Payment\\nService" as payment #E8F4FD
+participant "Inventory\\nService" as inventory #E8F4FD
+participant "Shipping\\nService" as shipping #E8F4FD
+
+order -> payment : OrderCreated
+payment -> inventory : PaymentDone
+inventory -> shipping : StockReserved
+
+note over order, shipping #FEE2E2
+  Compensating events se algo falhar
+end note
+
+shipping --> inventory : (rollback)
+inventory --> payment : (rollback)
+payment --> order : (rollback)
+
+@enduml
+  `}
+  alt="Saga Pattern Coreografado"
+  caption="Serviços reagem a eventos e emitem compensações em caso de falha"
+/>
+
+```typescript
+// Cada serviço reage a eventos e pode emitir compensações
+class PaymentService {
+  @EventHandler('OrderCreated')
+  async handleOrderCreated(event: OrderCreatedEvent): Promise<void> {
+    try {
+      await this.processPayment(event.data.orderId, event.data.totalAmount);
+      await this.eventBus.publish('payments', {
+        eventType: 'PaymentCompleted',
+        data: { orderId: event.data.orderId },
+      });
+    } catch (error) {
+      await this.eventBus.publish('payments', {
+        eventType: 'PaymentFailed',
+        data: { orderId: event.data.orderId, reason: error.message },
+      });
+    }
+  }
+}
+
+class OrderService {
+  @EventHandler('PaymentFailed')
+  async handlePaymentFailed(event: PaymentFailedEvent): Promise<void> {
+    // Compensação: cancelar a ordem
+    await this.cancelOrder(event.data.orderId);
+    await this.eventBus.publish('orders', {
+      eventType: 'OrderCancelled',
+      data: { orderId: event.data.orderId, reason: 'Payment failed' },
+    });
+  }
+}
+```
+
+### Orchestration-based Saga
+
+```typescript
+// Saga Orchestrator centraliza a lógica
+class OrderSagaOrchestrator {
+  async execute(orderId: string): Promise<void> {
+    const saga = new Saga(orderId);
+
+    try {
+      // Step 1: Reserve inventory
+      saga.addStep({
+        execute: () => this.inventoryService.reserve(orderId),
+        compensate: () => this.inventoryService.release(orderId),
+      });
+
+      // Step 2: Process payment
+      saga.addStep({
+        execute: () => this.paymentService.charge(orderId),
+        compensate: () => this.paymentService.refund(orderId),
+      });
+
+      // Step 3: Create shipment
+      saga.addStep({
+        execute: () => this.shippingService.createShipment(orderId),
+        compensate: () => this.shippingService.cancelShipment(orderId),
+      });
+
+      await saga.run();
+    } catch (error) {
+      await saga.compensate();
+      throw error;
+    }
+  }
+}
+```
+
+<Callout type="warning" title="Escolhendo a Abordagem">
+  **Choreography**: Mais desacoplado, melhor para fluxos simples. **Orchestration**: Mais fácil de entender e debugar, melhor para fluxos complexos.
+</Callout>
+
+## Message Brokers
+
+### Apache Kafka
+
+```yaml
+# docker-compose.yaml
+services:
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+```
+
+```typescript
+// Producer
+import { Kafka } from 'kafkajs';
+
+const kafka = new Kafka({ brokers: ['kafka:9092'] });
+const producer = kafka.producer();
+
+await producer.connect();
+await producer.send({
+  topic: 'orders',
+  messages: [
+    {
+      key: orderId,  // Garante ordenação por order
+      value: JSON.stringify(event),
+      headers: {
+        'event-type': 'OrderCreated',
+        'correlation-id': correlationId,
+      },
+    },
+  ],
+});
+
+// Consumer
+const consumer = kafka.consumer({ groupId: 'inventory-service' });
+await consumer.connect();
+await consumer.subscribe({ topic: 'orders', fromBeginning: false });
+
+await consumer.run({
+  eachMessage: async ({ topic, partition, message }) => {
+    const event = JSON.parse(message.value.toString());
+    await processEvent(event);
+  },
+});
+```
+
+## Boas Práticas
+
+<Steps
+  steps={[
+    {
+      title: 'Idempotência',
+      description: 'Consumidores devem ser idempotentes. Eventos podem ser entregues mais de uma vez.',
+    },
+    {
+      title: 'Event Schema Evolution',
+      description: 'Use schema registry e versionamento. Novos campos devem ser opcionais.',
+    },
+    {
+      title: 'Correlation ID',
+      description: 'Propague IDs de correlação para rastrear fluxos entre serviços.',
+    },
+    {
+      title: 'Dead Letter Queue',
+      description: 'Configure DLQ para eventos que falham no processamento.',
+    },
+    {
+      title: 'Monitoring',
+      description: 'Monitore lag de consumers, throughput e taxa de erros.',
+    },
+  ]}
+/>
+
+---
+
+*Quer implementar arquitetura event-driven nos seus microserviços? [Fale com nossos especialistas](/ptbr/contato) em Software Engineering.*
