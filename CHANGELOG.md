@@ -2,6 +2,13 @@
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
+## [1.1.2](https://github.com/integr8/integr8.me/compare/v1.1.1...v1.1.2) (2026-11-18)
+
+
+### Bug Fixes
+
+* Update README with project description ([#6](https://github.com/integr8/integr8.me/issues/6)) ([6ec5627](https://github.com/integr8/integr8.me/commit/6ec5627ad89b45b2ccfde0097883c719ec6f633c))
+
 ## [1.1.1](https://github.com/integr8/integr8.me/compare/v1.1.0...v1.1.1) (2026-01-14)
 
 
