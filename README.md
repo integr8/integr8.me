@@ -2,6 +2,7 @@
 
 Site institucional da Integr8 - Consultoria DevOps, Cloud e Platform Engineering.
 
+
 ## Stack
 
 - **Astro** - Static site generator
